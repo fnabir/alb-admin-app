@@ -10,7 +10,7 @@ import { useList, useObject } from 'react-firebase-hooks/database';
 import { MdOutlineInfo } from 'react-icons/md';
 import { update } from 'firebase/database';
 
-export default function StaffTransaction() {
+export default function ConveyanceTransaction() {
   const { id } = useParams<{ id: string }>();
   const staffId = decodeURIComponent(id);
   const { setItems } = useBreadcrumbs();
@@ -22,19 +22,19 @@ export default function StaffTransaction() {
   const staffName = staffData?.val();
 
   useEffect(() => {
-    document.title = `${staffName} | Transaction`;
+    document.title = `${staffName} | Conveyance`;
   }, [staffName]);
 
   useEffect(() => {
     setItems([
       { label: 'Home', href: '/' },
-      { label: 'Staff', href: '/staff' },
+      { label: 'Conveyance', href: '/conveyance' },
       { label: staffName },
     ]);
   }, [setItems, staffName]);
 
   const [data, transactionLoading, transactionError] = useList(
-    getDatabaseReference(`transaction/staff/${staffId}`),
+    getDatabaseReference(`transaction/conveyance/${staffId}`),
   );
 
   const paymentData = useMemo(
@@ -57,7 +57,7 @@ export default function StaffTransaction() {
   );
 
   const [balance, balanceLoading, balanceError] = useObject(
-    getDatabaseReference(`balance/staff/${staffId}`),
+    getDatabaseReference(`balance/conveyance/${staffId}`),
   );
 
   const balanceVal = balance?.val();
@@ -74,7 +74,7 @@ export default function StaffTransaction() {
 
   const handleUpdateBalance = async () => {
     try {
-      await update(getDatabaseReference(`balance/staff/${staffId}`), {
+      await update(getDatabaseReference(`balance/conveyance/${staffId}`), {
         value: total,
       });
       toast.success('Updated', 'Updated the total balance successfully.');

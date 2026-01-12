@@ -14,6 +14,10 @@ export default function Conveyance() {
   const { setItems } = useBreadcrumbs();
 
   useEffect(() => {
+    document.title = 'Conveyance | ALB Admin';
+  }, []);
+
+  useEffect(() => {
     setItems([{ label: 'Home', href: '/' }, { label: 'Conveyance' }]);
   }, [setItems]);
 
@@ -80,7 +84,7 @@ export default function Conveyance() {
         <div className="flex-1 flex flex-col space-y-2 overflow-y-auto px-2 md:px-3 lg:px-4">
           {projects.map((item) => {
             return (
-              <LoadingLink key={item.key} href={`project/${item.key}`}>
+              <LoadingLink key={item.key} href={`conveyance/${item.key}`}>
                 <BalanceRow data={item} title={item.val().name} />
               </LoadingLink>
             );

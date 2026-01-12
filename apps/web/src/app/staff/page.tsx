@@ -14,6 +14,10 @@ export default function Staff() {
   const { setItems } = useBreadcrumbs();
 
   useEffect(() => {
+    document.title = 'Staff | ALB Admin';
+  }, []);
+
+  useEffect(() => {
     setItems([{ label: 'Home', href: '/' }, { label: 'Staff' }]);
   }, [setItems]);
 
@@ -96,6 +100,7 @@ export default function Staff() {
       {data && data.length > 0 && (
         <LoadingLink href="/conveyance">
           <TotalBalanceRow
+            title="Total Conveyance"
             value={conveyanceVal?.value ?? 0}
             showUpdate={false}
             date={conveyanceVal?.date}
