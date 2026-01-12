@@ -57,6 +57,10 @@ export default function Home() {
   const { setItems } = useBreadcrumbs();
 
   useEffect(() => {
+    document.title = 'Dashboard | ALB Admin';
+  }, []);
+
+  useEffect(() => {
     setItems([{ label: 'Home' }]);
   }, [setItems]);
 

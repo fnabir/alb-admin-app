@@ -10,10 +10,14 @@ import { useList, useObject } from 'react-firebase-hooks/database';
 import { MdOutlineInfo } from 'react-icons/md';
 import { update } from 'firebase/database';
 
-export default function Project() {
+export default function ProjectTransaction() {
   const { id } = useParams() as { id: string };
   const projectName = decodeURIComponent(id);
   const { setItems } = useBreadcrumbs();
+
+  useEffect(() => {
+    document.title = `${projectName} | Transaction`;
+  }, [projectName]);
 
   useEffect(() => {
     setItems([

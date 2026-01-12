@@ -18,9 +18,11 @@ const geistMono = Geist_Mono({
   subsets: ['latin'],
 });
 
-export const metadata: Metadata = {
-  title: 'Dashboard | ALB Admin',
-  description: 'Developed by Farhan Noor Abir',
+export const metadata = {
+  title: {
+    default: 'ALB Admin',
+    template: '%s | ALB Admin',
+  },
 };
 
 export default function RootLayout({

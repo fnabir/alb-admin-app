@@ -12,6 +12,10 @@ export default function Project() {
   const { setItems } = useBreadcrumbs();
 
   useEffect(() => {
+    document.title = 'Callback | ALB Admin';
+  }, []);
+
+  useEffect(() => {
     setItems([{ label: 'Home', href: '/' }, { label: 'Callback' }]);
   }, [setItems]);
 

@@ -10,9 +10,14 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { loginSchema, LoginForm } from '@repo/app';
 import { FormInput } from '@/components/FormInput';
+import { MdCheck, MdInfoOutline } from 'react-icons/md';
 import TextLogo from '@/images/logo-text';
 
 export default function LoginPage() {
+  useEffect(() => {
+    document.title = 'Login | ALB Admin';
+  }, []);
+
   const {
     control,
     handleSubmit,
@@ -25,7 +30,8 @@ export default function LoginPage() {
     },
   });
 
-  const [loginError, setLoginError] = useState('');
+  const [loginError, setLoginError] = useState<string>('');
+  const [loginSuccess, setLoginSuccess] = useState<boolean>(false);
   const [signInWithEmailAndPassword, user, loading, error] =
     useSignInWithEmailAndPassword(auth);
   const { startLoading, stopLoading } = useLoading();
@@ -51,7 +57,7 @@ export default function LoginPage() {
 
   useEffect(() => {
     if (!error) return;
-
+    setLoginSuccess(false);
     switch (error.code) {
       case 'auth/invalid-email':
         setLoginError('Invalid email address!');
@@ -69,7 +75,6 @@ export default function LoginPage() {
         setLoginError('User access disabled!');
         break;
       default:
-        toast.error('Something went wrong');
         setLoginError('Invalid email/password!');
         break;
     }
@@ -88,8 +93,16 @@ export default function LoginPage() {
         </div>
 
         {error && (
-          <div className="mb-6 px-4 py-3 bg-red-900/20 border border-error rounded-xl">
-            <div className="text-error text-sm">{loginError}</div>
+          <div className="flex space-x-2 w-full items-center mb-6 px-4 py-3 bg-red-900/20 border border-error rounded-xl text-error">
+            <MdInfoOutline />
+            <div className="text-sm">{loginError}</div>
+          </div>
+        )}
+
+        {!error && loginSuccess && (
+          <div className="flex space-x-2 w-full items-center mb-6 px-4 py-3 bg-green-900/20 border border-success rounded-xl text-success">
+            <MdCheck />
+            <div className="text-sm">Login successful. Redirecting...</div>
           </div>
         )}
 

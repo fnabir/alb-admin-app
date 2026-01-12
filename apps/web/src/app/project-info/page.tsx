@@ -14,6 +14,10 @@ export default function ProjectInfo() {
   const { setItems } = useBreadcrumbs();
 
   useEffect(() => {
+    document.title = 'Project Info | ALB Admin';
+  }, []);
+
+  useEffect(() => {
     setItems([{ label: 'Home', href: '/' }, { label: 'Project Info' }]);
   }, [setItems]);
 

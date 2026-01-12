@@ -11,6 +11,10 @@ export default function Changelog() {
   const { isAdmin } = useAuth();
 
   useEffect(() => {
+    document.title = 'Changelog | ALB Admin';
+  }, []);
+
+  useEffect(() => {
     setItems([{ label: 'Home', href: '/' }, { label: 'Changelog' }]);
   }, [setItems]);
 

@@ -18,12 +18,11 @@ import {
   toast,
 } from '@repo/ui';
 import { DataSnapshot } from 'firebase/database';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { FormInput } from '@/components/FormInput';
 import { set, update } from 'firebase/database';
-import { formatInTimeZone } from 'date-fns-tz';
 
 export default function ProjectInfoDialog({
   data,
