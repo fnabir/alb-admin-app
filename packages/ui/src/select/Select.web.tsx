@@ -34,9 +34,7 @@ export function Select({
           ${error ? 'border-error' : 'border-border'}
         `}
       >
-        <option value="" disabled>
-          {placeholder}
-        </option>
+        <option value="">{placeholder}</option>
 
         {options.map((o) => (
           <option key={o.value} value={o.value}>

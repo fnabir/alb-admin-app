@@ -16,7 +16,7 @@ export function FormSelect<T extends FieldValues>({
       render={({ field, fieldState }) => (
         <Select
           {...props}
-          value={field.value ?? null}
+          value={field.value ?? ''}
           onChange={field.onChange}
           onBlur={field.onBlur}
           error={fieldState.error?.message}
