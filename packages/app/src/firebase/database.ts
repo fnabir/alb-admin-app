@@ -36,7 +36,5 @@ export async function addNewPaymentInfo(data: PaymentInfoForm) {
 }
 
 export async function deletePaymentInfo(type: string, key: string) {
-  console.log(type);
-  console.log(key);
   await remove(getDatabaseReference(`info/payment/${type}/${key}`));
 }
