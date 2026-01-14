@@ -37,7 +37,11 @@ export const Button = forwardRef<
       className={`
         ${buttonStyles.base}
         ${buttonStyles.variant[variant]}
-        ${isDisabled ? buttonStyles.disabled : ''}
+        ${
+          isDisabled
+            ? 'opacity-40 pointer-events-none'
+            : 'opacity-90 hover:opacity-100'
+        }
         ${className}
       `}
       {...props}

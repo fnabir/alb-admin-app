@@ -3,7 +3,6 @@ export const buttonStyles = {
     inline-flex items-center justify-center space-x-2
     py-1 lg:py-1.5 px-2 lg:px-4 rounded-lg
     shadow-md hover:shadow-lg
-    opacity-90 hover:opacity-100
     transition-all duration-200
   `,
 
@@ -26,8 +25,4 @@ export const buttonStyles = {
       border-2 border-border hover:border-accent
     `,
   },
-
-  disabled: `
-    opacity-40 pointer-events-none
-  `,
 };
