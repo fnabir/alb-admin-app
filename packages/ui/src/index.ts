@@ -8,4 +8,4 @@ export * from './input';
 export * from './toast';
 export * from './VersionCard';
 export * from './TotalBalanceRow';
-export { FormField } from './Form/FormField';
+export * from './FormInput';

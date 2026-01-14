@@ -1,5 +1,5 @@
 export interface InputProps {
-  value?: string;
+  value?: string | number;
   onChangeText?: (text: string) => void;
   onBlur?: () => void;
 
@@ -13,6 +13,7 @@ export interface InputProps {
   required?: boolean;
 
   type?: 'text' | 'email' | 'password' | 'number';
+  allowDecimal?: boolean;
 
   startAdornment?: React.ReactNode;
   endAdornment?: React.ReactNode;

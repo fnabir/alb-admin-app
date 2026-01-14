@@ -5,11 +5,10 @@ import { useSignInWithEmailAndPassword } from 'react-firebase-hooks/auth';
 import { auth } from '@repo/app';
 import { LoadingLink } from '@/components/LoadingLink';
 import { useLoading } from '@/contexts/LoadingContext';
-import { Button, toast } from '@repo/ui';
+import { Button, toast, FormInput } from '@repo/ui';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { loginSchema, LoginForm } from '@repo/app';
-import { FormInput } from '@/components/FormInput';
 import { MdCheck, MdInfoOutline } from 'react-icons/md';
 import TextLogo from '@/images/logo-text';
 

@@ -15,6 +15,7 @@ export function Input(props: InputProps) {
     error,
     secureTextEntry,
     type = 'text',
+    allowDecimal = true,
     disabled,
     required,
     startAdornment,
@@ -24,6 +25,8 @@ export function Input(props: InputProps) {
 
   const [showPassword, setShowPassword] = useState(false);
 
+  const isNumber = type === 'number';
+
   return (
     <div className={`${inputStyles.container} ${className}`}>
       {label && (
@@ -31,6 +34,7 @@ export function Input(props: InputProps) {
           {label} {required && <span className="text-error">*</span>}
         </label>
       )}
+
       <div
         className={`
           ${inputStyles.fieldWrapper}
@@ -46,14 +50,33 @@ export function Input(props: InputProps) {
           onChange={(e) => onChangeText?.(e.target.value)}
           onBlur={onBlur}
           placeholder={placeholder}
-          type={secureTextEntry ? (showPassword ? 'text' : 'password') : type}
-          className={inputStyles.field}
           disabled={disabled}
+          className={inputStyles.field}
+          type={
+            secureTextEntry
+              ? showPassword
+                ? 'text'
+                : 'password'
+              : isNumber
+              ? 'text'
+              : type
+          }
+          inputMode={
+            isNumber ? (allowDecimal ? 'decimal' : 'numeric') : undefined
+          }
+          pattern={
+            isNumber
+              ? allowDecimal
+                ? '[0-9]*[.,]?[0-9]*'
+                : '[0-9]*'
+              : undefined
+          }
         />
 
         {secureTextEntry && (
           <button
             type="button"
+            onMouseDown={(e) => e.preventDefault()}
             onClick={() => setShowPassword((p) => !p)}
             className="text-muted text-sm select-none"
           >

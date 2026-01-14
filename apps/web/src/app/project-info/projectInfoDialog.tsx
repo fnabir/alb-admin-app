@@ -21,7 +21,7 @@ import { DataSnapshot } from 'firebase/database';
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { FormInput } from '@/components/FormInput';
+import { FormInput } from '@repo/ui';
 import { set, update } from 'firebase/database';
 
 export default function ProjectInfoDialog({

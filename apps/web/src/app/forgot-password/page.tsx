@@ -2,12 +2,11 @@
 
 import { useEffect, useState } from 'react';
 import TextLogo from '@/images/logo-text';
-import { Button } from '@repo/ui';
+import { Button, FormInput } from '@repo/ui';
 import { useLoading } from '@/contexts/LoadingContext';
 import { auth, ForgetPasswordForm, forgetPasswordSchema } from '@repo/app';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
-import { FormInput } from '@/components/FormInput';
 import { useSendPasswordResetEmail } from 'react-firebase-hooks/auth';
 import { MdCheck, MdInfoOutline } from 'react-icons/md';
 import { LoadingLink } from '@/components/LoadingLink';
