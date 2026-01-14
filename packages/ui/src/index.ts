@@ -13,5 +13,6 @@ export * from './TotalBalanceRow';
 export * from './input';
 export * from './select';
 export * from './radio';
-export * from './FormInput';
-export { FormSelect } from './FormSelect';
+export * from './FormField/FormInput';
+export { FormSelect } from './FormField/FormSelect';
+export { FormRadioGroup } from './FormField/FormRadioGroup';

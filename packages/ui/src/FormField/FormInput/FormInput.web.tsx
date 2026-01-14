@@ -1,5 +1,5 @@
 import { Controller, Control, FieldValues, Path } from 'react-hook-form';
-import { Input } from '../input';
+import { Input } from '../../input';
 
 export function FormInput<T extends FieldValues>({
   name,
