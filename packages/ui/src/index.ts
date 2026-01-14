@@ -1,11 +1,16 @@
 export * from './button';
-export * from './Card';
 export * from './dialog';
+export * from './toast';
+
+export * from './Card';
 export * from './BalanceCard';
 export * from './BalanceRow';
 export * from './IconCard';
-export * from './input';
-export * from './toast';
 export * from './VersionCard';
+
 export * from './TotalBalanceRow';
+
+export * from './input';
+export * from './select';
 export * from './FormInput';
+export { FormSelect } from './FormSelect';
