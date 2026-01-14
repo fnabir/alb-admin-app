@@ -1,12 +1,16 @@
-import type { NextConfig } from 'next'
- 
+import type { NextConfig } from 'next';
+
 const nextConfig: NextConfig = {
   transpilePackages: [
     'react-native',
     'react-native-web',
     'react-native-css-interop',
     'nativewind',
+    'react-hook-form',
   ],
+  experimental: {
+    esmExternals: false,
+  },
   webpack: (config) => {
     config.resolve.alias = {
       ...(config.resolve.alias || {}),
@@ -19,7 +23,7 @@ const nextConfig: NextConfig = {
       ...config.resolve.extensions,
     ];
     return config;
-  }
-}
- 
-export default nextConfig
+  },
+};
+
+export default nextConfig;
