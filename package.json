@@ -9,9 +9,9 @@
     "lint": "turbo lint",
     "typecheck": "turbo typecheck"
   },
-  "packageManager": "pnpm@10.27.0",
+  "packageManager": "pnpm@10.28.0",
   "devDependencies": {
-    "turbo": "^2.7.3"
+    "turbo": "^2.7.4"
   },
   "pnpm": {
     "overrides": {
@@ -30,7 +30,7 @@
   },
   "dependencies": {
     "@hookform/resolvers": "^5.2.2",
-    "react-hook-form": "^7.70.0",
+    "react-hook-form": "^7.71.1",
     "zod": "^4.3.5",
     "react-icons": "5.5.0",
     "date-fns": "^4.1.0",
