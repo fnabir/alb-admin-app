@@ -6,11 +6,7 @@ const nextConfig: NextConfig = {
     'react-native-web',
     'react-native-css-interop',
     'nativewind',
-    'react-hook-form',
   ],
-  experimental: {
-    esmExternals: false,
-  },
   webpack: (config) => {
     config.resolve.alias = {
       ...(config.resolve.alias || {}),

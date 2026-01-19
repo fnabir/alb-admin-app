@@ -10,7 +10,7 @@
   },
   "devDependencies": {
     "@repo/app": "workspace:*",
-    "@types/react": "~19.2.7",
+    "@types/react": "~19.2.8",
     "eslint": "^9.39.2",
     "eslint-config-expo": "~10.0.0",
     "expo": "~54.0.31",
@@ -23,8 +23,6 @@
   },
   "dependencies": {
     "@radix-ui/react-slot": "^1.2.4",
-    "@radix-ui/react-dialog": "^1.1.15",
-    "tailwind-merge": "^3.4.0",
-    "tailwind-variants": "^3.2.2"
+    "@radix-ui/react-dialog": "^1.1.15"
   }
 }
