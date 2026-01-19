@@ -8,6 +8,8 @@ export * from './BalanceRow';
 export * from './IconCard';
 export * from './VersionCard';
 
+export * from './TransactionRow';
+export * from './ProjectTransactionRow';
 export * from './TotalBalanceRow';
 
 export * from './input';
