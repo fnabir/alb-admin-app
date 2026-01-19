@@ -3,19 +3,13 @@
 import { useBreadcrumbs } from '@/components/BreadcrumbContext';
 import { Loading } from '@/components/Loading';
 import { formatCurrency, getDatabaseReference, getTotalValue } from '@repo/app';
-import {
-  Button,
-  ProjectTransactionRow,
-  toast,
-  TotalBalanceRow,
-} from '@repo/ui';
+import { ProjectTransactionRow, toast, TotalBalanceRow } from '@repo/ui';
 import { useParams } from 'next/navigation';
 import { useEffect, useMemo } from 'react';
 import { useList, useObject } from 'react-firebase-hooks/database';
 import { MdAdd, MdEdit, MdOutlineInfo } from 'react-icons/md';
 import { update } from 'firebase/database';
-import UpdateTransactionDialog from './updateTransactionDialog';
-import DeleteTransactionDialog from './deleteTransactionDialog';
+import DeleteTransactionDialog from '@/components/DeleteTransactionDialog';
 
 export default function ProjectTransaction() {
   const { id } = useParams() as { id: string };

@@ -9,6 +9,7 @@ import { useEffect, useMemo } from 'react';
 import { useList, useObject } from 'react-firebase-hooks/database';
 import { MdOutlineInfo } from 'react-icons/md';
 import { update } from 'firebase/database';
+import DeleteTransactionDialog from '@/components/DeleteTransactionDialog';
 
 export default function StaffTransaction() {
   const { id } = useParams<{ id: string }>();
@@ -122,7 +123,13 @@ export default function StaffTransaction() {
               ) : (
                 <div className="flex flex-col space-y-2 min-h-0">
                   {billData.map((item) => (
-                    <TransactionRow key={item.key} data={item} />
+                    <TransactionRow key={item.key} data={item}>
+                      <DeleteTransactionDialog
+                        type="staff"
+                        id={staffId}
+                        data={item}
+                      />
+                    </TransactionRow>
                   ))}
                 </div>
               )}
@@ -144,7 +151,13 @@ export default function StaffTransaction() {
               ) : (
                 <div className="flex flex-col space-y-2 min-h-0">
                   {paymentData.map((item) => (
-                    <TransactionRow key={item.key} data={item} />
+                    <TransactionRow key={item.key} data={item}>
+                      <DeleteTransactionDialog
+                        type="staff"
+                        id={staffId}
+                        data={item}
+                      />
+                    </TransactionRow>
                   ))}
                 </div>
               )}
