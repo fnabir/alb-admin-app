@@ -3,7 +3,7 @@
 import { useBreadcrumbs } from '@/components/BreadcrumbContext';
 import { Loading } from '@/components/Loading';
 import { formatCurrency, getDatabaseReference, getTotalValue } from '@repo/app';
-import { toast, TotalBalanceRow } from '@repo/ui';
+import { toast, TotalBalanceRow, TransactionRow } from '@repo/ui';
 import { useParams } from 'next/navigation';
 import { useEffect, useMemo } from 'react';
 import { useList, useObject } from 'react-firebase-hooks/database';
@@ -121,24 +121,9 @@ export default function ConveyanceTransaction() {
                 </div>
               ) : (
                 <div className="flex flex-col space-y-2 min-h-0">
-                  {billData.map((item) => {
-                    const val = item.val();
-                    return (
-                      <div
-                        key={item.key}
-                        className="w-full flex items-center py-1 lg:py-1.5 px-2 md:px-3 lg:px-4 space-x-4 bg-card rounded-lg"
-                      >
-                        <span className="text-sm">{val.date}</span>
-                        <div className="flex-grow space-x-1">
-                          <span className="font-semibold">{val.title}</span>
-                          {val.details && <span>- {val.details}</span>}
-                        </div>
-                        <span className="text-lg font-semibold">
-                          {formatCurrency(val.amount)}
-                        </span>
-                      </div>
-                    );
-                  })}
+                  {billData.map((item) => (
+                    <TransactionRow key={item.key} data={item} />
+                  ))}
                 </div>
               )}
             </div>
@@ -158,24 +143,9 @@ export default function ConveyanceTransaction() {
                 </div>
               ) : (
                 <div className="flex flex-col space-y-2 min-h-0">
-                  {paymentData.map((item) => {
-                    const val = item.val();
-                    return (
-                      <div
-                        key={item.key}
-                        className="w-full flex items-center py-1 lg:py-1.5 px-2 md:px-3 lg:px-4 space-x-4 bg-card rounded-lg"
-                      >
-                        <span className="text-sm">{val.date}</span>
-                        <div className="flex-grow space-x-1">
-                          <span className="font-semibold">{val.title}</span>
-                          {val.details && <span>- {val.details}</span>}
-                        </div>
-                        <span className="text-lg font-semibold">
-                          {formatCurrency(val.amount)}
-                        </span>
-                      </div>
-                    );
-                  })}
+                  {paymentData.map((item) => (
+                    <TransactionRow key={item.key} data={item} />
+                  ))}
                 </div>
               )}
             </div>

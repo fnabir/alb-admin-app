@@ -3,32 +3,39 @@
 import { useBreadcrumbs } from '@/components/BreadcrumbContext';
 import { Loading } from '@/components/Loading';
 import { formatCurrency, getDatabaseReference, getTotalValue } from '@repo/app';
-import { toast, TotalBalanceRow } from '@repo/ui';
+import {
+  Button,
+  ProjectTransactionRow,
+  toast,
+  TotalBalanceRow,
+} from '@repo/ui';
 import { useParams } from 'next/navigation';
 import { useEffect, useMemo } from 'react';
 import { useList, useObject } from 'react-firebase-hooks/database';
-import { MdOutlineInfo } from 'react-icons/md';
+import { MdAdd, MdEdit, MdOutlineInfo } from 'react-icons/md';
 import { update } from 'firebase/database';
+import UpdateTransactionDialog from './updateTransactionDialog';
+import DeleteTransactionDialog from './deleteTransactionDialog';
 
 export default function ProjectTransaction() {
   const { id } = useParams() as { id: string };
-  const projectName = decodeURIComponent(id);
+  const project = decodeURIComponent(id);
   const { setItems } = useBreadcrumbs();
 
   useEffect(() => {
-    document.title = `${projectName} | Transaction`;
-  }, [projectName]);
+    document.title = `${project} | Transaction`;
+  }, [project]);
 
   useEffect(() => {
     setItems([
       { label: 'Home', href: '/' },
       { label: 'Project', href: '/project' },
-      { label: projectName },
+      { label: project },
     ]);
-  }, [setItems, projectName]);
+  }, [setItems, project]);
 
   const [data, transactionLoading, transactionError] = useList(
-    getDatabaseReference(`transaction/project/${projectName}`),
+    getDatabaseReference(`transaction/project/${project}`),
   );
 
   const paymentData = useMemo(
@@ -51,7 +58,7 @@ export default function ProjectTransaction() {
   );
 
   const [balance, balanceLoading, balanceError] = useObject(
-    getDatabaseReference(`balance/project/${projectName}`),
+    getDatabaseReference(`balance/project/${project}`),
   );
 
   const balanceVal = balance?.val();
@@ -66,9 +73,29 @@ export default function ProjectTransaction() {
   }, [totalBill, totalPayment]);
   const totalValue = balanceVal?.value ?? 0;
 
+  const paidDataOptions = useMemo(
+    () =>
+      data
+        ?.filter((t) => t.val().amount < 0)
+        .sort((a, b) => b.key!.localeCompare(a.key!))
+        .map((item) => ({
+          value: item.key!,
+          label: `${item.val().date} ${item.val().title}: ${formatCurrency(
+            Math.abs(item.val().amount),
+          )}`,
+        })),
+    [data],
+  );
+
+  const servicingCharge = Number(
+    useObject(
+      getDatabaseReference(`info/project/${project}/servicing`),
+    )[0]?.val() ?? 0,
+  );
+
   const handleUpdateBalance = async () => {
     try {
-      await update(getDatabaseReference(`balance/project/${projectName}`), {
+      await update(getDatabaseReference(`balance/project/${project}`), {
         value: total,
       });
       toast.success('Updated', 'Updated the total balance successfully.');
@@ -115,24 +142,38 @@ export default function ProjectTransaction() {
                 </div>
               ) : (
                 <div className="flex flex-col space-y-2 min-h-0">
-                  {billData.map((item) => {
-                    const val = item.val();
-                    return (
-                      <div
-                        key={item.key}
-                        className="w-full flex items-center py-1 lg:py-1.5 px-2 md:px-3 lg:px-4 space-x-4 bg-card rounded-lg"
-                      >
-                        <span className="text-sm">{val.date}</span>
-                        <div className="flex-grow space-x-1">
-                          <span className="font-semibold">{val.title}</span>
-                          {val.details && <span>- {val.details}</span>}
-                        </div>
-                        <span className="text-lg font-semibold">
-                          {formatCurrency(val.amount)}
-                        </span>
-                      </div>
-                    );
-                  })}
+                  {billData
+                    .sort((a, b) => b.key!.localeCompare(a.key!))
+                    .map((item) => {
+                      const paidData = item?.val().data;
+                      const paidArray = Object.entries(paidData ?? {}).map(
+                        ([key, value]) => ({
+                          key,
+                          ...(value as any),
+                        }),
+                      );
+                      const totalPaid: number = Object.values(
+                        paidData ?? {},
+                      ).reduce(
+                        (sum: number, item: any) =>
+                          sum + Number(item.amount || 0),
+                        0,
+                      );
+                      return (
+                        <ProjectTransactionRow
+                          key={item.key}
+                          transactionData={item}
+                          paidArray={paidArray}
+                          totalPaid={totalPaid}
+                        >
+                          <DeleteTransactionDialog
+                            type="project"
+                            id={project}
+                            data={item}
+                          />
+                        </ProjectTransactionRow>
+                      );
+                    })}
                 </div>
               )}
             </div>
@@ -152,24 +193,38 @@ export default function ProjectTransaction() {
                 </div>
               ) : (
                 <div className="flex flex-col space-y-2 min-h-0">
-                  {paymentData.map((item) => {
-                    const val = item.val();
-                    return (
-                      <div
-                        key={item.key}
-                        className="w-full flex items-center py-1 lg:py-1.5 px-2 md:px-3 lg:px-4 space-x-4 bg-card rounded-lg"
-                      >
-                        <span className="text-sm">{val.date}</span>
-                        <div className="flex-grow space-x-1">
-                          <span className="font-semibold">{val.title}</span>
-                          {val.details && <span>- {val.details}</span>}
-                        </div>
-                        <span className="text-lg font-semibold">
-                          {formatCurrency(val.amount)}
-                        </span>
-                      </div>
-                    );
-                  })}
+                  {paymentData
+                    .sort((a, b) => b.key!.localeCompare(a.key!))
+                    .map((item) => {
+                      const paidData = item?.val().data;
+                      const paidArray = Object.entries(paidData ?? {}).map(
+                        ([key, value]) => ({
+                          key,
+                          ...(value as any),
+                        }),
+                      );
+                      const totalPaid: number = Object.values(
+                        paidData ?? {},
+                      ).reduce(
+                        (sum: number, item: any) =>
+                          sum + Number(item.amount || 0),
+                        0,
+                      );
+                      return (
+                        <ProjectTransactionRow
+                          key={item.key}
+                          transactionData={item}
+                          paidArray={paidArray}
+                          totalPaid={totalPaid}
+                        >
+                          <DeleteTransactionDialog
+                            type="project"
+                            id={project}
+                            data={item}
+                          />
+                        </ProjectTransactionRow>
+                      );
+                    })}
                 </div>
               )}
             </div>
