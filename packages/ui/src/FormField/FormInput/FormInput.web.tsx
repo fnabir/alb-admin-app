@@ -19,13 +19,13 @@ export function FormInput<T extends FieldValues>({
           value={field.value ?? ''}
           onChangeText={(value) => {
             if (props.type === 'number') {
-              const normalized = value.replace(',', '.');
-
-              field.onChange(
-                normalized === '' || normalized === '.'
-                  ? null
-                  : Number(normalized),
-              );
+              if (props.allowDecimal) {
+                const normalized = value.replace(',', '.');
+                field.onChange(
+                  isNaN(Number(normalized)) ? null : Number(normalized),
+                );
+              } else
+                field.onChange(isNaN(Number(value)) ? null : Number(value));
             } else {
               field.onChange(value);
             }
