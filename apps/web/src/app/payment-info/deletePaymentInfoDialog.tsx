@@ -8,7 +8,6 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-  Input,
   toast,
 } from '@repo/ui';
 import { useState } from 'react';
@@ -43,7 +42,7 @@ export default function DeletePaymentInfoDialog({
         <Button
           icon={MdDelete}
           ariaLabel="Delete Payment Info dialog button"
-          variant="transparent"
+          className="!p-1"
         />
       </DialogTrigger>
       <DialogContent className={'border-error'}>
@@ -54,23 +53,28 @@ export default function DeletePaymentInfoDialog({
           </DialogDescription>
         </DialogHeader>
         {type == 'cash' ? (
-          <div className="p-2 border rounded-xl my-4 text-center">{value}</div>
+          <div className="p-2 border rounded-xl text-center">{value}</div>
         ) : (
-          <div className="flex space-x-2 p-2 border rounded-xl my-4">
+          <div className="flex space-x-2 p-2 border rounded-xl">
             <span className="flex-1">{id}</span>
             <span>{value}</span>
           </div>
         )}
-        <Button
-          type="submit"
-          variant="danger"
-          label="Delete"
-          loadingLabel="Deleting..."
-          className="px-10"
-          loading={isDeleting}
-          disabled={isDeleting}
-          onPress={handleDelete}
-        />
+        <div className="flex space-x-2 mt-4 w-full">
+          <DialogClose asChild>
+            <Button label="Cancel" variant="secondary" className="flex-1" />
+          </DialogClose>
+          <Button
+            type="submit"
+            variant="danger"
+            label="Delete"
+            loadingLabel="Deleting..."
+            className="flex-1"
+            loading={isDeleting}
+            disabled={isDeleting}
+            onPress={handleDelete}
+          />
+        </div>
       </DialogContent>
     </Dialog>
   );

@@ -171,7 +171,7 @@ export default function ProjectInfoDialog({
             startAdornment={'৳'}
           />
 
-          <div className="flex space-x-2 pt-6 justify-center">
+          <div className="flex space-x-2 pt-4 lg:pt-6 justify-center">
             <DialogClose asChild>
               <Button label={'Close'} variant="danger" className="px-10" />
             </DialogClose>

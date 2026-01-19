@@ -17,8 +17,8 @@ import {
   toast,
   FormSelect,
 } from '@repo/ui';
-import { useEffect, useRef, useState } from 'react';
-import { useForm } from 'react-hook-form';
+import { useEffect, useMemo, useState } from 'react';
+import { useForm, useWatch } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useListKeys } from 'react-firebase-hooks/database';
 import { MdAdd } from 'react-icons/md';
@@ -36,7 +36,6 @@ export const paymentInfoOptions: SelectOption[] = [
 
 export default function AddPaymentInfoDialog() {
   const [open, setOpen] = useState<boolean>(false);
-  const [detailsLabel, setDetailsLabel] = useState<string>('Details');
 
   const projectNames = useListKeys(getDatabaseReference(`balance/project`))[0];
   const projectNameOptions = projectNames
@@ -48,7 +47,6 @@ export default function AddPaymentInfoDialog() {
 
   const {
     control,
-    watch,
     setValue,
     handleSubmit,
     reset,
@@ -94,42 +92,31 @@ export default function AddPaymentInfoDialog() {
     }
   };
 
-  const typeValue = watch('type');
-  const projectValue = watch('project');
-  const firstRender = useRef(true);
+  const typeValue = useWatch({
+    control,
+    name: 'type',
+  });
 
-  useEffect(() => {
-    if (firstRender.current) {
-      firstRender.current = false;
-      return;
-    }
+  const projectValue = useWatch({
+    control,
+    name: 'project',
+  });
 
+  const detailsLabel = useMemo(() => {
     switch (typeValue) {
       case 'account':
       case 'cellAccount':
-        setDetailsLabel('Account Number (last 8 digits only)');
-        setValue('details', '');
-        break;
+        return 'Account Number (last 8 digits only)';
       case 'bank':
       case 'cheque':
-        setDetailsLabel('Bank Name, Branch');
-        setValue('details', '');
-        break;
+        return 'Bank Name, Branch';
       case 'bKash':
       case 'cell':
-        setDetailsLabel('Phone Number');
-        setValue('details', '');
-        break;
-      case 'cash':
-        setDetailsLabel('Details');
-        setValue('details', projectValue || '');
-        break;
+        return 'Phone Number';
       default:
-        setDetailsLabel('Details');
-        setValue('details', '');
-        break;
+        return 'Details';
     }
-  }, [typeValue, projectValue, setValue]);
+  }, [typeValue]);
 
   return (
     <Dialog open={open} onOpenChange={handleDialogChange}>
@@ -155,7 +142,7 @@ export default function AddPaymentInfoDialog() {
           <FormSelect
             name="project"
             control={control}
-            label="Project Name"
+            placeholder="Select Project Name..."
             options={projectNameOptions}
             disabled={isSubmitting}
           />
@@ -163,7 +150,7 @@ export default function AddPaymentInfoDialog() {
             <FormSelect
               name="type"
               control={control}
-              label="Payment Type"
+              placeholder="Select Payment Type..."
               options={paymentInfoOptions}
               disabled={isSubmitting}
             />
@@ -172,11 +159,11 @@ export default function AddPaymentInfoDialog() {
             <FormInput
               name="details"
               control={control}
-              label={detailsLabel}
+              placeholder={detailsLabel}
               disabled={isSubmitting || typeValue === 'cash'}
             />
           )}
-          <div className="flex space-x-2 pt-6 justify-center">
+          <div className="flex space-x-2 pt-4 lg:pt-6 justify-center">
             <DialogClose asChild>
               <Button label={'Close'} variant="danger" className="px-10" />
             </DialogClose>
