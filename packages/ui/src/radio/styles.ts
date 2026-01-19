@@ -1,7 +1,7 @@
 export const radioStyles = {
-  container: 'space-y-1',
+  container: 'mx-auto',
   label: 'text-sm font-medium',
-  group: 'flex flex-col gap-2',
+  group: 'flex gap-3 lg:gap-5',
 
   option: 'flex items-center gap-2',
 
