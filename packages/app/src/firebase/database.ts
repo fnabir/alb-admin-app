@@ -8,7 +8,6 @@ import {
   DatabaseReference,
 } from 'firebase/database';
 import { database } from './client';
-import { PaymentInfoForm } from 'src/schemas';
 
 export function getDatabaseReference(path?: string): DatabaseReference {
   return ref(database, path ?? '/');
@@ -45,7 +44,7 @@ export async function deleteTransaction(
 }
 
 // Payment Info
-export async function addNewPaymentInfo(data: PaymentInfoForm) {
+export async function addNewPaymentInfo(data: {type:string, project:string, details:string}) {
   const path = `info/payment/${
     data.type === 'cellAccount' ? 'cell' : data.type
   }`;
