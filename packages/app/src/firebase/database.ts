@@ -66,3 +66,12 @@ export async function deleteForm(
 ) {
   await remove(getDatabaseReference(`forms/${type}/${key}`));
 }
+
+// Inventory
+export async function setInventoryItem(item: string, count: number) {
+  await set(getDatabaseReference(`company/inventory/${item}`), count);
+}
+
+export async function deleteInventoryItem(item: string) {
+  await remove(getDatabaseReference(`company/inventory/${item}`));
+}
