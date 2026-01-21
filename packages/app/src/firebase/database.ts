@@ -24,6 +24,19 @@ export async function getDatabaseReferenceExists(
   return snapshot.exists();
 }
 
+export async function updateStaffTransaction(
+  id: string,
+  data: object,
+  dateKey: string,
+  key?: string,
+) {
+  if (!key || key == '') {
+    const databaseKey = generateDatabaseKey(`transaction/staff/${id}`);
+    key = dateKey + databaseKey;
+  }
+  await set(getDatabaseReference(`transaction/staff/${id}/${key}`), data);
+}
+
 export async function deleteTransaction(
   type: 'project' | 'staff' | 'conveyance',
   id: string,
@@ -44,7 +57,11 @@ export async function deleteTransaction(
 }
 
 // Payment Info
-export async function addNewPaymentInfo(data: {type:string, project:string, details:string}) {
+export async function addNewPaymentInfo(data: {
+  type: string;
+  project: string;
+  details: string;
+}) {
   const path = `info/payment/${
     data.type === 'cellAccount' ? 'cell' : data.type
   }`;

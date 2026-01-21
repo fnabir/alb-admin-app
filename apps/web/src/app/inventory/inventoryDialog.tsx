@@ -82,19 +82,8 @@ export default function InventoryDialog({
 
   const handleDialogChange = (state: boolean) => {
     setOpen(state);
-    if (!state) {
-      handleReset();
-    }
+    handleReset();
   };
-
-  useEffect(() => {
-    if (!open) return;
-
-    reset({
-      item: item ?? '',
-      count: count ?? 0,
-    });
-  }, [item, count, open, reset]);
 
   return (
     <Dialog open={open} onOpenChange={handleDialogChange}>

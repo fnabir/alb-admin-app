@@ -17,7 +17,7 @@ import {
   toast,
   FormSelect,
 } from '@repo/ui';
-import { useEffect, useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 import { useForm, useWatch } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useListKeys } from 'react-firebase-hooks/database';
@@ -47,7 +47,6 @@ export default function AddPaymentInfoDialog() {
 
   const {
     control,
-    setValue,
     handleSubmit,
     reset,
     formState: { isSubmitting },
@@ -87,9 +86,7 @@ export default function AddPaymentInfoDialog() {
 
   const handleDialogChange = (state: boolean) => {
     setOpen(state);
-    if (!state) {
-      handleReset();
-    }
+    handleReset();
   };
 
   const typeValue = useWatch({

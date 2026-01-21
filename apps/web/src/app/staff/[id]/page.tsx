@@ -3,13 +3,15 @@
 import { useBreadcrumbs } from '@/components/BreadcrumbContext';
 import { Loading } from '@/components/Loading';
 import { formatCurrency, getDatabaseReference, getTotalValue } from '@repo/app';
-import { toast, TotalBalanceRow, TransactionRow } from '@repo/ui';
+import { Button, toast, TotalBalanceRow, TransactionRow } from '@repo/ui';
 import { useParams } from 'next/navigation';
 import { useEffect, useMemo } from 'react';
 import { useList, useObject } from 'react-firebase-hooks/database';
 import { MdOutlineInfo } from 'react-icons/md';
 import { update } from 'firebase/database';
 import DeleteTransactionDialog from '@/components/DeleteTransactionDialog';
+import UpdateTransactionDialog from './updateTransactionDialog';
+import { MdAdd, MdEdit } from 'react-icons/md';
 
 export default function StaffTransaction() {
   const { id } = useParams<{ id: string }>();
@@ -38,23 +40,36 @@ export default function StaffTransaction() {
     getDatabaseReference(`transaction/staff/${staffId}`),
   );
 
+  const uniqueData = useMemo(() => {
+    if (!data) return [];
+
+    const seen = new Set<string>();
+
+    return data.filter((snap) => {
+      if (!snap.key) return false;
+      if (seen.has(snap.key)) return false;
+      seen.add(snap.key);
+      return true;
+    });
+  }, [data]);
+
   const paymentData = useMemo(
     () =>
-      data
-        ? data.filter((item) => {
+      uniqueData
+        ? uniqueData.filter((item) => {
             return item.val().amount < 0;
           })
         : [],
-    [data],
+    [uniqueData],
   );
   const billData = useMemo(
     () =>
-      data
-        ? data.filter((item) => {
+      uniqueData
+        ? uniqueData.filter((item) => {
             return item.val().amount >= 0;
           })
         : [],
-    [data],
+    [uniqueData],
   );
 
   const [balance, balanceLoading, balanceError] = useObject(
@@ -91,7 +106,11 @@ export default function StaffTransaction() {
 
   return (
     <div className="flex h-full w-full flex-col space-y-2 overflow-hidden min-h-0">
-      <div className="shrink-0 px-2 md:px-3 lg:px-4"></div>
+      <div className="shrink-0 px-2 md:px-3 lg:px-4">
+        <UpdateTransactionDialog id={staffId} name={staffName}>
+          <Button icon={MdAdd} label="Add" />
+        </UpdateTransactionDialog>
+      </div>
       {loading ? (
         <div className="flex flex-1 items-center justify-center">
           <Loading isFullScreen={false} />
@@ -122,15 +141,17 @@ export default function StaffTransaction() {
                 </div>
               ) : (
                 <div className="flex flex-col space-y-2 min-h-0">
-                  {billData.map((item) => (
-                    <TransactionRow key={item.key} data={item}>
-                      <DeleteTransactionDialog
-                        type="staff"
-                        id={staffId}
-                        data={item}
-                      />
-                    </TransactionRow>
-                  ))}
+                  {billData
+                    .sort((a, b) => b.key!.localeCompare(a.key!))
+                    .map((item) => (
+                      <TransactionRow key={item.key} data={item}>
+                        <DeleteTransactionDialog
+                          type="staff"
+                          id={staffId}
+                          data={item}
+                        />
+                      </TransactionRow>
+                    ))}
                 </div>
               )}
             </div>
@@ -150,15 +171,24 @@ export default function StaffTransaction() {
                 </div>
               ) : (
                 <div className="flex flex-col space-y-2 min-h-0">
-                  {paymentData.map((item) => (
-                    <TransactionRow key={item.key} data={item}>
-                      <DeleteTransactionDialog
-                        type="staff"
-                        id={staffId}
-                        data={item}
-                      />
-                    </TransactionRow>
-                  ))}
+                  {paymentData
+                    .sort((a, b) => b.key!.localeCompare(a.key!))
+                    .map((item) => (
+                      <TransactionRow key={item.key} data={item}>
+                        <UpdateTransactionDialog
+                          id={staffId}
+                          name={staffName}
+                          data={item}
+                        >
+                          <Button icon={MdEdit} />
+                        </UpdateTransactionDialog>
+                        <DeleteTransactionDialog
+                          type="staff"
+                          id={staffId}
+                          data={item}
+                        />
+                      </TransactionRow>
+                    ))}
                 </div>
               )}
             </div>
