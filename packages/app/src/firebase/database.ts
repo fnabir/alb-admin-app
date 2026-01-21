@@ -8,6 +8,7 @@ import {
   DatabaseReference,
 } from 'firebase/database';
 import { database } from './client';
+import { getCurrentDate } from '../utils';
 
 export function getDatabaseReference(path?: string): DatabaseReference {
   return ref(database, path ?? '/');
@@ -35,6 +36,9 @@ export async function updateStaffTransaction(
     key = dateKey + databaseKey;
   }
   await set(getDatabaseReference(`transaction/staff/${id}/${key}`), data);
+  await update(getDatabaseReference(`balance/staff/${id}`), {
+    date: getCurrentDate('dd MMM yyyy'),
+  });
 }
 
 export async function deleteTransaction(

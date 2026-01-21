@@ -44,7 +44,7 @@ export default function Staff() {
     getDatabaseReference('balance/total/staff'),
   );
 
-  const [conveyance, conveyanceLoading, conveyanceError] = useObject(
+  const [conveyance] = useObject(
     getDatabaseReference('balance/total/conveyance'),
   );
 
@@ -52,18 +52,16 @@ export default function Staff() {
   const totalValue = balanceVal?.value ?? 0;
 
   const conveyanceVal = conveyance?.val();
+  const totalConveyance = conveyanceVal?.amount ?? 0;
 
   const handleUpdateBalance = async () => {
     try {
       await update(getDatabaseReference('balance/total/staff'), {
         value: total,
       });
-      toast.success('Updated', 'Updated the total balance successfully.');
+      toast.success('Updated the total balance.');
     } catch (error: any) {
-      toast.error(
-        'Failed',
-        'Failed to update the total balance. Please try again.',
-      );
+      toast.error('Failed to update the total balance.', 'Please try again.');
     }
   };
 
@@ -101,7 +99,7 @@ export default function Staff() {
         <LoadingLink href="/conveyance">
           <TotalBalanceRow
             title="Total Conveyance"
-            value={conveyanceVal?.value ?? 0}
+            value={totalConveyance}
             showUpdate={false}
             date={conveyanceVal?.date}
             error={conveyanceVal?.message}
@@ -110,7 +108,7 @@ export default function Staff() {
       )}
       {data && data.length > 0 && (
         <TotalBalanceRow
-          value={total}
+          value={total + totalConveyance}
           showUpdate={total != totalValue}
           date={balanceVal?.date}
           error={balanceError?.message}

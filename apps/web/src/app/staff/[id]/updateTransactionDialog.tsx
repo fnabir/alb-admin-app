@@ -178,7 +178,7 @@ export default function UpdateTransactionDialog({
               loadingLabel={dataExists ? 'Updating...' : 'Adding...'}
               className="px-10"
               loading={isSubmitting}
-              disabled={isSubmitting}
+              disabled={!isValid || !isDirty || isSubmitting}
             />
           </div>
         </form>
