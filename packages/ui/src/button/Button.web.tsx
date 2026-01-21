@@ -23,7 +23,7 @@ export const Button = forwardRef<
     asChild = false,
     ...props
   },
-  ref,
+  ref
 ) {
   const isDisabled = disabled || loading;
   const Comp = asChild ? Slot : 'button';
@@ -42,6 +42,7 @@ export const Button = forwardRef<
             ? 'opacity-40 pointer-events-none'
             : 'opacity-90 hover:opacity-100'
         }
+        ${Icon && !label ? 'px-1' : 'px-2 lg:px-4'}
         ${className}
       `}
       {...props}

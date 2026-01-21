@@ -42,7 +42,6 @@ export default function DeletePaymentInfoDialog({
         <Button
           icon={MdDelete}
           ariaLabel="Delete Payment Info dialog button"
-          className="!p-1"
         />
       </DialogTrigger>
       <DialogContent className={'border-error'}>

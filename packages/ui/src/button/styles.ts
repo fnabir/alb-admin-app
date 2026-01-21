@@ -1,7 +1,7 @@
 export const buttonStyles = {
   base: `
-    inline-flex items-center justify-center space-x-2
-    py-1 lg:py-1.5 px-2 lg:px-4 rounded-lg
+    inline-flex items-center justify-center space-x-1
+    py-1 rounded-lg
     shadow-md hover:shadow-lg
     transition-all duration-200
   `,
@@ -21,7 +21,7 @@ export const buttonStyles = {
     `,
     transparent: `
       text-primary bg-transparent
-      !px-1.5 !rounded-md
+      rounded-md
       border-2 border-border hover:border-accent
     `,
   },

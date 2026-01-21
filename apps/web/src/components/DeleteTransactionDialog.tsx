@@ -48,7 +48,7 @@ export default function DeleteTransactionDialog({
         <Button
           icon={MdDelete}
           ariaLabel="Delete Transaction dialog button"
-          className="text-black bg-white !p-1"
+          className="text-black bg-white"
         />
       </DialogTrigger>
       <DialogContent className={'border-error'}>

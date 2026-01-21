@@ -62,7 +62,7 @@ export default function Ledger() {
             >
               <div className="flex space-x-2">
                 <InventoryDialog item={item.name} count={item.count}>
-                  <Button icon={MdEdit} className="!p-1" />
+                  <Button icon={MdEdit} />
                 </InventoryDialog>
                 <DeleteInventoryDialog item={item.name} count={item.count} />
               </div>

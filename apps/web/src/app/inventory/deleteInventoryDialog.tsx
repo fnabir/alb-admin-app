@@ -37,7 +37,7 @@ export default function DeleteInventoryDialog({
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button icon={MdDelete} ariaLabel={`Delete ${item}`} className="!p-1" />
+        <Button icon={MdDelete} ariaLabel={`Delete ${item}`} />
       </DialogTrigger>
       <DialogContent className={'border-error'}>
         <DialogHeader>

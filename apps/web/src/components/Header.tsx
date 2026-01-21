@@ -19,8 +19,6 @@ export default function Header({ onMenuClick }: { onMenuClick: () => void }) {
           <Button
             icon={FaUser}
             label={user?.displayName ?? 'User'}
-            variant="transparent"
-            className="!px-4 !py-1"
           />
         </LoadingLink>
         <ThemeToggle />
