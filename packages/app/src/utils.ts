@@ -1,3 +1,4 @@
+import { isValid, parse, format } from 'date-fns';
 import { formatInTimeZone } from 'date-fns-tz';
 import { DataSnapshot } from 'firebase/database';
 
@@ -49,17 +50,29 @@ export function getTotalValue(
   else {
     if (dataName == 'amount')
       return data.reduce((sum, snap) => {
-        const data = snap.val();
-        return sum + (data.amount || 0);
+        const val = snap.val();
+        return sum + (val.amount || 0);
       }, 0);
     else
       return data.reduce((sum, snap) => {
-        const data = snap.val();
-        return sum + (data.value || 0);
+        const val = snap.val();
+        return sum + (val.value || 0);
       }, 0);
   }
 }
 
 export function getCurrentDate(format: string): string {
   return formatInTimeZone(new Date(), 'Asia/Dhaka', format);
+}
+
+export function toISODate(dateFormat: string, value?: string) {
+  if (!value) return '';
+  const date = parse(value, dateFormat, new Date());
+  return isValid(date) ? format(date, 'yyyy-MM-dd') : '';
+}
+
+export function fromISODate(dateFormat: string, value?: string) {
+  if (!value) return '';
+  const date = parse(value, 'yyyy-MM-dd', new Date());
+  return isValid(date) ? format(date, dateFormat) : '';
 }
