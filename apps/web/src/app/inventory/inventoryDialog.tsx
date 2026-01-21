@@ -1,11 +1,4 @@
-import {
-  getCurrentDate,
-  getDatabaseReference,
-  getDatabaseReferenceExists,
-  InventoryForm,
-  inventorySchema,
-  setInventoryItem,
-} from '@repo/app';
+import { InventoryForm, inventorySchema, setInventoryItem } from '@repo/app';
 import {
   Button,
   Dialog,
@@ -15,15 +8,12 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-  Input,
   toast,
 } from '@repo/ui';
-import { DataSnapshot } from 'firebase/database';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { FormInput } from '@repo/ui';
-import { set, update } from 'firebase/database';
 
 export default function InventoryDialog({
   item,
