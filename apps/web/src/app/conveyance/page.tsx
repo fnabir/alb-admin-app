@@ -3,11 +3,14 @@
 import { useBreadcrumbs } from '@/components/BreadcrumbContext';
 import { Loading } from '@/components/Loading';
 import { LoadingLink } from '@/components/LoadingLink';
-import { getDatabaseReference, getTotalValue } from '@repo/app';
+import {
+  getDatabaseReference,
+  getTotalValue,
+  updateTotalBalance,
+} from '@repo/app';
 import { useEffect, useMemo } from 'react';
 import { useList, useObject } from 'react-firebase-hooks/database';
 import { MdOutlineInfo } from 'react-icons/md';
-import { update } from 'firebase/database';
 import { BalanceRow, toast, TotalBalanceRow } from '@repo/ui';
 
 export default function Conveyance() {
@@ -47,19 +50,22 @@ export default function Conveyance() {
   const balanceVal = balance?.val();
   const totalValue = balanceVal?.value ?? 0;
 
-  const handleUpdateBalance = async () => {
-    try {
-      await update(getDatabaseReference('balance/total/conveyance'), {
-        value: total,
-      });
-      toast.success('Updated', 'Updated the total balance successfully.');
-    } catch (error: any) {
-      toast.error(
-        'Failed',
-        'Failed to update the total balance. Please try again.',
-      );
-    }
-  };
+  useEffect(() => {
+    if (balanceLoading) return;
+    if (balanceError) return;
+    if (totalValue === total) return;
+
+    const syncBalance = async () => {
+      try {
+        await updateTotalBalance('conveyance', total);
+        toast.success('Updated', 'Balance auto-synced.');
+      } catch (err) {
+        toast.error('Failed', 'Failed to sync balance.');
+      }
+    };
+
+    syncBalance();
+  }, [total, totalValue, balanceLoading, balanceError]);
 
   const loading = dataLoading || balanceLoading;
 
@@ -94,10 +100,8 @@ export default function Conveyance() {
       {data && data.length > 0 && (
         <TotalBalanceRow
           value={total}
-          showUpdate={total != totalValue}
           date={balanceVal?.date}
           error={balanceError?.message}
-          onClick={handleUpdateBalance}
         />
       )}
     </div>

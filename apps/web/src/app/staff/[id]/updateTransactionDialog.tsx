@@ -1,9 +1,10 @@
 import {
   fromISODate,
+  generateDatabaseKey,
   toISODate,
   TransactionForm,
   transactionSchema,
-  updateStaffTransaction,
+  updateTransaction,
 } from '@repo/app';
 import {
   Button,
@@ -44,7 +45,6 @@ export default function UpdateTransactionDialog({
   id: string;
   name: string;
   data?: DataSnapshot;
-  servicingCharge?: number;
   children: React.ReactNode;
 }) {
   const [open, setOpen] = useState<boolean>(false);
@@ -69,16 +69,19 @@ export default function UpdateTransactionDialog({
 
   const onSubmit = async (formData: TransactionForm) => {
     try {
-      await updateStaffTransaction(
+      await updateTransaction(
+        'staff',
         id,
+        data
+          ? data.key!
+          : fromISODate('yyMMdd', formData.date) +
+              generateDatabaseKey(`transaction/staff/${id}`),
         {
           title: formData.title,
           details: formData.details,
           amount: formData.amount * (sign == '-' ? -1 : 1),
           date: fromISODate('dd.MM.yy', formData.date),
         },
-        fromISODate('yyMMdd', formData.date),
-        data ? data.key! : undefined,
       );
       toast.success(`${dataExists ? 'Updated' : 'Added'} the transaction`);
     } catch (error: any) {

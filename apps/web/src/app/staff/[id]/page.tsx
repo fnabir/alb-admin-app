@@ -2,13 +2,17 @@
 
 import { useBreadcrumbs } from '@/components/BreadcrumbContext';
 import { Loading } from '@/components/Loading';
-import { formatCurrency, getDatabaseReference, getTotalValue } from '@repo/app';
+import {
+  formatCurrency,
+  getDatabaseReference,
+  getTotalValue,
+  updateBalance,
+} from '@repo/app';
 import { Button, toast, TotalBalanceRow, TransactionRow } from '@repo/ui';
 import { useParams } from 'next/navigation';
 import { useEffect, useMemo } from 'react';
 import { useList, useObject } from 'react-firebase-hooks/database';
 import { MdOutlineInfo } from 'react-icons/md';
-import { update } from 'firebase/database';
 import DeleteTransactionDialog from '@/components/DeleteTransactionDialog';
 import UpdateTransactionDialog from './updateTransactionDialog';
 import { MdAdd, MdEdit } from 'react-icons/md';
@@ -88,19 +92,22 @@ export default function StaffTransaction() {
   }, [totalBill, totalPayment]);
   const totalValue = balanceVal?.value ?? 0;
 
-  const handleUpdateBalance = async () => {
-    try {
-      await update(getDatabaseReference(`balance/staff/${staffId}`), {
-        value: total,
-      });
-      toast.success('Updated', 'Updated the total balance successfully.');
-    } catch (error: any) {
-      toast.error(
-        'Failed',
-        'Failed to update the total balance. Please try again.',
-      );
-    }
-  };
+  useEffect(() => {
+    if (balanceLoading) return;
+    if (balanceError) return;
+    if (totalValue === total) return;
+
+    const syncBalance = async () => {
+      try {
+        await updateBalance('staff', staffId, total);
+        toast.success('Updated', 'Balance auto-synced.');
+      } catch (err) {
+        toast.error('Failed', 'Failed to sync balance.');
+      }
+    };
+
+    syncBalance();
+  }, [total, totalValue, balanceLoading, balanceError, staffId]);
 
   const loading = transactionLoading || balanceLoading;
 
@@ -198,10 +205,8 @@ export default function StaffTransaction() {
       {data && data.length > 0 && (
         <TotalBalanceRow
           value={total}
-          showUpdate={total != totalValue}
           date={balanceVal?.date}
           error={balanceError?.message}
-          onClick={handleUpdateBalance}
         />
       )}
     </div>
