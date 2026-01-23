@@ -3,7 +3,5 @@ export interface TotalBalanceProps {
   date?: string;
   value: number;
   error?: string;
-  showUpdate?: boolean;
-  onClick?: () => void;
   className?: string;
 }
