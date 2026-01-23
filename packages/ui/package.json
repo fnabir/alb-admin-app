@@ -10,10 +10,10 @@
   },
   "devDependencies": {
     "@repo/app": "workspace:*",
-    "@types/react": "~19.2.8",
+    "@types/react": "~19.2.9",
     "eslint": "^9.39.2",
     "eslint-config-expo": "~10.0.0",
-    "expo": "~54.0.31",
+    "expo": "~54.0.32",
     "nativewind": "^4.1.23",
     "typescript": "~5.9.3"
   },
