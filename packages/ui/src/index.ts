@@ -12,6 +12,9 @@ export * from './TransactionRow';
 export * from './ProjectTransactionRow';
 export * from './TotalBalanceRow';
 
+export * from './ErrorUI';
+export * from './EmptyUI';
+
 export * from './input';
 export * from './select';
 export * from './radio';
