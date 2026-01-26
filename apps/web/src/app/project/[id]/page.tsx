@@ -2,14 +2,27 @@
 
 import { useBreadcrumbs } from '@/components/BreadcrumbContext';
 import { Loading } from '@/components/Loading';
-import { formatCurrency, getDatabaseReference, getTotalValue } from '@repo/app';
-import { ProjectTransactionRow, toast, TotalBalanceRow } from '@repo/ui';
+import {
+  formatCurrency,
+  getDatabaseReference,
+  getTotalValue,
+  updateBalance,
+} from '@repo/app';
+import {
+  Button,
+  EmptyUI,
+  ErrorUI,
+  ProjectTransactionRow,
+  toast,
+  TotalBalanceRow,
+} from '@repo/ui';
 import { useParams } from 'next/navigation';
 import { useEffect, useMemo } from 'react';
 import { useList, useObject } from 'react-firebase-hooks/database';
 import { MdAdd, MdEdit, MdOutlineInfo } from 'react-icons/md';
-import { update } from 'firebase/database';
 import DeleteTransactionDialog from '@/components/DeleteTransactionDialog';
+import UpdateTransactionDialog from './updateTransactionDialog';
+import { SelectOption } from '@repo/ui/src/select/types';
 
 export default function ProjectTransaction() {
   const { id } = useParams() as { id: string };
@@ -32,23 +45,36 @@ export default function ProjectTransaction() {
     getDatabaseReference(`transaction/project/${project}`),
   );
 
+  const uniqueData = useMemo(() => {
+    if (!data) return [];
+
+    const seen = new Set<string>();
+
+    return data.filter((snap) => {
+      if (!snap.key) return false;
+      if (seen.has(snap.key)) return false;
+      seen.add(snap.key);
+      return true;
+    });
+  }, [data]);
+
   const paymentData = useMemo(
     () =>
-      data
-        ? data.filter((item) => {
+      uniqueData
+        ? uniqueData.filter((item) => {
             return item.val().amount < 0;
           })
         : [],
-    [data],
+    [uniqueData],
   );
   const billData = useMemo(
     () =>
-      data
-        ? data.filter((item) => {
+      uniqueData
+        ? uniqueData.filter((item) => {
             return item.val().amount >= 0;
           })
         : [],
-    [data],
+    [uniqueData],
   );
 
   const [balance, balanceLoading, balanceError] = useObject(
@@ -67,7 +93,27 @@ export default function ProjectTransaction() {
   }, [totalBill, totalPayment]);
   const totalValue = balanceVal?.value ?? 0;
 
-  const paidDataOptions = useMemo(
+  const loading = transactionLoading || balanceLoading;
+  const error = transactionError || balanceError;
+
+  useEffect(() => {
+    if (loading) return;
+    if (error) return;
+    if (totalValue === total) return;
+
+    const syncBalance = async () => {
+      try {
+        await updateBalance('project', project, total);
+        toast.success('Updated', 'Balance auto-synced.');
+      } catch (err) {
+        toast.error('Failed', 'Failed to sync balance.');
+      }
+    };
+
+    syncBalance();
+  }, [total, totalValue, loading, error, project]);
+
+  const paidDataOptions: SelectOption[] | undefined = useMemo(
     () =>
       data
         ?.filter((t) => t.val().amount < 0)
@@ -87,39 +133,21 @@ export default function ProjectTransaction() {
     )[0]?.val() ?? 0,
   );
 
-  const handleUpdateBalance = async () => {
-    try {
-      await update(getDatabaseReference(`balance/project/${project}`), {
-        value: total,
-      });
-      toast.success('Updated', 'Updated the total balance successfully.');
-    } catch (error: any) {
-      toast.error(
-        'Failed',
-        'Failed to update the total balance. Please try again.',
-      );
-    }
-  };
-
-  const loading = transactionLoading || balanceLoading;
-
   return (
     <div className="flex h-full w-full flex-col space-y-2 overflow-hidden min-h-0">
-      <div className="shrink-0 px-2 md:px-3 lg:px-4"></div>
+      <div className="px-2 md:px-3 lg:px-4">
+        <UpdateTransactionDialog id={project} servicingCharge={servicingCharge}>
+          <Button icon={MdAdd} label="Add" />
+        </UpdateTransactionDialog>
+      </div>
       {loading ? (
         <div className="flex flex-1 items-center justify-center">
           <Loading isFullScreen={false} />
         </div>
-      ) : transactionError || balanceError ? (
-        <div className="flex flex-1 flex-col items-center justify-center gap-2 text-lg">
-          <MdOutlineInfo className="size-16" />
-          {transactionError ? transactionError.message : balanceError?.message}
-        </div>
-      ) : !data || data.length == 0 ? (
-        <div className="flex flex-1 flex-col items-center justify-center gap-2 text-lg">
-          <MdOutlineInfo className="size-16" />
-          No Record Found
-        </div>
+      ) : error ? (
+        <ErrorUI error={error} />
+      ) : !data?.length ? (
+        <EmptyUI />
       ) : (
         <div className="flex-1 grid grid-cols-1 lg:grid-cols-2 gap-2 px-2 md:px-3 lg:px-4 min-h-0">
           <div className="w-full rounded-xl border-2 border-error flex flex-col h-full min-h-0">
@@ -143,7 +171,7 @@ export default function ProjectTransaction() {
                       const paidArray = Object.entries(paidData ?? {}).map(
                         ([key, value]) => ({
                           key,
-                          ...(value as any),
+                          ...(value as object),
                         }),
                       );
                       const totalPaid: number = Object.values(
@@ -160,6 +188,16 @@ export default function ProjectTransaction() {
                           paidArray={paidArray}
                           totalPaid={totalPaid}
                         >
+                          <UpdateTransactionDialog
+                            id={project}
+                            data={item}
+                            servicingCharge={servicingCharge}
+                            paidArray={paidArray}
+                            paidDataOptions={paidDataOptions}
+                            total={totalPaid}
+                          >
+                            <Button icon={MdEdit} />
+                          </UpdateTransactionDialog>
                           <DeleteTransactionDialog
                             type="project"
                             id={project}
@@ -194,7 +232,7 @@ export default function ProjectTransaction() {
                       const paidArray = Object.entries(paidData ?? {}).map(
                         ([key, value]) => ({
                           key,
-                          ...(value as any),
+                          ...(value as object),
                         }),
                       );
                       const totalPaid: number = Object.values(
@@ -211,6 +249,13 @@ export default function ProjectTransaction() {
                           paidArray={paidArray}
                           totalPaid={totalPaid}
                         >
+                          <UpdateTransactionDialog
+                            id={project}
+                            data={item}
+                            paidArray={paidArray}
+                          >
+                            <Button icon={MdEdit} />
+                          </UpdateTransactionDialog>
                           <DeleteTransactionDialog
                             type="project"
                             id={project}
@@ -228,10 +273,8 @@ export default function ProjectTransaction() {
       {data && data.length > 0 && (
         <TotalBalanceRow
           value={total}
-          showUpdate={total != totalValue}
           date={balanceVal?.date}
           error={balanceError?.message}
-          onClick={handleUpdateBalance}
         />
       )}
     </div>

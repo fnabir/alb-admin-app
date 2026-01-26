@@ -8,7 +8,13 @@ import {
   getTotalValue,
   updateBalance,
 } from '@repo/app';
-import { toast, TotalBalanceRow, TransactionRow } from '@repo/ui';
+import {
+  EmptyUI,
+  ErrorUI,
+  toast,
+  TotalBalanceRow,
+  TransactionRow,
+} from '@repo/ui';
 import { useParams } from 'next/navigation';
 import { useEffect, useMemo } from 'react';
 import { useList, useObject } from 'react-firebase-hooks/database';
@@ -52,9 +58,12 @@ export default function ConveyanceTransaction() {
   }, [data]);
   const totalValue = balanceVal?.value ?? 0;
 
+  const loading = transactionLoading || balanceLoading;
+  const error = transactionError || balanceError;
+
   useEffect(() => {
-    if (balanceLoading) return;
-    if (balanceError) return;
+    if (loading) return;
+    if (error) return;
     if (totalValue === total) return;
 
     const syncBalance = async () => {
@@ -67,27 +76,18 @@ export default function ConveyanceTransaction() {
     };
 
     syncBalance();
-  }, [total, totalValue, balanceLoading, balanceError, staffId]);
-
-  const loading = transactionLoading || balanceLoading;
+  }, [total, totalValue, loading, error, staffId]);
 
   return (
-    <div className="flex h-full w-full flex-col space-y-2 overflow-hidden min-h-0">
-      <div className="shrink-0 px-2 md:px-3 lg:px-4"></div>
+    <div className="size-full flex flex-col space-y-2">
       {loading ? (
         <div className="flex flex-1 items-center justify-center">
           <Loading isFullScreen={false} />
         </div>
-      ) : transactionError || balanceError ? (
-        <div className="flex flex-1 flex-col items-center justify-center gap-2 text-lg">
-          <MdOutlineInfo className="size-16" />
-          {transactionError ? transactionError.message : balanceError?.message}
-        </div>
-      ) : !data || data.length == 0 ? (
-        <div className="flex flex-1 flex-col items-center justify-center gap-2 text-lg">
-          <MdOutlineInfo className="size-16" />
-          No Record Found
-        </div>
+      ) : error ? (
+        <ErrorUI error={error} />
+      ) : !data?.length ? (
+        <EmptyUI />
       ) : (
         <div className="flex-1 rounded-xl border-2 border-error flex flex-col h-full min-h-0 mx-2 lg:mx-4">
           <div className="flex px-2 lg:px-4 py-1 lg:py-2 text-lg md:text-xl lg:text-2xl font-semibold border-b-2 border-error">

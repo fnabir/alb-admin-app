@@ -8,7 +8,14 @@ import {
   getTotalValue,
   updateBalance,
 } from '@repo/app';
-import { Button, toast, TotalBalanceRow, TransactionRow } from '@repo/ui';
+import {
+  Button,
+  EmptyUI,
+  ErrorUI,
+  toast,
+  TotalBalanceRow,
+  TransactionRow,
+} from '@repo/ui';
 import { useParams } from 'next/navigation';
 import { useEffect, useMemo } from 'react';
 import { useList, useObject } from 'react-firebase-hooks/database';
@@ -92,9 +99,12 @@ export default function StaffTransaction() {
   }, [totalBill, totalPayment]);
   const totalValue = balanceVal?.value ?? 0;
 
+  const loading = transactionLoading || balanceLoading;
+  const error = transactionError || balanceError;
+
   useEffect(() => {
-    if (balanceLoading) return;
-    if (balanceError) return;
+    if (loading) return;
+    if (error) return;
     if (totalValue === total) return;
 
     const syncBalance = async () => {
@@ -107,9 +117,7 @@ export default function StaffTransaction() {
     };
 
     syncBalance();
-  }, [total, totalValue, balanceLoading, balanceError, staffId]);
-
-  const loading = transactionLoading || balanceLoading;
+  }, [total, totalValue, loading, error, staffId]);
 
   return (
     <div className="flex h-full w-full flex-col space-y-2 overflow-hidden min-h-0">
@@ -122,16 +130,10 @@ export default function StaffTransaction() {
         <div className="flex flex-1 items-center justify-center">
           <Loading isFullScreen={false} />
         </div>
-      ) : transactionError || balanceError ? (
-        <div className="flex flex-1 flex-col items-center justify-center gap-2 text-lg">
-          <MdOutlineInfo className="size-16" />
-          {transactionError ? transactionError.message : balanceError?.message}
-        </div>
-      ) : !data || data.length == 0 ? (
-        <div className="flex flex-1 flex-col items-center justify-center gap-2 text-lg">
-          <MdOutlineInfo className="size-16" />
-          No Record Found
-        </div>
+      ) : error ? (
+        <ErrorUI error={error} />
+      ) : !data?.length ? (
+        <EmptyUI />
       ) : (
         <div className="flex-1 grid grid-cols-1 lg:grid-cols-2 gap-2 px-2 md:px-3 lg:px-4 min-h-0">
           <div className="w-full rounded-xl border-2 border-error flex flex-col h-full min-h-0">
