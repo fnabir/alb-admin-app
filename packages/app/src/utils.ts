@@ -76,3 +76,10 @@ export function fromISODate(dateFormat: string, value?: string) {
   const date = parse(value, 'yyyy-MM-dd', new Date());
   return isValid(date) ? format(date, dateFormat) : '';
 }
+
+export function getLabelByValue(
+  options: { value: string; label: string }[],
+  value: string,
+) {
+  return options.find((o) => o.value === value)?.label ?? '';
+}

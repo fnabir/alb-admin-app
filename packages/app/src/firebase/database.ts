@@ -25,18 +25,14 @@ export async function getDatabaseReferenceExists(
   return snapshot.exists();
 }
 
-export async function updateStaffTransaction(
+export async function updateTransaction(
+  type: 'project' | 'staff' | 'conveyance',
   id: string,
+  key: string,
   data: object,
-  dateKey: string,
-  key?: string,
 ) {
-  if (!key || key == '') {
-    const databaseKey = generateDatabaseKey(`transaction/staff/${id}`);
-    key = dateKey + databaseKey;
-  }
-  await set(getDatabaseReference(`transaction/staff/${id}/${key}`), data);
-  await update(getDatabaseReference(`balance/staff/${id}`), {
+  await set(getDatabaseReference(`transaction/${type}/${id}/${key}`), data);
+  await update(getDatabaseReference(`balance/${type}/${id}`), {
     date: getCurrentDate('dd MMM yyyy'),
   });
 }
@@ -58,6 +54,25 @@ export async function deleteTransaction(
   }
 
   await update(getDatabaseReference(`transaction/${type}/${id}`), updates);
+}
+
+export async function updateBalance(
+  type: 'project' | 'staff' | 'conveyance',
+  id: string,
+  total: number,
+) {
+  await update(getDatabaseReference(`balance/${type}/${id}`), {
+    value: total,
+  });
+}
+
+export async function updateTotalBalance(
+  type: 'project' | 'staff' | 'conveyance',
+  total: number,
+) {
+  await update(getDatabaseReference(`balance/total/${type}`), {
+    value: total,
+  });
 }
 
 // Payment Info
