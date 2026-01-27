@@ -1,9 +1,9 @@
 export function Loading({ isFullScreen = true }: { isFullScreen?: boolean }) {
   return (
     <div
-      className={`flex items-center justify-center ${
+      className={`flex items-center justify-center bg-background ${
         isFullScreen ? 'h-screen' : ''
-      } bg-background`}
+      }`}
     >
       <div className="text-center">
         <div className="animate-spin rounded-full size-16 border-b-[3px] border-accent mx-auto mb-4" />
