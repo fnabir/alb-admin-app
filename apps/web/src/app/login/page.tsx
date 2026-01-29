@@ -120,6 +120,7 @@ export default function LoginPage() {
             label="Password"
             placeholder="••••••••"
             secureTextEntry
+            disabled={loading}
           />
 
           <div className="flex items-center justify-end pb-4">

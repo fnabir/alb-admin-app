@@ -40,7 +40,7 @@ export function Input(props: InputProps) {
           ${inputStyles.fieldWrapper}
           ${error ? 'border-error' : 'border-border'}
           focus-within:border-accent
-          ${disabled ? 'opacity-50 pointer-events-none' : ''}
+          ${disabled ? 'opacity-70 pointer-events-none' : ''}
         `}
       >
         {startAdornment}
@@ -58,8 +58,8 @@ export function Input(props: InputProps) {
                 ? 'text'
                 : 'password'
               : isNumber
-              ? 'text'
-              : type
+                ? 'text'
+                : type
           }
           inputMode={
             isNumber ? (allowDecimal ? 'decimal' : 'numeric') : undefined

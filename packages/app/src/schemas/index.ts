@@ -4,3 +4,5 @@ export * from './projectInfo.schema';
 export * from './paymentInfo.schema';
 export * from './transaction.schema';
 export * from './inventory.schema';
+export * from './user.schema';
+export * from './changePassword.schema';

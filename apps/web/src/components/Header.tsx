@@ -15,11 +15,8 @@ export default function Header({ onMenuClick }: { onMenuClick: () => void }) {
     <header className="flex items-center justify-between mx-4">
       <Breadcrumb />
       <div className="space-x-2">
-        <LoadingLink href="./user" className="hidden lg:inline-block">
-          <Button
-            icon={FaUser}
-            label={user?.displayName ?? 'User'}
-          />
+        <LoadingLink href="/user" className="hidden lg:inline-block">
+          <Button icon={FaUser} label={user?.displayName ?? 'User'} />
         </LoadingLink>
         <ThemeToggle />
         <LogoutButton />

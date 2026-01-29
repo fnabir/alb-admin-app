@@ -110,3 +110,8 @@ export async function setInventoryItem(item: string, count: number) {
 export async function deleteInventoryItem(item: string) {
   await remove(getDatabaseReference(`company/inventory/${item}`));
 }
+
+// User Info
+export async function updateUserInfo(uid: string, data: object) {
+  await update(getDatabaseReference(`info/user/${uid}`), data);
+}
