@@ -94,6 +94,19 @@ export async function deletePaymentInfo(type: string, key: string) {
   await remove(getDatabaseReference(`info/payment/${type}/${key}`));
 }
 
+//Callback
+export async function updateCallback(
+  project: string,
+  key: string,
+  data: object,
+) {
+  await set(getDatabaseReference(`callback/${project}/${key}`), data);
+}
+
+export async function deleteCallback(project: string, key: string) {
+  await remove(getDatabaseReference(`callback/${project}/${key}`));
+}
+
 // Forms
 export async function deleteForm(
   type: 'offer' | 'quote' | 'contact',

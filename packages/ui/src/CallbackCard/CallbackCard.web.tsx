@@ -12,8 +12,8 @@ export function CallbackCard({ data, children }: CallabckCardProps) {
       </div>
 
       {(val.status || children) && (
-        <div>
-          <div className="text-sm text-background bg-primary rounded-lg px-2 py-0.5">
+        <div className="space-y-2">
+          <div className="text-sm text-background bg-primary rounded-lg px-2 py-0.5 text-center">
             {val.status}
           </div>
           <div className="flex space-x-2">{children}</div>

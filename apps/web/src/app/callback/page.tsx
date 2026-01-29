@@ -4,9 +4,11 @@ import { useBreadcrumbs } from '@/components/BreadcrumbContext';
 import { Loading } from '@/components/Loading';
 import { LoadingLink } from '@/components/LoadingLink';
 import { getDatabaseReference } from '@repo/app';
-import { CallbackTotalCard, EmptyUI, ErrorUI } from '@repo/ui';
+import { Button, CallbackTotalCard, EmptyUI, ErrorUI } from '@repo/ui';
 import { useEffect } from 'react';
 import { useList } from 'react-firebase-hooks/database';
+import UpdateCallbackDialog from './updateCallbackDialog';
+import { MdAdd } from 'react-icons/md';
 
 export default function Project() {
   const { setItems } = useBreadcrumbs();
@@ -22,9 +24,14 @@ export default function Project() {
   const [data, loading, error] = useList(getDatabaseReference('callback'));
 
   return (
-    <div className="size-full">
+    <div className="size-full flex flex-col space-y-2">
+      <div className="flex items-center space-x-2 px-2 md:px-3 lg:px-4">
+        <UpdateCallbackDialog>
+          <Button label="Add Callback" icon={MdAdd} />
+        </UpdateCallbackDialog>
+      </div>
       {loading ? (
-        <div className="h-full flex justify-center">
+        <div className="flex flex-1 items-center justify-center">
           <Loading isFullScreen={false} />
         </div>
       ) : error ? (

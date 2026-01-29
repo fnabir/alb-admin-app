@@ -6,3 +6,4 @@ export * from './transaction.schema';
 export * from './inventory.schema';
 export * from './user.schema';
 export * from './changePassword.schema';
+export * from './callback.schema';
