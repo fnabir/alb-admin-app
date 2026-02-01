@@ -10,7 +10,7 @@
   },
   "devDependencies": {
     "@repo/app": "workspace:*",
-    "@types/react": "~19.2.9",
+    "@types/react": "~19.2.10",
     "eslint": "^9.39.2",
     "eslint-config-expo": "~10.0.0",
     "expo": "~54.0.32",
