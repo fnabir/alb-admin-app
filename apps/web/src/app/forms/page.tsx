@@ -120,7 +120,7 @@ export default function Forms() {
 
               <DeleteFormDialog
                 type={item.type}
-                key={item.snap.key!}
+                id={item.snap.key!}
                 name={item.name}
               >
                 <div className="px-2 py-0.25 bg-primary rounded-full cursor-pointer">

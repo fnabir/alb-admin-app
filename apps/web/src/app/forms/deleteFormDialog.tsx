@@ -11,16 +11,15 @@ import {
   toast,
 } from '@repo/ui';
 import { useState } from 'react';
-import { MdDelete } from 'react-icons/md';
 
 export default function DeleteFormDialog({
   type,
-  key,
+  id,
   name,
   children,
 }: {
   type: 'offer' | 'contact' | 'quote';
-  key: string;
+  id: string;
   name?: string;
   children: React.ReactNode;
 }) {
@@ -30,7 +29,7 @@ export default function DeleteFormDialog({
   const handleDelete = async () => {
     setIsDeleting(true);
     try {
-      await deleteForm(type, key);
+      await deleteForm(type, id);
       toast.success('Deleted', `Deleted the ${type}.`);
     } catch (error: any) {
       toast.error('Failed', error.message);
