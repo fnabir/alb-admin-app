@@ -19,7 +19,8 @@
   },
   "peerDependencies": {
     "react": "19.1.0",
-    "react-native": "0.81.5"
+    "react-native": "0.81.5",
+    "react-hook-form": "^7"
   },
   "dependencies": {
     "@radix-ui/react-slot": "^1.2.4",
