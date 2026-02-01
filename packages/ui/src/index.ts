@@ -20,6 +20,8 @@ export * from './EmptyUI';
 export * from './input';
 export * from './select';
 export * from './radio';
+export * from './textarea';
 export * from './FormField/FormInput';
+export { FormTextarea } from './FormField/FormTextArea';
 export { FormSelect } from './FormField/FormSelect';
 export { FormRadioGroup } from './FormField/FormRadioGroup';
