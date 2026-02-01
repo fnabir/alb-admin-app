@@ -17,6 +17,7 @@ export function FormCard({ data, children, type }: FormCardProps) {
             {val.status}
           </div>
         )}
+        <div className="pl-2 flex-1 flex space-x-2 justify-end">{children}</div>
       </div>
       <div className="pt-1 flex-auto grid grid-cols-[minmax(auto,30%)_1fr] md:grid-cols-[minmax(auto,25%)_1fr]">
         <strong className="py-1 border-b-2 border-border">Full Name:</strong>
@@ -43,7 +44,7 @@ export function FormCard({ data, children, type }: FormCardProps) {
 
         {val.person && (
           <strong className={`py-1 ${val.floor && 'border-b-2 border-border'}`}>
-            Capacity:
+            Person/Load:
           </strong>
         )}
         {val.person && (
@@ -54,7 +55,7 @@ export function FormCard({ data, children, type }: FormCardProps) {
 
         {val.floor && (
           <strong className={`py-1 ${val.note && 'border-b-2 border-border '}`}>
-            Floor:
+            Floor/Stop:
           </strong>
         )}
         {val.floor && (
@@ -66,7 +67,6 @@ export function FormCard({ data, children, type }: FormCardProps) {
         {val.note && <strong className="py-1">Note:</strong>}
         {val.note && <pre className="py-1">{val.note}</pre>}
       </div>
-      <div className="pl-2 flex space-x-2">{children}</div>
     </Card>
   );
 }

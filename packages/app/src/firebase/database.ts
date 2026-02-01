@@ -108,6 +108,14 @@ export async function deleteCallback(project: string, key: string) {
 }
 
 // Forms
+export async function updateForm(
+  type: 'offer' | 'quote' | 'contact',
+  key: string,
+  data: object,
+) {
+  await update(getDatabaseReference(`forms/${type}/${key}`), data);
+}
+
 export async function deleteForm(
   type: 'offer' | 'quote' | 'contact',
   key: string,

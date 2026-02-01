@@ -84,12 +84,9 @@ export default function Home() {
     });
   }, [totalBalanceData, totalBalanceLoading, isAdmin]);
 
-  const [offerDataKeys] = useListKeys(getDatabaseReference('offer'));
-
-  const [contactDataKeys] = useListKeys(
-    getDatabaseReference('website/contact'),
-  );
-  const [quoteDataKeys] = useListKeys(getDatabaseReference('website/quote'));
+  const [offerDataKeys] = useListKeys(getDatabaseReference('forms/offer'));
+  const [contactDataKeys] = useListKeys(getDatabaseReference('forms/contact'));
+  const [quoteDataKeys] = useListKeys(getDatabaseReference('forms/quote'));
 
   const formdata = useMemo(() => {
     return [

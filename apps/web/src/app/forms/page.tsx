@@ -3,15 +3,19 @@
 import { useBreadcrumbs } from '@/components/BreadcrumbContext';
 import { Loading } from '@/components/Loading';
 import { getDatabaseReference } from '@repo/app';
-import { EmptyUI, ErrorUI, FormCard } from '@repo/ui';
+import { Button, EmptyUI, ErrorUI, FormCard } from '@repo/ui';
 import { DataSnapshot } from 'firebase/database';
 import { useEffect, useMemo, useState } from 'react';
 import { useList } from 'react-firebase-hooks/database';
+import { MdAdd } from 'react-icons/md';
+import OfferFormDialog from './offerFormDialog';
+import DeleteFormDialog from './deleteFormDialog';
 
 type FormItem = {
   snap: DataSnapshot;
   type: 'offer' | 'contact' | 'quote';
   date: string;
+  name: string;
 };
 
 export default function Forms() {
@@ -22,11 +26,11 @@ export default function Forms() {
   }, [setItems]);
 
   const [filter, setFilter] = useState<
-    'offer' | 'contact' | 'quote' | undefined
+    'offer' | 'contact' | 'quote' | '' | undefined
   >();
 
   const [offers, offersLoading, offerError] = useList(
-    getDatabaseReference('offer'),
+    getDatabaseReference('forms/offer'),
   );
 
   const [contacts, contactsLoading, contactsError] = useList(
@@ -34,7 +38,7 @@ export default function Forms() {
   );
 
   const [quote, quoteLoading, quoteError] = useList(
-    getDatabaseReference('website/quote'),
+    getDatabaseReference('forms/quote'),
   );
 
   const mapSnapshots = (
@@ -44,10 +48,12 @@ export default function Forms() {
     if (!snaps) return [];
 
     return snaps.map((snap) => {
+      const val = snap.val();
       return {
         snap,
         type,
-        date: snap.val().date,
+        name: val.name,
+        date: val.date,
       };
     });
   };
@@ -81,7 +87,11 @@ export default function Forms() {
 
   return (
     <div className="size-full flex flex-col space-y-2">
-      <div className="px-2 md:px-3 lg:px-4"></div>
+      <div className="px-2 md:px-3 lg:px-4">
+        <OfferFormDialog>
+          <Button icon={MdAdd} label="Add Offer" />
+        </OfferFormDialog>
+      </div>
       {loading ? (
         <div className="flex flex-1 items-center justify-center">
           <Loading isFullScreen={false} />
@@ -93,7 +103,31 @@ export default function Forms() {
       ) : (
         <div className="flex-1 grid grid-cols-1 lg:grid-cols-2 gap-2 lg:gap-3 overflow-y-auto px-2 md:px-3 lg:px-4 content-start">
           {combinedData?.map((item) => (
-            <FormCard key={item.snap.key} type={item.type} data={item.snap} />
+            <FormCard key={item.snap.key} type={item.type} data={item.snap}>
+              {item.type === 'offer' ? (
+                <OfferFormDialog data={item.snap}>
+                  <div className="px-2 py-0.25 bg-primary rounded-full cursor-pointer">
+                    <span>Edit</span>
+                  </div>
+                </OfferFormDialog>
+              ) : item.type === 'contact' || item.type === 'quote' ? (
+                <OfferFormDialog data={item.snap}>
+                  <div className="px-2 py-0.25 bg-primary rounded-full cursor-pointer">
+                    <span>Edit</span>
+                  </div>
+                </OfferFormDialog>
+              ) : null}
+
+              <DeleteFormDialog
+                type={item.type}
+                key={item.snap.key!}
+                name={item.name}
+              >
+                <div className="px-2 py-0.25 bg-primary rounded-full cursor-pointer">
+                  <span>Delete</span>
+                </div>
+              </DeleteFormDialog>
+            </FormCard>
           ))}
         </div>
       )}
