@@ -328,7 +328,7 @@ export default function UpdateTransactionDialog({
       amount: val?.amount ? Math.abs(val.amount) : 0,
       date: toISODate('dd.MM.yy', val?.date ?? ''),
     });
-    if (val.amount >= 0) {
+    if (val?.amount && val.amount >= 0) {
       if (!paidArray) {
         setPaymentType('notPaid');
       } else if (paidArray.length == 1 && total >= val.amount) {

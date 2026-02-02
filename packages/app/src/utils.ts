@@ -1,4 +1,4 @@
-import { isValid, parse, format, parseISO } from 'date-fns';
+import { isValid, parse, format } from 'date-fns';
 import { formatInTimeZone } from 'date-fns-tz';
 import { DataSnapshot } from 'firebase/database';
 
@@ -73,7 +73,7 @@ export function toISODate(dateFormat: string, value?: string) {
 
 export function fromISODate(dateFormat: string, value?: string) {
   if (!value) return '';
-  const date = parseISO(value);
+  const date = parse(value, 'yyyy-MM-dd', new Date());
   return isValid(date) ? format(date, dateFormat) : '';
 }
 

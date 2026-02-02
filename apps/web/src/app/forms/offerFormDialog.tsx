@@ -24,7 +24,7 @@ import { FormInput } from '@repo/ui';
 import { DataSnapshot } from 'firebase/database';
 import { SelectOption } from '@repo/ui/src/select/types';
 
-export const productOptions: SelectOption[] = [
+const productOptions: SelectOption[] = [
   { value: 'Passenger Lift', label: 'Passenger Lift' },
   { value: 'Cargo Lift', label: 'Cargo Lift' },
   { value: 'Hospital Lift', label: 'Hospital Lift' },
@@ -35,11 +35,19 @@ export const productOptions: SelectOption[] = [
   { value: 'Other', label: 'Other' },
 ];
 
-export const workOptions: SelectOption[] = [
+const workOptions: SelectOption[] = [
   { value: 'Full Project', label: 'Full Project' },
   { value: 'Servicing', label: 'Servicing' },
   { value: 'Installation', label: 'Installation' },
   { value: 'Repair', label: 'Repair' },
+];
+
+export const statusOptions: SelectOption[] = [
+  { value: 'New', label: 'New' },
+  { value: 'Contacted', label: 'Contacted' },
+  { value: 'Quote Submitted', label: 'Quote Submitted' },
+  { value: 'In Progress', label: 'In Progress' },
+  { value: 'Closed', label: 'Closed' },
 ];
 
 export default function OfferFormDialog({
@@ -66,8 +74,14 @@ export default function OfferFormDialog({
 
   const onSubmit = async (formData: OfferForm) => {
     const key = dataExists ? data?.key! : generateDatabaseKey('forms/offer');
+    const updatedData = dataExists
+      ? formData
+      : {
+          ...formData,
+          date: new Date().toISOString(),
+        };
     try {
-      await updateForm('offer', key, formData);
+      await updateForm('offer', key, updatedData);
       toast.success(
         'Updated',
         dataExists ? 'Updated the offer.' : 'Added new offer.',
@@ -180,6 +194,13 @@ export default function OfferFormDialog({
             name="note"
             control={control}
             placeholder="Note"
+            disabled={isSubmitting}
+          />
+          <FormSelect
+            name="status"
+            control={control}
+            options={statusOptions}
+            placeholder="Select Status..."
             disabled={isSubmitting}
           />
 

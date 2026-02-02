@@ -1,4 +1,4 @@
-import { WebsiteForm, websiteSchema } from '@repo/app';
+import { updateForm, WebsiteForm, websiteSchema } from '@repo/app';
 import {
   Button,
   Dialog,
@@ -8,6 +8,7 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
+  FormSelect,
   FormTextarea,
   toast,
 } from '@repo/ui';
@@ -15,6 +16,7 @@ import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { DataSnapshot } from 'firebase/database';
+import { statusOptions } from './offerFormDialog';
 
 export default function WebsiteFormDialog({
   type,
@@ -41,8 +43,7 @@ export default function WebsiteFormDialog({
 
   const onSubmit = async (formData: WebsiteForm) => {
     try {
-      console.log(formData);
-      //await updateForm(type, data.key!, formData);
+      await updateForm(type, data.key!, formData);
       toast.success('Updated', `Updated the ${type}.`);
     } catch (error: any) {
       toast.error(`Failed to update ${type}.`, 'Please try again.');
@@ -92,7 +93,7 @@ export default function WebsiteFormDialog({
             placeholder="Note"
             disabled={isSubmitting}
           />
-
+          <FormSelect name="status" control={control} options={statusOptions} />
           <div className="flex space-x-2 pt-4 lg:pt-6 justify-center">
             <DialogClose asChild>
               <Button label={'Close'} variant="danger" className="px-10" />

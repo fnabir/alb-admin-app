@@ -1,6 +1,6 @@
 import { Card } from '../Card';
-import { fromISODate } from '@repo/app';
 import { FormCardProps } from './types';
+import { format, parseISO } from 'date-fns';
 
 export function FormCard({ data, children, type }: FormCardProps) {
   const val = data.val();
@@ -9,7 +9,7 @@ export function FormCard({ data, children, type }: FormCardProps) {
     <Card className={`hover:border-accent text-primary`}>
       <div className="flex items-center space-x-2 font-semibold text-background">
         <div className="px-2 py-0.25 bg-primary rounded-full">
-          {fromISODate('dd MMM yyyy', val.date)}
+          {format(parseISO(val.date), 'dd MMM yyyy')}
         </div>
         <div className="px-2 py-0.25 bg-primary rounded-full capitalize">
           <span>{type}</span>
