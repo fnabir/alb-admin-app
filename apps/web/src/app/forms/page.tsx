@@ -46,17 +46,24 @@ export default function Forms() {
     snaps: DataSnapshot[] | undefined,
     type: FormItem['type'],
   ): FormItem[] => {
-    if (!snaps) return [];
+    if (!snaps?.length) return [];
 
-    return snaps.map((snap) => {
+    const map = new Map<string, FormItem>();
+
+    for (const snap of snaps) {
+      if (!snap.key) continue;
+
       const val = snap.val();
-      return {
+
+      map.set(snap.key, {
         snap,
         type,
         name: val.name,
         date: val.date,
-      };
-    });
+      });
+    }
+
+    return Array.from(map.values());
   };
 
   const combinedData = useMemo(() => {

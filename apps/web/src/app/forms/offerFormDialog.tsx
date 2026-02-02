@@ -70,6 +70,19 @@ export default function OfferFormDialog({
   } = useForm<OfferForm>({
     resolver: zodResolver(offerSchema),
     mode: 'onChange',
+    defaultValues: {
+      name: '',
+      address: '',
+      product: '',
+      work: '',
+      unit: 1,
+      floor: '',
+      person: '',
+      shaft: '',
+      note: '',
+      refer: '',
+      status: '',
+    },
   });
 
   const onSubmit = async (formData: OfferForm) => {
@@ -97,7 +110,8 @@ export default function OfferFormDialog({
     setOpen(false);
   };
 
-  const handleReset = () => {
+  const handleDialogChange = (state: boolean) => {
+    setOpen(state);
     reset({
       name: val?.name ?? '',
       address: val?.address ?? '',
@@ -113,11 +127,6 @@ export default function OfferFormDialog({
     });
   };
 
-  const handleDialogChange = (state: boolean) => {
-    setOpen(state);
-    handleReset();
-  };
-
   return (
     <Dialog open={open} onOpenChange={handleDialogChange}>
       <DialogTrigger asChild>{children}</DialogTrigger>
@@ -130,7 +139,6 @@ export default function OfferFormDialog({
         </DialogHeader>
         <form
           onSubmit={handleSubmit(onSubmit)}
-          onReset={handleReset}
           className="flex flex-col space-y-3"
         >
           <FormInput<OfferForm>
@@ -149,14 +157,14 @@ export default function OfferFormDialog({
             name="product"
             control={control}
             options={productOptions}
-            placeholder="Select Product Type"
+            placeholder="Select Product Type..."
             disabled={isSubmitting}
           />
           <FormSelect<OfferForm>
             name="work"
             control={control}
             options={workOptions}
-            placeholder="Select Work Type"
+            placeholder="Select Work Type..."
             disabled={isSubmitting}
           />
           <div className="flex space-x-2">
@@ -206,23 +214,16 @@ export default function OfferFormDialog({
 
           <div className="flex space-x-2 pt-4 lg:pt-6 justify-center">
             <DialogClose asChild>
-              <Button label={'Close'} variant="danger" className="px-10" />
+              <Button label={'Close'} variant="danger" className="w-full" />
             </DialogClose>
-            <Button
-              type="reset"
-              label={'Reset'}
-              variant="secondary"
-              className="px-10"
-              disabled={isSubmitting}
-            />
             <Button
               type="submit"
               variant="accent"
               label={dataExists ? 'Update' : 'Add'}
               loadingLabel={dataExists ? 'Updating...' : 'Adding...'}
-              className="px-10"
+              className="w-full"
               loading={isSubmitting}
-              disabled={!isValid || !isDirty || isSubmitting}
+              disabled={isSubmitting}
             />
           </div>
         </form>
