@@ -23,17 +23,20 @@ export function VersionCard({ version, isAdmin }: VersionCardProps) {
       : cleanDetail;
 
     return (
-      <div key={index} className="w-full flex flex-row py-0.5 space-x-2">
+      <div
+        key={index}
+        className="w-full flex flex-row text-sm lg:text-[15px] py-0.5 space-x-2"
+      >
         {tag && (
           <div
             className={`font-semibold ${
               tag === 'FEATURE'
                 ? 'text-green-500'
                 : tag === 'UPDATE'
-                ? 'text-sky-500'
-                : tag === 'FIX'
-                ? 'text-red-500'
-                : 'text-gray-500'
+                  ? 'text-sky-500'
+                  : tag === 'FIX'
+                    ? 'text-red-500'
+                    : 'text-gray-500'
             }`}
           >
             [{tag}]
@@ -47,10 +50,12 @@ export function VersionCard({ version, isAdmin }: VersionCardProps) {
 
   return (
     <Card className="flex flex-col items-center">
-      <div className="font-semibold">ALB ADMIN APP</div>
-      <div className="text-3xl font-mono text-accent">{version}</div>
+      <div className="text-sm lg:text-base font-semibold">ALB ADMIN APP</div>
+      <div className="text-2xl lg:text-3xl font-mono text-accent">
+        {version}
+      </div>
       {date && (
-        <div className="text-muted text-center">
+        <div className="text-muted text-center text-sm lg:text-base">
           {format(new Date(date), 'dd MMMM yyyy')}
         </div>
       )}

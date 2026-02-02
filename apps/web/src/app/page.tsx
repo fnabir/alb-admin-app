@@ -112,9 +112,9 @@ export default function Home() {
   }, [offerDataKeys, contactDataKeys, quoteDataKeys]);
 
   return (
-    <div className="w-full flex px-4 space-x-4">
+    <div className="size-full flex flex-col lg:flex-row px-4 gap-3 lg:gap-4 overflow-y-auto">
       <div className="basis-3/4 space-y-4">
-        <div className="flex space-x-2 lg:space-x-3">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-2 lg:gap-3">
           {filteredBalanceData?.map((card, index) => (
             <LoadingLink href={card?.key ?? '#'} key={index} className="w-full">
               <BalanceCard

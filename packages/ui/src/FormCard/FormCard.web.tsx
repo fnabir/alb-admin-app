@@ -7,7 +7,7 @@ export function FormCard({ data, children, type }: FormCardProps) {
 
   return (
     <Card className={`hover:border-accent text-primary`}>
-      <div className="flex items-center space-x-2 font-semibold text-background">
+      <div className="flex flex-wrap items-center gap-2 font-semibold text-background">
         <div className="px-2 py-0.25 bg-primary rounded-full">
           {format(parseISO(val.date), 'dd MMM yyyy')}
         </div>
@@ -21,7 +21,7 @@ export function FormCard({ data, children, type }: FormCardProps) {
         )}
         <div className="pl-2 flex-1 flex space-x-2 justify-end">{children}</div>
       </div>
-      <div className="pt-1 flex-auto grid grid-cols-[minmax(auto,30%)_1fr] md:grid-cols-[minmax(auto,25%)_1fr]">
+      <div className="pt-1 flex-auto grid grid-cols-[minmax(auto,120px)_1fr]">
         <strong className="py-1 border-b-2 border-border">Full Name:</strong>
         <div className="py-1 border-b-2 border-border">{val.name}</div>
 
@@ -78,7 +78,9 @@ export function FormCard({ data, children, type }: FormCardProps) {
         {val?.note && (
           <>
             <strong className="py-1">Note:</strong>
-            <pre className="py-1">{val.note}</pre>
+            <pre className="py-1 whitespace-pre-wrap wrap-break-word">
+              {val.note}
+            </pre>
           </>
         )}
       </div>
