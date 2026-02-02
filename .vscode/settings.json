@@ -1,0 +1,31 @@
+{
+  "eslint.workingDirectories": [
+    {
+      "mode": "auto"
+    }
+  ],
+  // Use Prettier as the default formatter
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+
+  // Format on save
+  "editor.formatOnSave": true,
+  "editor.formatOnPaste": true,
+  "editor.formatOnType": true,
+
+  // Enable Prettier for all supported languages
+  "[javascript]": { "editor.defaultFormatter": "esbenp.prettier-vscode" },
+  "[typescript]": { "editor.defaultFormatter": "esbenp.prettier-vscode" },
+  "[javascriptreact]": { "editor.defaultFormatter": "esbenp.prettier-vscode" },
+  "[typescriptreact]": { "editor.defaultFormatter": "esbenp.prettier-vscode" },
+
+  // TailwindCSS plugin support (optional, nice for class sorting)
+  "tailwindCSS.experimental.classRegex": [
+    "clsx\\(([^)]*)\\)",
+    "className\\s*=\\s*\"([^\"]*)\""
+  ],
+
+  // Use prettier-plugin-tailwindcss for sorting classNames
+  "prettier.enableDebugLogs": false,
+  "prettier.requireConfig": true, 
+  "prettier.useEditorConfig": false
+}
