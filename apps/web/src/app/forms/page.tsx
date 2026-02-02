@@ -2,15 +2,22 @@
 
 import { useBreadcrumbs } from '@/components/BreadcrumbContext';
 import { Loading } from '@/components/Loading';
-import { getDatabaseReference } from '@repo/app';
-import { Button, EmptyUI, ErrorUI, FormCard } from '@repo/ui';
+import { getDatabaseReference, usePersistedState } from '@repo/app';
+import { Button, EmptyUI, ErrorUI, FormCard, Select } from '@repo/ui';
 import { DataSnapshot } from 'firebase/database';
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo } from 'react';
 import { useList } from 'react-firebase-hooks/database';
 import { MdAdd } from 'react-icons/md';
 import OfferFormDialog from './offerFormDialog';
 import DeleteFormDialog from './deleteFormDialog';
 import WebsiteFormDialog from './websiteFormDialog';
+import { SelectOption } from '@repo/ui/src/select/types';
+
+const filterOptions: SelectOption[] = [
+  { value: 'offer', label: 'Offer' },
+  { value: 'contact', label: 'Contact' },
+  { value: 'quote', label: 'Quote' },
+];
 
 type FormItem = {
   snap: DataSnapshot;
@@ -26,9 +33,7 @@ export default function Forms() {
     setItems([{ label: 'Home', href: '/' }, { label: 'Forms' }]);
   }, [setItems]);
 
-  const [filter, setFilter] = useState<
-    'offer' | 'contact' | 'quote' | '' | undefined
-  >();
+  const [filter, setFilter] = usePersistedState<string>('forms-filter', '');
 
   const [offers, offersLoading, offerError] = useList(
     getDatabaseReference('forms/offer'),
@@ -95,7 +100,15 @@ export default function Forms() {
 
   return (
     <div className="size-full flex flex-col space-y-2">
-      <div className="px-2 md:px-3 lg:px-4">
+      <div className="flex items-center space-x-2 px-2 md:px-3 lg:px-4">
+        <span>Show</span>
+        <Select
+          value={filter}
+          options={filterOptions}
+          onChange={setFilter}
+          placeholder="All"
+          className="max-w-36"
+        />
         <OfferFormDialog>
           <Button icon={MdAdd} label="Add Offer" />
         </OfferFormDialog>
@@ -106,8 +119,10 @@ export default function Forms() {
         </div>
       ) : error ? (
         <ErrorUI error={error} />
-      ) : !offers?.length && !contacts?.length && !quote?.length ? (
-        <EmptyUI />
+      ) : !combinedData?.length ? (
+        <EmptyUI
+          text={filter ? `No ${filter} form found.` : 'No Record Found.'}
+        />
       ) : (
         <div className="flex-1 grid grid-cols-1 lg:grid-cols-2 gap-2 lg:gap-3 overflow-y-auto px-2 md:px-3 lg:px-4 content-start">
           {combinedData?.map((item) => (
