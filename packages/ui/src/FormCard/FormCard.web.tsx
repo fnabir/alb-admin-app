@@ -25,49 +25,62 @@ export function FormCard({ data, children, type }: FormCardProps) {
         <strong className="py-1 border-b-2 border-border">Full Name:</strong>
         <div className="py-1 border-b-2 border-border">{val.name}</div>
 
-        <strong className="py-1 border-b-2 border-border">Contact:</strong>
-        <div className="py-1 border-b-2 border-border">{val.contact}</div>
-
-        <strong className="py-1 border-b-2 border-border">Address:</strong>
-        <div className="py-1 border-b-2 border-border">{val.address}</div>
-
+        {val?.contact && (
+          <>
+            <strong className="py-1 border-b-2 border-border">Contact:</strong>
+            <div className="py-1 border-b-2 border-border">{val.contact}</div>
+          </>
+        )}
+        {val?.address && (
+          <>
+            <strong className="py-1 border-b-2 border-border">Address:</strong>
+            <div className="py-1 border-b-2 border-border">{val.address}</div>
+          </>
+        )}
         <strong
           className={`py-1 ${
-            (val.person || val.floor) && 'border-b-2 border-border'
+            (val?.person || val?.floor) && 'border-b-2 border-border'
           }`}
         >
           Product:
         </strong>
         <div
           className={`py-1 ${
-            (val.person || val.floor) && 'border-b-2 border-border'
+            (val?.person || val?.floor) && 'border-b-2 border-border'
           }`}
-        >{`${val.product} ${val.unit && `(${val.unit})`} - ${val.work}`}</div>
+        >{`${val?.product} ${val?.unit && `(${val?.unit})`} - ${val?.work}`}</div>
 
         {val.person && (
-          <strong className={`py-1 ${val.floor && 'border-b-2 border-border'}`}>
+          <strong
+            className={`py-1 ${val?.floor && 'border-b-2 border-border'}`}
+          >
             Person/Load:
           </strong>
         )}
-        {val.person && (
-          <div className={`py-1 ${val.floor && 'border-b-2 border-border'}`}>
-            {val.person}
+        {val?.person && (
+          <div className={`py-1 ${val?.floor && 'border-b-2 border-border'}`}>
+            {val?.person}
           </div>
         )}
 
         {val.floor && (
-          <strong className={`py-1 ${val.note && 'border-b-2 border-border '}`}>
+          <strong
+            className={`py-1 ${val?.note && 'border-b-2 border-border '}`}
+          >
             Floor/Stop:
           </strong>
         )}
         {val.floor && (
-          <div className={`py-1 ${val.note && 'border-b-2 border-border'}`}>
-            {val.floor}
+          <div className={`py-1 ${val?.note && 'border-b-2 border-border'}`}>
+            {val?.floor}
           </div>
         )}
-
-        {val.note && <strong className="py-1">Note:</strong>}
-        {val.note && <pre className="py-1">{val.note}</pre>}
+        {val?.note && (
+          <>
+            <strong className="py-1">Note:</strong>
+            <pre className="py-1">{val.note}</pre>
+          </>
+        )}
       </div>
     </Card>
   );

@@ -10,6 +10,7 @@ import { useList } from 'react-firebase-hooks/database';
 import { MdAdd } from 'react-icons/md';
 import OfferFormDialog from './offerFormDialog';
 import DeleteFormDialog from './deleteFormDialog';
+import WebsiteFormDialog from './websiteFormDialog';
 
 type FormItem = {
   snap: DataSnapshot;
@@ -111,11 +112,11 @@ export default function Forms() {
                   </div>
                 </OfferFormDialog>
               ) : item.type === 'contact' || item.type === 'quote' ? (
-                <OfferFormDialog data={item.snap}>
+                <WebsiteFormDialog type={item.type} data={item.snap}>
                   <div className="px-2 py-0.25 bg-primary rounded-full cursor-pointer">
                     <span>Edit</span>
                   </div>
-                </OfferFormDialog>
+                </WebsiteFormDialog>
               ) : null}
 
               <DeleteFormDialog

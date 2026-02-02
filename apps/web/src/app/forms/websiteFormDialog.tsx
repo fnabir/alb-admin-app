@@ -80,11 +80,20 @@ export default function WebsiteFormDialog({
         >
           {val?.name && <p>Name: {val.name}</p>}
           {val?.address && <p>Address: {val.address}</p>}
-          {val?.product && <p>Product: {val.product}</p>}
-          {val?.Work && <p>Work: {val.work}</p>}
-          {val?.person && <p>Person/Load: {val.person}</p>}
-          {val?.floor && <p>Floor/Stop: {val.floor}</p>}
-          {val?.unit && <p>Unit: {val.unit}</p>}
+          {val?.product && (
+            <p>
+              Product: {val.product} {val?.unit ? `(${val.unit})` : ''}{' '}
+              {val?.work ? `| Work: ${val.work}` : ''}
+            </p>
+          )}
+          {(val?.person || val?.floor) && (
+            <p>
+              {val?.person ? `Person/Load: ${val.floor}` : ''}
+              {val?.floor
+                ? `${val.person ? `|` : ''} Floor/Stop: ${val.floor}`
+                : ''}
+            </p>
+          )}
           {val?.shaft && <p>Shaft Size (W X D X H): {val.unit}</p>}
 
           <FormTextarea<WebsiteForm>
@@ -93,7 +102,13 @@ export default function WebsiteFormDialog({
             placeholder="Note"
             disabled={isSubmitting}
           />
-          <FormSelect name="status" control={control} options={statusOptions} />
+          <FormSelect
+            name="status"
+            control={control}
+            placeholder="Select Status..."
+            options={statusOptions}
+            disabled={isSubmitting}
+          />
           <div className="flex space-x-2 pt-4 lg:pt-6 justify-center">
             <DialogClose asChild>
               <Button label={'Close'} variant="danger" className="px-10" />
