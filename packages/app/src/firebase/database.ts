@@ -123,6 +123,31 @@ export async function deleteForm(
   await remove(getDatabaseReference(`forms/${type}/${key}`));
 }
 
+// Ledger
+export async function updateLedgerTransaction(
+  year: string,
+  month: string,
+  date: string,
+  id: string,
+  data: object,
+) {
+  await set(
+    getDatabaseReference(`ledger/transaction/${year}/${month}/${date}/${id}`),
+    data,
+  );
+}
+
+export async function deleteLedgerTransaction(
+  year: string,
+  month: string,
+  date: string,
+  id: string,
+) {
+  await remove(
+    getDatabaseReference(`ledger/transaction/${year}/${month}/${date}/${id}`),
+  );
+}
+
 // Inventory
 export async function setInventoryItem(item: string, count: number) {
   await set(getDatabaseReference(`company/inventory/${item}`), count);
