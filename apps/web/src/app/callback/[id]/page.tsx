@@ -11,7 +11,7 @@ import UpdateCallbackDialog from '../updateCallbackDialog';
 import { MdAdd, MdEdit } from 'react-icons/md';
 import DeleteCallbackDialog from './deleteCallbackDialog';
 
-export default function Project() {
+export default function CallbackProject() {
   const { id } = useParams() as { id: string };
   const project = decodeURIComponent(id);
   const { setItems } = useBreadcrumbs();

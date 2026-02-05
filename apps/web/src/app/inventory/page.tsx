@@ -10,7 +10,7 @@ import { MdAdd, MdEdit, MdOutlineInfo } from 'react-icons/md';
 import InventoryDialog from './inventoryDialog';
 import DeleteInventoryDialog from './deleteInventoryDialog';
 
-export default function Ledger() {
+export default function Inventory() {
   const { setItems } = useBreadcrumbs();
 
   useEffect(() => {

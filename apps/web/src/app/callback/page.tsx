@@ -10,7 +10,7 @@ import { useList } from 'react-firebase-hooks/database';
 import UpdateCallbackDialog from './updateCallbackDialog';
 import { MdAdd } from 'react-icons/md';
 
-export default function Project() {
+export default function Callback() {
   const { setItems } = useBreadcrumbs();
 
   useEffect(() => {

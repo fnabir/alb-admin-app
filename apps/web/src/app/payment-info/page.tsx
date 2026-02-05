@@ -12,7 +12,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import AddPaymentInfoDialog from './addPaymentInfoDialog';
 import DeletePaymentInfoDialog from './deletePaymentInfoDialog';
 
-export default function Project() {
+export default function PaymentInfo() {
   const { setItems } = useBreadcrumbs();
 
   useEffect(() => {
@@ -101,8 +101,8 @@ function PaymentInfoGrid({
         {data.key === 'bank' || data.key === 'account'
           ? `${data.key!} transfer`
           : data.key === 'cell'
-          ? 'cellfin'
-          : data.key!}
+            ? 'cellfin'
+            : data.key!}
       </div>
       <div className={'text-xs md:text-sm lg:text-[15px] lg:text divide-y'}>
         {Object.entries(data.val()).map(([key, value]) => {

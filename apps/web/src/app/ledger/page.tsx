@@ -226,7 +226,7 @@ export default function Ledger() {
   );
 }
 
-export function DailyLedgerCard({ data }: { data: DailyCard }) {
+function DailyLedgerCard({ data }: { data: DailyCard }) {
   const formattedDate = fromISODate('dd MMM yyyy', data.date);
 
   return (
@@ -331,7 +331,7 @@ export function DailyLedgerCard({ data }: { data: DailyCard }) {
   );
 }
 
-export function MonthlyLedgerCard({ data }: { data: MonthlyCard }) {
+function MonthlyLedgerCard({ data }: { data: MonthlyCard }) {
   return (
     <div className="border border-border rounded-xl mx-4 px-4 py-2 shadow-sm space-y-3 bg-card">
       {/* Header */}

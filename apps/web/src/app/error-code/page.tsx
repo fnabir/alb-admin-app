@@ -3,7 +3,7 @@
 import { useBreadcrumbs } from '@/components/BreadcrumbContext';
 import { useEffect } from 'react';
 
-export default function Project() {
+export default function ErrorCode() {
   const { setItems } = useBreadcrumbs();
 
   useEffect(() => {
