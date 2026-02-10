@@ -3,7 +3,7 @@
 import { useBreadcrumbs } from '@/components/BreadcrumbContext';
 import { useAuth } from '@/contexts/AuthContext';
 import { VersionCard } from '@repo/ui';
-import { changelog } from '@repo/ui/src/lib/changelog';
+import { changelog } from '@repo/app';
 import { useEffect } from 'react';
 
 export default function Changelog() {
