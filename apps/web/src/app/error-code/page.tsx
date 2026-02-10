@@ -35,7 +35,7 @@ export default function ErrorCode() {
       {code &&
         code == errorCode &&
         (info ? (
-          <div className="flex-1 grid grid-cols-1 lg:grid-cols-2 px-2 md:px-3 lg:px-4 gap-2 lg:gap-3 overflow-y-auto">
+          <div className="grid grid-cols-1 lg:grid-cols-2 px-2 md:px-3 lg:px-4 gap-2 lg:gap-3 overflow-y-auto">
             <Card className="text-center space-y-2">
               <Badge
                 label={`Error Code: E${code.length == 1 ? `0${code}` : code}`}
