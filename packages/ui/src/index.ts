@@ -1,6 +1,7 @@
 export * from './button';
 export * from './dialog';
 export * from './toast';
+export * from './badge';
 
 export * from './Card';
 export * from './BalanceCard';
