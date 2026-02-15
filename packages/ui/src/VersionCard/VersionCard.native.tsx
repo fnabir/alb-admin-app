@@ -1,7 +1,7 @@
 import { Text, View } from 'react-native';
 import { Card } from '../Card';
 import { format } from 'date-fns';
-import { changelog } from '../lib/changelog';
+import { changelog } from '../../../app/src';
 import { VersionCardProps } from './types';
 
 export function VersionCard({ version, isAdmin }: VersionCardProps) {
@@ -31,10 +31,10 @@ export function VersionCard({ version, isAdmin }: VersionCardProps) {
               tag === 'FEATURE'
                 ? 'text-green-500'
                 : tag === 'UPDATE'
-                ? 'text-sky-500'
-                : tag === 'FIX'
-                ? 'text-red-500'
-                : 'text-gray-500'
+                  ? 'text-sky-500'
+                  : tag === 'FIX'
+                    ? 'text-red-500'
+                    : 'text-gray-500'
             }`}
           >
             [{tag}]

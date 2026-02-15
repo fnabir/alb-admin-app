@@ -21,7 +21,6 @@ export function Button({
       className={`
         ${buttonStyles.base}
         ${buttonStyles.variant[variant]}
-        ${isDisabled ? buttonStyles.disabled : ''}
         ${className}
       `}
     >
