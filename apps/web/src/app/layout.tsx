@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import { Geist, Geist_Mono } from 'next/font/google';
 import './globals.css';
 import { ThemeProvider } from '@/components/ThemeProvider';
-import { LoadingProvider } from '@/contexts/LoadingContext';
+import { LoadingProvider } from '@repo/app';
 import { AuthProvider } from '@/contexts/AuthContext';
 import { LoadingBar } from '@/components/LoadingBar';
 import { RootLayoutContent } from '@/components/RootLayoutContent';

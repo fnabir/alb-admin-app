@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { useLoading } from '@/contexts/LoadingContext';
+import { useLoading } from '@repo/app';
 import { ReactNode } from 'react';
 
 type LoadingLinkProps = {

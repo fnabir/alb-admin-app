@@ -3,8 +3,12 @@
 import { useEffect, useState } from 'react';
 import TextLogo from '@/images/logo-text';
 import { Button, FormInput } from '@repo/ui';
-import { useLoading } from '@/contexts/LoadingContext';
-import { auth, ForgetPasswordForm, forgetPasswordSchema } from '@repo/app';
+import {
+  auth,
+  ForgetPasswordForm,
+  forgetPasswordSchema,
+  useLoading,
+} from '@repo/app';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { useSendPasswordResetEmail } from 'react-firebase-hooks/auth';

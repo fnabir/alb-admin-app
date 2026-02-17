@@ -1,6 +1,6 @@
 'use client';
 
-import { useLoading } from '@/contexts/LoadingContext';
+import { useLoading } from '@repo/app';
 import { Loading } from './Loading';
 
 export function LoadingBar() {

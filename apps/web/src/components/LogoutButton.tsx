@@ -1,4 +1,4 @@
-import { useLoading } from '@/contexts/LoadingContext';
+import { useLoading } from '@repo/app';
 import { signOut } from '@repo/app';
 import { Button } from '@repo/ui';
 import { MdLogout } from 'react-icons/md';
