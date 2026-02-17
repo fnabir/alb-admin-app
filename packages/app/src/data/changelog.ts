@@ -5,10 +5,14 @@ type ChangelogItem = {
 
 export const changelog: Record<string, ChangelogItem> = {
   '1.5.0': {
-    date: '2025-12-07',
+    date: '2026-02-14',
     details: [
-      '[ADMIN][FEATURE] Added changelog page.',
+      '[ADMIN][FEATURE] Added ledger, inventory page.',
+      '[FEATURE] Added changelog page.',
+      '[ADMIN][UPDATE] Option to add project and update info including service charge.',
       '[UPDATE] Unified website forms and offer forms in single page.',
+      '[ADMIN][UPDATE] Update balance automatically.',
+      '[FIX] Major bug fixes and optimizations.',
     ],
   },
 
