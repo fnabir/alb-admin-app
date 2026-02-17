@@ -1,5 +1,3 @@
-'use client';
-
 import { Control, FieldValues, Path, useController } from 'react-hook-form';
 import { Textarea } from '../textarea';
 

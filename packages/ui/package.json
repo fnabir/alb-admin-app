@@ -4,19 +4,23 @@
   "private": true,
   "main": "./src/index.ts",
   "types": "./src/index.ts",
+  "exports": {
+    ".": "./src/index.ts"
+  },
   "scripts": {
     "lint": "eslint",
     "typecheck": "tsc --noEmit"
   },
   "devDependencies": {
-    "@repo/app": "workspace:*",
     "nativewind": "^4.1.23"
   },
   "peerDependencies": {
     "react": "19.1.0"
   },
   "dependencies": {
+    "@repo/app": "workspace:*",
     "@radix-ui/react-slot": "^1.2.4",
-    "@radix-ui/react-dialog": "^1.1.15"
+    "@radix-ui/react-dialog": "^1.1.15",
+    "react-hook-form": "^7"
   }
 }

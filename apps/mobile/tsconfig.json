@@ -4,6 +4,8 @@
     "strict": true,
     "paths": {
       "@/*": ["./*"],
+      "@repo/ui": ["../../../packages/ui/src"],
+      "@repo/app": ["../../../packages/app/src"],
       "@firebase/auth": ["./node_modules/@firebase/auth/dist/index.rn.d.ts"]
     }
   },
