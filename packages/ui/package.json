@@ -10,17 +10,10 @@
   },
   "devDependencies": {
     "@repo/app": "workspace:*",
-    "@types/react": "~19.2.11",
-    "eslint": "^9.39.2",
-    "eslint-config-expo": "~10.0.0",
-    "expo": "~54.0.33",
-    "nativewind": "^4.1.23",
-    "typescript": "~5.9.3"
+    "nativewind": "^4.1.23"
   },
   "peerDependencies": {
-    "react": "19.1.0",
-    "react-native": "0.81.5",
-    "react-hook-form": "^7"
+    "react": "19.1.0"
   },
   "dependencies": {
     "@radix-ui/react-slot": "^1.2.4",

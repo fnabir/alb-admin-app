@@ -9,24 +9,19 @@
     "lint": "turbo lint",
     "typecheck": "turbo typecheck"
   },
-  "packageManager": "pnpm@10.29.2",
-  "devDependencies": {
-    "turbo": "^2.8.4"
-  },
+  "packageManager": "pnpm@10.29.3",
   "pnpm": {
-    "overrides": {
-      "react": "19.1.0",
-      "react-dom": "19.1.0",
-      "react-native": "0.81.5",
-      "react-native-web": "0.21.1",
-      "tailwindcss": "3.4.19"
-    },
     "onlyBuiltDependencies": [
       "@firebase/util",
       "protobufjs",
       "sharp",
       "unrs-resolver"
     ]
+  },
+  "resolutions": {
+    "react": "19.1.0",
+    "react-dom": "19.1.0",
+    "react-native": "0.81.5"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.2.2",
@@ -36,6 +31,15 @@
     "date-fns": "^4.1.0",
     "date-fns-tz": "^3.2.0",
     "firebase": "^12.9.0",
+    "js-cookie": "^3.0.5",
     "react-firebase-hooks": "5.1.1"
+  },
+  "devDependencies": {
+    "@types/js-cookie": "^3.0.6",
+    "@types/react": "~19.2.14",
+    "eslint": "^9",
+    "turbo": "^2.8.9",
+    "typescript": "5.9.3",
+    "tailwindcss": "3.4.19"
   }
 }
