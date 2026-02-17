@@ -20,7 +20,7 @@ interface AuthContextType {
   user?: User | null;
   userData?: UserData | null;
   loading: boolean;
-  error: Error | undefined;
+  error?: Error;
   isAdmin: boolean;
   isUnauthorized: boolean;
 }

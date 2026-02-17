@@ -118,9 +118,9 @@ export default function ForgetPassword() {
 
           <LoadingLink href="/login">
             <Button
-              label="Goto Login Page"
+              label="Go to Login Page"
               className="w-full"
-              disabled={!isValid || isSubmitting}
+              disabled={isSubmitting}
             />
           </LoadingLink>
         </form>
