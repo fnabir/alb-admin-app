@@ -7,7 +7,7 @@ import {
   push,
   DatabaseReference,
 } from 'firebase/database';
-import { database } from './client';
+import { database } from './core';
 import { getCurrentDate } from '../utils';
 
 export function getDatabaseReference(path?: string): DatabaseReference {
