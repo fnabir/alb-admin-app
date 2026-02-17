@@ -19,7 +19,7 @@ import {
   toast,
   TotalBalanceRow,
 } from '@repo/ui';
-import { SelectOption } from '@repo/ui/src/select/types';
+import type { SelectOption } from '@repo/ui';
 import { DataSnapshot } from 'firebase/database';
 
 const sortOptions: SelectOption[] = [

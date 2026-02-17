@@ -11,7 +11,7 @@ import { MdAdd } from 'react-icons/md';
 import OfferFormDialog from './offerFormDialog';
 import DeleteFormDialog from './deleteFormDialog';
 import WebsiteFormDialog from './websiteFormDialog';
-import { SelectOption } from '@repo/ui/src/select/types';
+import type { SelectOption } from '@repo/ui';
 
 const filterOptions: SelectOption[] = [
   { value: 'offer', label: 'Offer' },

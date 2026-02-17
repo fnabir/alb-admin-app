@@ -22,7 +22,7 @@ import { useList, useObject } from 'react-firebase-hooks/database';
 import { MdAdd, MdEdit, MdOutlineInfo } from 'react-icons/md';
 import DeleteTransactionDialog from '@/components/DeleteTransactionDialog';
 import UpdateTransactionDialog from './updateTransactionDialog';
-import { SelectOption } from '@repo/ui/src/select/types';
+import type { SelectOption } from '@repo/ui';
 
 export default function ProjectTransaction() {
   const { id } = useParams() as { id: string };

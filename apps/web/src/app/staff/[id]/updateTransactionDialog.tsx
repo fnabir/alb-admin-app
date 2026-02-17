@@ -23,7 +23,7 @@ import { useState } from 'react';
 import { DataSnapshot } from 'firebase/database';
 import { useForm, useWatch } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { SelectOption } from '@repo/ui/src/select/types';
+import type { SelectOption } from '@repo/ui';
 
 const transactionTypeOptions: SelectOption[] = [
   { value: 'Advance', label: 'Advance (-)' },

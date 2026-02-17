@@ -9,7 +9,7 @@ import {
   usePersistedState,
 } from '@repo/app';
 import { Button, EmptyUI, ErrorUI, Select } from '@repo/ui';
-import { SelectOption } from '@repo/ui/src/select/types';
+import type { SelectOption } from '@repo/ui';
 import { useEffect, useMemo } from 'react';
 import { useObject } from 'react-firebase-hooks/database';
 import { MdAdd, MdEdit } from 'react-icons/md';

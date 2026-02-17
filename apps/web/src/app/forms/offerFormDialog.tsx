@@ -13,16 +13,16 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
+  FormInput,
   FormSelect,
   FormTextarea,
   toast,
 } from '@repo/ui';
+import type { SelectOption } from '@repo/ui';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { FormInput } from '@repo/ui';
 import { DataSnapshot } from 'firebase/database';
-import { SelectOption } from '@repo/ui/src/select/types';
 
 const productOptions: SelectOption[] = [
   { value: 'Passenger Lift', label: 'Passenger Lift' },

@@ -22,7 +22,7 @@ import { useForm, useWatch } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useListKeys } from 'react-firebase-hooks/database';
 import { MdAdd } from 'react-icons/md';
-import { SelectOption } from '@repo/ui/src/select/types';
+import type { SelectOption } from '@repo/ui';
 
 export const paymentInfoOptions: SelectOption[] = [
   { value: 'account', label: 'Account Transfer' },
