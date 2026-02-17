@@ -8,6 +8,13 @@ module.exports = {
   presets: [require('nativewind/preset')],
   theme: {
     extend: {
+      fontFamily: {
+        sans: ['Nunito-Regular', 'system-ui', 'sans-serif'],
+      },
+      fontWeight: {
+        400: '400',
+        700: '700',
+      },
       colors: {
         primary: 'var(--color-primary)',
         muted: 'var(--color-muted)',
