@@ -11,17 +11,17 @@
   },
   "packageManager": "pnpm@10.29.3",
   "pnpm": {
+    "overrides": {
+      "react": "19.1.0",
+      "react-dom": "19.1.0",
+      "react-native": "0.81.5"
+    },
     "onlyBuiltDependencies": [
       "@firebase/util",
       "protobufjs",
       "sharp",
       "unrs-resolver"
     ]
-  },
-  "resolutions": {
-    "react": "19.1.0",
-    "react-dom": "19.1.0",
-    "react-native": "0.81.5"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.2.2",
