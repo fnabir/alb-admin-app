@@ -159,9 +159,6 @@ importers:
       eslint-config-expo:
         specifier: ~10.0.0
         version: 10.0.0(eslint@9.39.2(jiti@1.21.7))(typescript@5.9.3)
-      tailwindcss:
-        specifier: ^3.4.19
-        version: 3.4.19(yaml@2.8.2)
 
   apps/web:
     dependencies:
@@ -208,10 +205,10 @@ importers:
   packages/ui:
     dependencies:
       '@radix-ui/react-dialog':
-        specifier: ^1
+        specifier: ^1.1.15
         version: 1.1.15(@types/react-dom@19.2.3(@types/react@19.2.14))(@types/react@19.2.14)(react-dom@19.2.4(react@19.1.0))(react@19.1.0)
       '@radix-ui/react-slot':
-        specifier: ^1
+        specifier: ^1.2.4
         version: 1.2.4(@types/react@19.2.14)(react@19.1.0)
       react:
         specifier: 19.1.0
