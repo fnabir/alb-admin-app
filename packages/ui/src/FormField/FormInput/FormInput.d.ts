@@ -1,1 +1,1 @@
-export { FormInput } from './FormInput.web';
+export { FormInput } from './FormInput';

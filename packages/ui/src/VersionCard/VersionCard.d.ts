@@ -1,1 +1,1 @@
-export { VersionCard } from './VersionCard.web';
+export { VersionCard } from './VersionCard';

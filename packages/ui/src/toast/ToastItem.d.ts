@@ -1,1 +1,1 @@
-export { ToastItem } from './ToastItem.web';
+export { ToastItem } from './ToastItem';

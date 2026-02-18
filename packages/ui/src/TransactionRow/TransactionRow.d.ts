@@ -1,1 +1,1 @@
-export { TransactionRow } from './TransactionRow.web';
+export { TransactionRow } from './TransactionRow';

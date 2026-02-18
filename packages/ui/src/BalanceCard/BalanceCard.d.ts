@@ -1,1 +1,1 @@
-export { BalanceCard } from './BalanceCard.web';
+export { BalanceCard } from './BalanceCard';

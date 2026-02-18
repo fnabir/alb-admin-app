@@ -1,1 +1,1 @@
-export { Select } from './Select.web';
+export { Select } from './Select';

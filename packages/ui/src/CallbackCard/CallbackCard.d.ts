@@ -1,1 +1,1 @@
-export { CallbackCard } from './CallbackCard.web';
+export { CallbackCard } from './CallbackCard';

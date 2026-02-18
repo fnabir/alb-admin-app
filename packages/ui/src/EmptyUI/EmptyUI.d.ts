@@ -1,1 +1,1 @@
-export { EmptyUI } from './EmptyUI.web';
+export { EmptyUI } from './EmptyUI';

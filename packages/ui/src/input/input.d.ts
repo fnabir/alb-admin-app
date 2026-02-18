@@ -1,1 +1,1 @@
-export { Input } from './input.web';
+export { Input } from './input';

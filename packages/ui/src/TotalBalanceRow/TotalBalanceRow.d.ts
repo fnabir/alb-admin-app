@@ -1,1 +1,1 @@
-export { TotalBalanceRow } from './TotalBalanceRow.web';
+export { TotalBalanceRow } from './TotalBalanceRow';

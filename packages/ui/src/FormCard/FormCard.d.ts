@@ -1,1 +1,1 @@
-export { FormCard } from './FormCard.web';
+export { FormCard } from './FormCard';

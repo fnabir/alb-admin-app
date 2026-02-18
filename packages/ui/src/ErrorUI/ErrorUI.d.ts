@@ -1,1 +1,1 @@
-export { ErrorUI } from './ErrorUI.web';
+export { ErrorUI } from './ErrorUI';

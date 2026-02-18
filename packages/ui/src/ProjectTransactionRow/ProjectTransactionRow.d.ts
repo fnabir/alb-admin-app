@@ -1,1 +1,1 @@
-export { ProjectTransactionRow } from './ProjectTransactionRow.web';
+export { ProjectTransactionRow } from './ProjectTransactionRow';

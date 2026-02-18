@@ -1,1 +1,1 @@
-export { Card } from './Card.web';
+export { Card } from './Card';

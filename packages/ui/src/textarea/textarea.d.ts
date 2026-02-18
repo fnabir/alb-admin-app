@@ -1,1 +1,1 @@
-export { Textarea } from './textarea.web';
+export { Textarea } from './textarea';

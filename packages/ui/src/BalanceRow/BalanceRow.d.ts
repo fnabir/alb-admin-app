@@ -1,1 +1,1 @@
-export { BalanceRow } from './BalanceRow.web';
+export { BalanceRow } from './BalanceRow';
