@@ -402,7 +402,7 @@ export default function UpdateTransactionDialog({
         >
           <RadioGroup
             value={sign}
-            onValueChange={(value) => {
+            onValueChange={(value: string) => {
               setSign(value);
               setValue('title', '');
               setValue('details', '');
@@ -474,7 +474,7 @@ export default function UpdateTransactionDialog({
                   <Select
                     options={paidDataOptions}
                     value={fullPaymentData.key ?? ''}
-                    onChange={(value) =>
+                    onChange={(value: string) =>
                       setFullPaymentData({
                         key: value,
                         details: getLabelByValue(paidDataOptions, value),
@@ -491,7 +491,7 @@ export default function UpdateTransactionDialog({
                         <Select
                           options={paidDataOptions}
                           value={partialDataSets[index].key}
-                          onChange={(value) => {
+                          onChange={(value: string) => {
                             handlePartialDataChange(set.id, 'key', value);
                             handlePartialDataChange(
                               set.id,
@@ -505,7 +505,7 @@ export default function UpdateTransactionDialog({
                           placeholder="Amount"
                           type="number"
                           value={partialDataSets[index].amount}
-                          onChangeText={(value) =>
+                          onChangeText={(value: string) =>
                             handlePartialDataAmountChange(set.id, Number(value))
                           }
                           startAdornment={'৳'}
