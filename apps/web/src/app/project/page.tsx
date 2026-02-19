@@ -2,7 +2,6 @@
 
 import { useBreadcrumbs } from '@/components/BreadcrumbContext';
 import { Loading } from '@/components/Loading';
-import { LoadingLink } from '@/components/LoadingLink';
 import {
   getDatabaseReference,
   getTotalValue,
@@ -18,6 +17,7 @@ import {
   Select,
   toast,
   TotalBalanceRow,
+  LoadingLink,
 } from '@repo/ui';
 import type { SelectOption } from '@repo/ui';
 import { DataSnapshot } from 'firebase/database';

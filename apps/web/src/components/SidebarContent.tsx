@@ -1,5 +1,5 @@
 import { MdBuild, MdDashboard, MdInventory } from 'react-icons/md';
-import { LoadingLink } from './LoadingLink';
+import { LoadingLink } from '@repo/ui';
 import { IconType } from 'react-icons';
 import {
   FaBook,

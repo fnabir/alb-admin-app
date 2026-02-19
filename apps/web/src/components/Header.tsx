@@ -1,8 +1,7 @@
 'use client';
 
-import { Button } from '@repo/ui';
+import { Button, LoadingLink } from '@repo/ui';
 import Breadcrumb from './Breadcrumb';
-import { LoadingLink } from './LoadingLink';
 import { LogoutButton } from './LogoutButton';
 import { ThemeToggle } from './ThemeToggle';
 import { FaUser } from 'react-icons/fa6';

@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import TextLogo from '@/images/logo-text';
-import { Button, FormInput } from '@repo/ui';
+import { Button, FormInput, LoadingLink } from '@repo/ui';
 import {
   auth,
   ForgetPasswordForm,
@@ -13,7 +13,6 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { useSendPasswordResetEmail } from 'react-firebase-hooks/auth';
 import { MdCheck, MdInfoOutline } from 'react-icons/md';
-import { LoadingLink } from '@/components/LoadingLink';
 
 export default function ForgetPassword() {
   useEffect(() => {

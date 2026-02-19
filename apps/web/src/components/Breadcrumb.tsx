@@ -1,6 +1,6 @@
 import { FaChevronRight } from 'react-icons/fa6';
 import { useBreadcrumbs } from './BreadcrumbContext';
-import { LoadingLink } from './LoadingLink';
+import { LoadingLink } from '@repo/ui';
 
 export type BreadcrumbItem = {
   label: string;

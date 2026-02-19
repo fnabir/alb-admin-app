@@ -2,9 +2,14 @@
 
 import { useBreadcrumbs } from '@/components/BreadcrumbContext';
 import { Loading } from '@/components/Loading';
-import { LoadingLink } from '@/components/LoadingLink';
 import { getDatabaseReference } from '@repo/app';
-import { Button, CallbackTotalCard, EmptyUI, ErrorUI } from '@repo/ui';
+import {
+  Button,
+  CallbackTotalCard,
+  EmptyUI,
+  ErrorUI,
+  LoadingLink,
+} from '@repo/ui';
 import { useEffect } from 'react';
 import { useList } from 'react-firebase-hooks/database';
 import UpdateCallbackDialog from './updateCallbackDialog';

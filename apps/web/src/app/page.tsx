@@ -1,7 +1,7 @@
 'use client';
 
 import { Card, VersionCard } from '@repo/ui';
-import { BalanceCard, IconCard } from '@repo/ui';
+import { BalanceCard, IconCard, LoadingLink } from '@repo/ui';
 import packageJson from '@/../../../../package.json';
 import PieChart from '@/components/PieChart';
 import { FaBook, FaBuildingUser, FaTag, FaWrench } from 'react-icons/fa6';
@@ -9,8 +9,8 @@ import { getDatabaseReference } from '@repo/app';
 import { useList, useListKeys } from 'react-firebase-hooks/database';
 import { useEffect, useMemo } from 'react';
 import { useBreadcrumbs } from '@/components/BreadcrumbContext';
-import { LoadingLink } from '@/components/LoadingLink';
 import { MdInventory, MdNearbyError } from 'react-icons/md';
+import { useAuth } from '@/contexts/AuthContext';
 
 const balanceOrder = ['project', 'staff', 'conveyance', 'ZZZ'] as const;
 
@@ -68,7 +68,7 @@ export default function Home() {
     getDatabaseReference('balance/total'),
   );
 
-  const isAdmin = true;
+  const { isAdmin } = useAuth();
 
   const filteredBalanceData = useMemo(() => {
     if (totalBalanceLoading || !totalBalanceData) return [];

@@ -3,8 +3,7 @@
 import { useEffect, useState } from 'react';
 import { useSignInWithEmailAndPassword } from 'react-firebase-hooks/auth';
 import { auth } from '@repo/app';
-import { LoadingLink } from '@/components/LoadingLink';
-import { Button, toast, FormInput } from '@repo/ui';
+import { Button, toast, FormInput, LoadingLink } from '@repo/ui';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { loginSchema, LoginForm, useLoading } from '@repo/app';
