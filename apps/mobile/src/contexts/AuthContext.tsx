@@ -8,8 +8,9 @@ import { useRouter, useSegments } from 'expo-router';
 
 interface UserData {
   role?: string;
-  displayName?: string;
-  email?: string;
+  name?: string;
+  title?: string;
+  phone?: string;
 }
 
 interface AuthContextType {

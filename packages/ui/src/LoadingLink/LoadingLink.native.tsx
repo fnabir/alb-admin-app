@@ -1,7 +1,7 @@
 'use client';
 
 import { useRouter } from 'expo-router';
-import { useLoading } from '@repo/app';
+import { useLoading } from '../../../../apps/mobile/src/contexts/LoadingContext';
 import { Pressable, Text } from 'react-native';
 import { ReactNode } from 'react';
 

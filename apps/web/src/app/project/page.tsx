@@ -8,7 +8,7 @@ import {
   updateTotalBalance,
   usePersistedState,
 } from '@repo/app';
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo } from 'react';
 import { useList, useObject } from 'react-firebase-hooks/database';
 import {
   BalanceRow,
