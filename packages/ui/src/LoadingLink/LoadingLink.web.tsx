@@ -12,10 +12,6 @@ type LoadingLinkProps = {
   prefetch?: boolean;
 };
 
-/**
- * Enhanced Link component that triggers loading state
- * Use this instead of regular Next.js Link
- */
 export function LoadingLink({
   href,
   children,
