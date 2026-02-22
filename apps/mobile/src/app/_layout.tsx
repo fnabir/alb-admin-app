@@ -7,6 +7,8 @@ import * as SplashScreen from 'expo-splash-screen';
 import { useFonts } from 'expo-font';
 import '../../global.css';
 import { useEffect } from 'react';
+import { ThemeProvider } from '../contexts/ThemeContext';
+import { ThemeWrapper } from '../components/ThemeWrapper';
 
 SplashScreen.preventAutoHideAsync();
 
@@ -24,13 +26,17 @@ export default function RootLayout() {
   if (!fontsLoaded) return null;
 
   return (
-    <LoadingProvider>
-      <AuthProvider>
-        <AuthGuard>
-          <Slot />
-        </AuthGuard>
-        <LoadingOverlay />
-      </AuthProvider>
-    </LoadingProvider>
+    <ThemeProvider>
+      <ThemeWrapper>
+        <LoadingProvider>
+          <AuthProvider>
+            <AuthGuard>
+              <Slot />
+            </AuthGuard>
+            <LoadingOverlay />
+          </AuthProvider>
+        </LoadingProvider>
+      </ThemeWrapper>
+    </ThemeProvider>
   );
 }
