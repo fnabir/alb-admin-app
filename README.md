@@ -23,8 +23,8 @@
 | **Turborepo**  | Monorepo build system   | Latest  |
 | **Next.js**    | React framework for web | 16.x    |
 | **Expo**       | React Native platform   | 54.x    |
-| **React**      | Frameowrk               | 19.0    |
-| **Tailwind**   | UI library              | 3.0     |
+| **React**      | Frameowrk               | 19.x    |
+| **Tailwind**   | UI library              | 3.x     |
 | **NativeWind** | Cross-platform styling  | 4.x     |
 | **TypeScript** | Type safety             | 5.x     |
 | **pnpm**       | Package manager         | 10.x    |
@@ -131,9 +131,8 @@ eas build --platform android
 
 ### Styling & UI
 
-- **[Tailwind CSS v3](https://tailwindcss.com/docs)** - Utility-first CSS framework
+- **[Tailwind CSS](https://tailwindcss.com/docs)** - Utility-first CSS framework
 - **[NativeWind](https://www.nativewind.dev/)** - Tailwind CSS for React Native
-- **[React Native Web](https://necolas.github.io/react-native-web/)** - RN components for web
 
 ### Development Tools
 
@@ -153,4 +152,4 @@ Built by [Farhan Noor Abir](https://github.com/fnabir).
 
 ---
 
-**Built with Turborepo • Next.js • Expo • NativeWind**
+**Built with Turborepo • Next.js • Expo • TailwindCSS • NativeWind**
