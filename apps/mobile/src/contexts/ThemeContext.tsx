@@ -86,13 +86,9 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
     }
   };
 
-  if (!isReady) {
-    return null;
-  }
-
   return (
     <ThemeContext.Provider value={{ theme, setTheme, colorScheme }}>
-      {children}
+      {isReady ? children : null}
     </ThemeContext.Provider>
   );
 }

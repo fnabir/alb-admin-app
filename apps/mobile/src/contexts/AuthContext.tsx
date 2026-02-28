@@ -1,8 +1,7 @@
-import { createContext, useContext, useEffect, useRef } from 'react';
+import { createContext, useContext, useEffect, useMemo, useRef } from 'react';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { useObjectVal } from 'react-firebase-hooks/database';
-import { auth, database } from '@repo/app';
-import { ref } from 'firebase/database';
+import { auth, getDatabaseReference } from '@repo/app';
 import { User } from 'firebase/auth';
 import { useRouter, useSegments } from 'expo-router';
 
@@ -11,6 +10,7 @@ interface UserData {
   name?: string;
   title?: string;
   phone?: string;
+  appAccess?: boolean;
 }
 
 interface AuthContextType {
@@ -29,13 +29,19 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const segments = useSegments();
   const hasInitialized = useRef(false);
 
-  // Fetch user data from database when user is authenticated
-  const userDataRef = user ? ref(database, `info/user/${user.uid}`) : null;
+  const userDataRef = useMemo(
+    () => (user ? getDatabaseReference(`info/user/${user.uid}`) : null),
+    [user],
+  );
   const [userData, userDataLoading, userDataError] =
     useObjectVal<UserData>(userDataRef);
 
-  // Determine if user is admin
   const isAdmin = userData?.role === 'admin';
+
+  const hasAccess = userData?.appAccess ?? true;
+  if (user && !hasAccess) {
+    auth.signOut();
+  }
 
   // Combined loading state
   const loading = userLoading || userDataLoading;
@@ -54,9 +60,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     if (!user && !inAuthGroup) {
       // Redirect to login if not authenticated
       router.replace('/login');
-    } else if (user && inAuthGroup) {
-      // Redirect to main app if authenticated
-      router.replace('/(tabs)');
     }
   }, [user, loading, segments, router]);
 
