@@ -1,15 +1,29 @@
 import { Tabs } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { useTheme } from '@/src/contexts/ThemeContext';
 
 export default function TabsLayout() {
+  const { colorScheme } = useTheme();
+
+  const tabBarColors = {
+    activeTintColor: '#3B82F6',
+    inactiveTintColor: colorScheme === 'dark' ? '#9CA3AF' : '#6B7280',
+    backgroundColor: colorScheme === 'dark' ? '#18181b' : '#ffffff',
+    borderTopColor: colorScheme === 'dark' ? '#3f3f46' : '#e5e7eb',
+  };
+
   return (
-    <SafeAreaView className="flex-1 bg-black dark:bg-zinc-950">
+    <SafeAreaView className="flex-1 bg-background">
       <Tabs
         screenOptions={{
           headerShown: false,
-          tabBarActiveTintColor: '#3B82F6',
-          tabBarInactiveTintColor: '#9CA3AF',
+          tabBarActiveTintColor: tabBarColors.activeTintColor,
+          tabBarInactiveTintColor: tabBarColors.inactiveTintColor,
+          tabBarStyle: {
+            backgroundColor: tabBarColors.backgroundColor,
+            borderTopColor: tabBarColors.borderTopColor,
+          },
         }}
       >
         <Tabs.Screen
@@ -22,11 +36,20 @@ export default function TabsLayout() {
           }}
         />
         <Tabs.Screen
-          name="profile"
+          name="projects"
           options={{
-            title: 'Profile',
+            title: 'Projects',
             tabBarIcon: ({ color, size }) => (
-              <Ionicons name="person" size={size} color={color} />
+              <Ionicons name="business" size={size} color={color} />
+            ),
+          }}
+        />
+        <Tabs.Screen
+          name="company"
+          options={{
+            title: 'Company',
+            tabBarIcon: ({ color, size }) => (
+              <Ionicons name="briefcase" size={size} color={color} />
             ),
           }}
         />
