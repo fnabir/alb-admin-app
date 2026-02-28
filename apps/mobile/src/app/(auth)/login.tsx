@@ -53,7 +53,7 @@ export default function LoginScreen() {
             <View className="items-center mb-8">
               <Image
                 source={require('../../../assets/images/adaptive-icon.png')}
-                className="w-24 h-24 mb-4"
+                className="w-24 h-24 mb-4 rounded-lg"
                 resizeMode="contain"
               />
               <Text className="text-3xl font-bold text-primary mb-2">
