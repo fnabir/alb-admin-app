@@ -1,24 +1,36 @@
-import { Text } from 'react-native';
+import { Text, View } from 'react-native';
 import { Card } from '../Card';
 import { formatCurrency } from '@repo/app';
 import { TotalBalanceProps } from './types';
 
 export function TotalBalanceRow({
-  title,
+  title = 'Total Balance',
+  value = 0,
   date,
-  value,
   error,
-  showUpdate = false,
-  onClick,
-  className,
+  className = '',
 }: TotalBalanceProps) {
   return (
-    <Card className={`hover:border-accent ${className}`}>
-      <Text className="text-lg text-primary pb-1 capitalize">{title}</Text>
-      <Text className="text-2xl text-primary font-semibold">
-        {formatCurrency(value)}
-      </Text>
-      {date && <Text className="text-muted">Last updated on {date}</Text>}
-    </Card>
+    <>
+      {error ? (
+        <Card className={`!bg-blue-500 ${className}`}>
+          <Text className="text-2xl text-white">{error}</Text>
+        </Card>
+      ) : (
+        <Card className={`flex-row items-center !bg-blue-500 ${className}`}>
+          <View className="flex-1">
+            <Text className="text-xl text-white font-semibold pb-1 capitalize">
+              {title}
+            </Text>
+            {date && (
+              <Text className="text-white/80">Last updated on {date}</Text>
+            )}
+          </View>
+          <Text className="text-2xl text-white font-semibold">
+            {formatCurrency(value)}
+          </Text>
+        </Card>
+      )}
+    </>
   );
 }

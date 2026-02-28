@@ -1,11 +1,13 @@
-import { MdOutlineInfo } from 'react-icons/md';
-import { View } from 'react-native';
+import { Text, View } from 'react-native';
+import { ThemedIcon } from '../../../../apps/mobile/src/components/ThemedIcon';
 
 export function ErrorUI({ error }: { error: Error }) {
   return (
-    <View className="flex flex-1 flex-col items-center justify-center gap-2 text-lg">
-      <MdOutlineInfo className="size-16" />
-      {error.message}
+    <View className="items-center">
+      <ThemedIcon name="information-circle-outline" size={64} />
+      <Text className="text-2xl text-primary font-semibold">
+        {error.message}
+      </Text>
     </View>
   );
 }

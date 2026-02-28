@@ -10,9 +10,11 @@ export function BalanceCard({
   className = '',
 }: BalanceCardProps) {
   return (
-    <Card className={`items-center hover:border-accent ${className}`}>
-      <Text className="text-xl text-primary capitalize mb-1">{title}</Text>
-      <Text className="text-3xl text-primary font-semibold -mb-1">
+    <Card className={`items-center gap-0 ${className}`}>
+      <Text className="text-xl text-primary font-semibold capitalize mb-1">
+        {title}
+      </Text>
+      <Text className="text-3xl text-primary font-semibold">
         {formatCurrency(balance)}
       </Text>
       {date && <Text className="text-muted">Last updated on {date}</Text>}

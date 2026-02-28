@@ -1,12 +1,23 @@
 import { BadgeProps } from './types';
-import { Text } from 'react-native';
+import { Text, View } from 'react-native';
 
-export function Badge({ label, className = '' }: BadgeProps) {
+export function Badge({
+  label,
+  variant = 'default',
+  className = '',
+}: BadgeProps) {
+  const variantStyles = {
+    default: 'bg-primary text-background',
+    success: 'bg-green-200 text-green-800',
+    warning: 'bg-yellow-200 text-yellow-800',
+    error: 'bg-red-200 text-red-800',
+  };
+
   return (
-    <Text
-      className={`w-fit bg-primary text-background text-sm lg:text-base px-2 lg:px-3 rounded-full font-semibold ${className}`}
+    <View
+      className={`self-start px-2 py-0.5 rounded-full ${variantStyles[variant]} ${className}`}
     >
-      {label}
-    </Text>
+      <Text className="text-sm font-semibold">{label}</Text>
+    </View>
   );
 }
