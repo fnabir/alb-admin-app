@@ -15,9 +15,9 @@ export function Badge({
 
   return (
     <View
-      className={`self-start px-2 py-0.5 rounded-full ${variantStyles[variant]} ${className}`}
+      className={`self-start px-2 py-0.25 rounded-full ${variantStyles[variant]} ${className}`}
     >
-      <Text className="text-sm font-semibold">{label}</Text>
+      <Text className="font-medium capitalize">{label}</Text>
     </View>
   );
 }
