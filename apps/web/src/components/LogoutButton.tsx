@@ -14,7 +14,7 @@ export function LogoutButton() {
   return (
     <Button
       icon={MdLogout}
-      variant="transparent"
+      variant="outline"
       aria-label="Logout Button"
       onPress={handleSignOut}
     />

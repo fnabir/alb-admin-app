@@ -5,6 +5,7 @@ export type ButtonVariant =
   | 'primary'
   | 'danger'
   | 'secondary'
+  | 'outline'
   | 'transparent';
 
 export interface ButtonProps {

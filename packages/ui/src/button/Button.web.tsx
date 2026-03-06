@@ -1,9 +1,17 @@
 'use client';
 
 import { forwardRef } from 'react';
-import { buttonStyles } from './styles';
 import { ButtonProps } from './types';
 import { Slot } from '@radix-ui/react-slot';
+
+const style = {
+  accent: 'text-white bg-gradient-to-b from-sky-600 to-sky-800',
+  primary: 'text-background bg-primary',
+  danger: 'text-white bg-gradient-to-b from-red-600 to-red-800',
+  secondary: 'text-white bg-gradient-to-b from-zinc-600 to-zinc-800',
+  outline:
+    'text-primary bg-transparent rounded-md border-2 border-border hover:border-accent',
+};
 
 export const Button = forwardRef<
   HTMLButtonElement,
@@ -23,7 +31,7 @@ export const Button = forwardRef<
     asChild = false,
     ...props
   },
-  ref
+  ref,
 ) {
   const isDisabled = disabled || loading;
   const Comp = asChild ? Slot : 'button';
@@ -34,9 +42,11 @@ export const Button = forwardRef<
       aria-label={ariaLabel}
       disabled={isDisabled}
       onClick={onPress}
-      className={`
-        ${buttonStyles.base}
-        ${buttonStyles.variant[variant]}
+      className={`inline-flex items-center justify-center space-x-1
+                  py-1 rounded-lg
+                  shadow-md hover:shadow-lg
+                  transition-all duration-200
+        ${style[variant]}
         ${
           isDisabled
             ? 'opacity-40 pointer-events-none'

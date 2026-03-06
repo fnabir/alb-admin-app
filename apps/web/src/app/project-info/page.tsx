@@ -83,7 +83,7 @@ export default function ProjectInfo() {
                     <Button
                       icon={MdEdit}
                       ariaLabel="Edit Button"
-                      variant="transparent"
+                      variant="outline"
                     />
                   </ProjectInfoDialog>
                   {val.phone && (
@@ -91,7 +91,7 @@ export default function ProjectInfo() {
                       <Button
                         icon={MdCall}
                         ariaLabel="Call Button"
-                        variant="transparent"
+                        variant="outline"
                       />
                     </Link>
                   )}

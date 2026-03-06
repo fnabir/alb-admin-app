@@ -21,7 +21,7 @@ export default function Header({ onMenuClick }: { onMenuClick: () => void }) {
         <LogoutButton />
         <Button
           icon={MdMenu}
-          variant="transparent"
+          variant="outline"
           onPress={onMenuClick}
           className="lg:hidden"
         />

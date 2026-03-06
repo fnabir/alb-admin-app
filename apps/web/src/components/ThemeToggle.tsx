@@ -12,7 +12,7 @@ export function ThemeToggle() {
   return (
     <Button
       icon={theme === 'light' ? FaMoon : FaSun}
-      variant="transparent"
+      variant="outline"
       aria-label="Toggle Theme"
       onPress={toggleTheme}
     />
