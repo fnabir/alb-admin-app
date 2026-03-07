@@ -1,10 +1,14 @@
 import { toastStore } from './store';
 import { ToastVariant } from './types';
 
+function generateId(): string {
+  return `${Date.now()}-${Math.random().toString(36).slice(2, 9)}`;
+}
+
 function createToast(variant: ToastVariant) {
   return (title: string, description?: string) => {
     toastStore.show({
-      id: crypto.randomUUID(),
+      id: generateId(),
       title,
       description,
       variant,

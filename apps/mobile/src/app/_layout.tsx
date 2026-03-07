@@ -9,6 +9,7 @@ import '../../global.css';
 import { useEffect } from 'react';
 import { ThemeProvider } from '../contexts/ThemeContext';
 import { ThemeWrapper } from '../components/ThemeWrapper';
+import { ToastProvider } from '@repo/ui';
 
 SplashScreen.preventAutoHideAsync();
 
@@ -36,6 +37,7 @@ export default function RootLayout() {
             <LoadingOverlay />
           </AuthProvider>
         </LoadingProvider>
+        <ToastProvider />
       </ThemeWrapper>
     </ThemeProvider>
   );
