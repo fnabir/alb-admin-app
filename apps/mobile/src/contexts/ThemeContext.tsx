@@ -17,14 +17,19 @@ interface ThemeContextType {
   colorScheme: 'light' | 'dark';
 }
 
-const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
+const ThemeContext = createContext<ThemeContextType>({
+  theme: 'system',
+  setTheme: () => {},
+  colorScheme: Appearance.getColorScheme() ?? 'light',
+});
 
 const THEME_STORAGE_KEY = '@app_theme';
 
 export function ThemeProvider({ children }: { children: ReactNode }) {
   const [theme, setThemeState] = useState<Theme>('system');
-  const [colorScheme, setColorScheme] = useState<'light' | 'dark'>('light');
-  const [isReady, setIsReady] = useState(false);
+  const [colorScheme, setColorScheme] = useState<'light' | 'dark'>(
+    () => Appearance.getColorScheme() ?? 'light',
+  );
   const isUpdatingRef = useRef(false);
 
   useEffect(() => {
@@ -37,9 +42,7 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
     const listener = Appearance.addChangeListener(
       ({ colorScheme: newScheme }) => {
         if (isUpdatingRef.current) return;
-
-        const scheme = newScheme ?? 'light';
-        setColorScheme(scheme);
+        setColorScheme(newScheme ?? 'light');
       },
     );
 
@@ -50,8 +53,7 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
     isUpdatingRef.current = true;
 
     if (theme === 'system') {
-      const systemScheme = Appearance.getColorScheme() ?? 'light';
-      setColorScheme(systemScheme);
+      setColorScheme(Appearance.getColorScheme() ?? 'light');
     } else {
       setColorScheme(theme);
     }
@@ -66,14 +68,9 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
       const savedTheme = await AsyncStorage.getItem(THEME_STORAGE_KEY);
       if (savedTheme && ['light', 'dark', 'system'].includes(savedTheme)) {
         setThemeState(savedTheme as Theme);
-      } else {
-        const systemScheme = Appearance.getColorScheme() ?? 'light';
-        setColorScheme(systemScheme);
       }
     } catch (error) {
       console.error('Failed to load theme:', error);
-    } finally {
-      setIsReady(true);
     }
   };
 
@@ -88,15 +85,11 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
 
   return (
     <ThemeContext.Provider value={{ theme, setTheme, colorScheme }}>
-      {isReady ? children : null}
+      {children}
     </ThemeContext.Provider>
   );
 }
 
 export function useTheme() {
-  const context = useContext(ThemeContext);
-  if (context === undefined) {
-    throw new Error('useTheme must be used within a ThemeProvider');
-  }
-  return context;
+  return useContext(ThemeContext);
 }

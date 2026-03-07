@@ -4,6 +4,7 @@ import { useObjectVal } from 'react-firebase-hooks/database';
 import { auth, getDatabaseReference } from '@repo/app';
 import { User } from 'firebase/auth';
 import { useRouter, useSegments } from 'expo-router';
+import { toast } from '@repo/ui';
 
 interface UserData {
   role?: string;
@@ -21,47 +22,67 @@ interface AuthContextType {
   error: Error | undefined;
 }
 
-const AuthContext = createContext<AuthContextType | undefined>(undefined);
+const AuthContext = createContext<AuthContextType>({
+  user: undefined,
+  userData: undefined,
+  isAdmin: false,
+  loading: true,
+  error: undefined,
+});
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, userLoading, userError] = useAuthState(auth);
   const router = useRouter();
   const segments = useSegments();
-  const hasInitialized = useRef(false);
 
   const userDataRef = useMemo(
     () => (user ? getDatabaseReference(`info/user/${user.uid}`) : null),
-    [user],
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [user?.uid],
   );
+
   const [userData, userDataLoading, userDataError] =
     useObjectVal<UserData>(userDataRef);
 
   const isAdmin = userData?.role === 'admin';
-
-  const hasAccess = userData?.appAccess ?? true;
-  if (user && !hasAccess) {
-    auth.signOut();
-  }
-
-  // Combined loading state
   const loading = userLoading || userDataLoading;
   const error = userError || userDataError;
 
-  // Route protection
+  const accessDeniedRef = useRef(false);
+
   useEffect(() => {
     if (loading) return;
 
-    if (!hasInitialized.current) {
-      hasInitialized.current = true;
-    }
-
     const inAuthGroup = segments[0] === '(auth)';
 
-    if (!user && !inAuthGroup) {
-      // Redirect to login if not authenticated
-      router.replace('/login');
+    if (!user) {
+      if (!inAuthGroup) {
+        router.replace('/login');
+      }
+      return;
     }
-  }, [user, loading, segments, router]);
+
+    // Still waiting for userData from DB
+    if (userData === undefined) return;
+
+    const hasAccess = userData?.appAccess ?? true;
+
+    if (!hasAccess && !accessDeniedRef.current) {
+      accessDeniedRef.current = true;
+
+      auth.signOut();
+
+      toast.error(
+        'Access Denied',
+        'You do not have permission to access this app.',
+      );
+    }
+
+    if (hasAccess) {
+      accessDeniedRef.current = false;
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [user, userData, loading]);
 
   return (
     <AuthContext.Provider value={{ user, userData, isAdmin, loading, error }}>
@@ -71,9 +92,5 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 }
 
 export function useAuth() {
-  const context = useContext(AuthContext);
-  if (context === undefined) {
-    throw new Error('useAuth must be used within an AuthProvider');
-  }
-  return context;
+  return useContext(AuthContext);
 }
