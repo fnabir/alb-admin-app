@@ -82,10 +82,8 @@ export default function SettingsScreen() {
           <ThemeSelector />
         </Card>
 
-        {/* Logout */}
         <LogoutButton />
       </View>
-      <StatusBar style="auto" />
     </ScrollView>
   );
 }

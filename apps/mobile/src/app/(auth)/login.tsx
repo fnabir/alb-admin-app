@@ -10,15 +10,13 @@ import {
   Image,
 } from 'react-native';
 import { useSignInWithEmailAndPassword } from 'react-firebase-hooks/auth';
-import { auth } from '@repo/app';
+import { auth, useLoading } from '@repo/app';
 import { Card } from '@repo/ui';
-import { useLoading } from '../../contexts/LoadingContext';
-import { StatusBar } from 'expo-status-bar';
 
 export default function LoginScreen() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [signInWithEmailAndPassword, user, loading, error] =
+  const [signInWithEmailAndPassword, , loading, error] =
     useSignInWithEmailAndPassword(auth);
   const { startLoading, stopLoading } = useLoading();
 
@@ -124,7 +122,6 @@ export default function LoginScreen() {
           </Card>
         </View>
       </ScrollView>
-      <StatusBar style="auto" />
     </KeyboardAvoidingView>
   );
 }

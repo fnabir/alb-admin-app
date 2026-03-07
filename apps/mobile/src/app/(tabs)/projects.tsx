@@ -65,7 +65,6 @@ export default function ProjectsScreen() {
           </LoadingLink>
         ))}
       </View>
-      <StatusBar style="auto" />
     </ScrollView>
   );
 }

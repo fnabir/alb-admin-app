@@ -98,8 +98,6 @@ export default function HomeScreen() {
           </Card>
         </LoadingLink>
       </View>
-
-      <StatusBar style="auto" />
     </ScrollView>
   );
 }

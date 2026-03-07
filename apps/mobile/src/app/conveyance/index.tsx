@@ -1,41 +1,21 @@
 import { View, Text, ScrollView } from 'react-native';
 import {
-  BalanceCard,
   BalanceRow,
   EmptyUI,
   ErrorUI,
   LoadingLink,
-  SelectOption,
   toast,
   TotalBalanceRow,
 } from '@repo/ui';
-import { StatusBar } from 'expo-status-bar';
-import { useTheme } from '../../contexts/ThemeContext';
 import {
   getDatabaseReference,
   getTotalValue,
   updateTotalBalance,
-  usePersistedState,
 } from '@repo/app';
 import { useList, useObject } from 'react-firebase-hooks/database';
 import { useEffect, useMemo } from 'react';
 import { GoBackButton } from '@/src/components/GoBackButton';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { DataSnapshot } from 'firebase/database';
-
-const sortOptions: SelectOption[] = [
-  { value: 'position', label: 'Position' },
-  { value: 'balance', label: 'Balance' },
-];
-
-type StaffBalance = {
-  snap: DataSnapshot;
-  parsed: {
-    name: string;
-    position: number;
-    value: number;
-  };
-};
 
 export default function ConveyanceBalanceScreen() {
   const [data, dataLoading, dataError] = useList(
@@ -111,8 +91,8 @@ export default function ConveyanceBalanceScreen() {
               })}
           </View>
         )}
-        <StatusBar style="auto" />
       </ScrollView>
+
       {data && data.length > 0 && (
         <TotalBalanceRow
           value={totalValue}

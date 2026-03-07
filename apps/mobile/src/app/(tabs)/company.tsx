@@ -13,7 +13,6 @@ export default function CompanyScreen() {
           Company
         </Text>
       </View>
-      <StatusBar style="auto" />
     </ScrollView>
   );
 }

@@ -4,31 +4,18 @@ import {
   EmptyUI,
   ErrorUI,
   LoadingLink,
-  SelectOption,
   toast,
   TotalBalanceRow,
 } from '@repo/ui';
-import { StatusBar } from 'expo-status-bar';
 import {
   getDatabaseReference,
   getTotalValue,
   updateTotalBalance,
-  usePersistedState,
 } from '@repo/app';
 import { useList, useObject } from 'react-firebase-hooks/database';
 import { useEffect, useMemo } from 'react';
 import { GoBackButton } from '@/src/components/GoBackButton';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { DataSnapshot } from 'firebase/database';
-
-type ProjectBalance = {
-  snap: DataSnapshot;
-  parsed: {
-    id: string;
-    balance: number;
-    status: 'outstanding' | 'paid' | 'overpaid' | 'cancelled';
-  };
-};
 
 export default function ProjectBalanceScreen() {
   const [data, dataLoading, dataError] = useList(
@@ -104,7 +91,6 @@ export default function ProjectBalanceScreen() {
               })}
           </View>
         )}
-        <StatusBar style="auto" />
       </ScrollView>
       {data?.length ? (
         <TotalBalanceRow

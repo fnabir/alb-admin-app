@@ -1,6 +1,5 @@
 import { View, Text, ScrollView } from 'react-native';
 import { useLocalSearchParams } from 'expo-router';
-import { StatusBar } from 'expo-status-bar';
 import { getDatabaseReference, getTotalValue, updateBalance } from '@repo/app';
 import { useList, useObject } from 'react-firebase-hooks/database';
 import {
@@ -90,7 +89,6 @@ export default function ConveyanceDetailScreen() {
               ))}
           </View>
         )}
-        <StatusBar style="auto" />
       </ScrollView>
       {data && data.length > 0 && (
         <TotalBalanceRow
