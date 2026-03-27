@@ -1,15 +1,17 @@
 {
   "name": "alb-admin-app",
-  "version": "1.5.0",
+  "version": "1.0.0",
   "author": "Farhan Noor Abir",
   "main": "index.js",
   "scripts": {
     "dev": "turbo dev",
     "build": "turbo build",
     "lint": "turbo lint",
-    "typecheck": "turbo typecheck"
+    "typecheck": "turbo typecheck",
+    "android": "expo run:android",
+    "ios": "expo run:ios"
   },
-  "packageManager": "pnpm@10.30.3",
+  "packageManager": "pnpm@10.33.0",
   "pnpm": {
     "overrides": {
       "react": "19.1.0",
@@ -28,16 +30,19 @@
     "zod": "^4.3.6",
     "date-fns": "^4.1.0",
     "date-fns-tz": "^3.2.0",
-    "firebase": "^12.10.0",
+    "firebase": "^12.11.0",
     "js-cookie": "^3.0.5",
     "react-firebase-hooks": "5.1.1",
-    "react-hook-form": "^7.71.2"
+    "react-hook-form": "^7.72.0",
+    "expo": "~54.0.33",
+    "react": "19.1.0",
+    "react-native": "0.81.5"
   },
   "devDependencies": {
     "@types/js-cookie": "^3.0.6",
     "@types/react": "~19.2.14",
     "eslint": "^9",
-    "turbo": "^2.8.14",
+    "turbo": "^2.8.20",
     "typescript": "5.9.3",
     "tailwindcss": "3.4.19"
   }
