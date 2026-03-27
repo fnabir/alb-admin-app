@@ -1,10 +1,10 @@
 import { View, Text, ScrollView, Pressable } from 'react-native';
-import { Card } from '@repo/ui';
+import { Card, LoadingLink } from '@repo/ui';
 import { LogoutButton } from '../../components/LogoutButton';
 import { Ionicons } from '@expo/vector-icons';
-import { StatusBar } from 'expo-status-bar';
 import { ThemeSelector } from '@/src/components/ThemeSelector';
 import { useAuth } from '@/src/contexts/AuthContext';
+import packageJson from '@/package.json';
 
 export default function SettingsScreen() {
   const { user, userData } = useAuth();
@@ -33,7 +33,7 @@ export default function SettingsScreen() {
           </View>
 
           {/* Info Section */}
-          <View className="border-t-2 border-border pt-4 gap-1">
+          <View className="border-t-2 border-border py-2 gap-1">
             {userData?.phone && (
               <View className="flex-row justify-between">
                 <Text className="text-lg text-muted">Phone</Text>
@@ -44,36 +44,28 @@ export default function SettingsScreen() {
             )}
             <View className="flex-row justify-between">
               <Text className="text-lg text-muted">Role</Text>
-              <Text className="text-lg text-primary font-medium">
-                {userData?.role?.toUpperCase() || 'User'}
+              <Text className="text-lg text-primary font-medium capitalize">
+                {userData?.role || 'User'}
+              </Text>
+            </View>
+          </View>
+          <View className="border-t-2 border-border py-2 gap-1">
+            <View className="flex-row justify-between">
+              <Text className="text-lg text-muted">App Version</Text>
+              <Text className="text-lg text-primary font-medium capitalize">
+                {packageJson.version}
               </Text>
             </View>
           </View>
         </Card>
 
-        <Card className="p-4">
-          <Pressable className="flex-row items-center justify-between py-3">
-            <View className="flex-row items-center gap-3">
-              <Ionicons
-                name="notifications-outline"
-                size={18}
-                color="#6B7280"
-              />
-              <Text className="text-primary">Notifications</Text>
-            </View>
+        <LoadingLink href="/changelog">
+          <Card className="flex-row items-center gap-3 py-3">
+            <Ionicons name="calendar-outline" size={18} color="#6B7280" />
+            <Text className="flex-grow text-primary">Changelog</Text>
             <Ionicons name="chevron-forward" size={18} color="#9CA3AF" />
-          </Pressable>
-
-          <View className="border-t border-border" />
-
-          <Pressable className="flex-row items-center justify-between py-3">
-            <View className="flex-row items-center gap-3">
-              <Ionicons name="lock-closed-outline" size={18} color="#6B7280" />
-              <Text className="text-primary">Privacy</Text>
-            </View>
-            <Ionicons name="chevron-forward" size={18} color="#9CA3AF" />
-          </Pressable>
-        </Card>
+          </Card>
+        </LoadingLink>
 
         <Card className="p-4">
           <Text className="text-lg font-semibold text-center text-primary mb-2">

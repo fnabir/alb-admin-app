@@ -1,6 +1,5 @@
-import { View, Text, ScrollView, Pressable } from 'react-native';
+import { View, Text, ScrollView } from 'react-native';
 import { Card, LoadingLink } from '@repo/ui';
-import { StatusBar } from 'expo-status-bar';
 import { Ionicons } from '@expo/vector-icons';
 import { ThemedIcon } from '@/src/components/ThemedIcon';
 
@@ -13,6 +12,13 @@ type itemProps = {
 };
 
 const items: itemProps[] = [
+  {
+    href: '/project-info',
+    icon: 'business',
+    title: 'Project Info',
+    details: 'Details, Contact',
+    color: '#4ade80',
+  },
   {
     href: '/payment-info',
     icon: 'card',
@@ -33,34 +39,25 @@ export default function ProjectsScreen() {
   return (
     <ScrollView className="flex-1 bg-background p-4">
       <View className="gap-4">
-        <Text className="text-2xl font-bold text-primary text-center">
+        <Text className="text-2xl font-medium text-primary text-center">
           Projects
         </Text>
 
-        <Card className="p-4">
-          <Pressable className="flex-row items-center justify-between py-3">
-            <View className="flex-row items-center gap-3">
-              <Ionicons name="business" size={24} color="#4ade80" />
-              <Text className="text-xl font-medium text-primary">
-                Projects Info
-              </Text>
-            </View>
-            <ThemedIcon name="chevron-forward" size={24} />
-          </Pressable>
-        </Card>
-
         {items.map((item, index) => (
           <LoadingLink href={item.href} key={index}>
-            <Card className="p-4">
-              <Pressable className="flex-row items-center justify-between py-3">
-                <View className="flex-row items-center gap-3">
-                  <Ionicons name={item.icon} size={24} color={item.color} />
+            <Card className="flex-row items-center justify-between py-3">
+              <View className="flex-row items-center gap-3">
+                <Ionicons name={item.icon} size={24} color={item.color} />
+                <View>
                   <Text className="text-xl font-medium text-primary">
                     {item.title}
                   </Text>
+                  {item.details && (
+                    <Text className="text-muted">{item.details}</Text>
+                  )}
                 </View>
-                <ThemedIcon name="chevron-forward" size={24} />
-              </Pressable>
+              </View>
+              <ThemedIcon name="chevron-forward" size={24} />
             </Card>
           </LoadingLink>
         ))}

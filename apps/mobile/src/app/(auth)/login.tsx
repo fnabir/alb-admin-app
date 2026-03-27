@@ -10,8 +10,9 @@ import {
   Image,
 } from 'react-native';
 import { useSignInWithEmailAndPassword } from 'react-firebase-hooks/auth';
-import { auth, useLoading } from '@repo/app';
+import { auth } from '@repo/app';
 import { Card } from '@repo/ui';
+import { useLoading } from '../../contexts/LoadingContext';
 
 export default function LoginScreen() {
   const [email, setEmail] = useState('');
