@@ -1,6 +1,6 @@
 import { Card } from '../Card';
 import { format } from 'date-fns';
-import { changelog } from '../../../app/src/data/changelog';
+import { changelog } from '@/../../../app/src/data/changelog';
 import { VersionCardProps } from './types';
 
 export function VersionCard({ version, isAdmin }: VersionCardProps) {
