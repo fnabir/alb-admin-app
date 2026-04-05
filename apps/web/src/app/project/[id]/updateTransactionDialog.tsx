@@ -272,7 +272,7 @@ export default function UpdateTransactionDialog({
         );
       }
     } else {
-      paymentData = val.data;
+      paymentData = val?.data ?? null;
     }
 
     const key = data
