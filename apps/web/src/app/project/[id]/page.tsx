@@ -136,7 +136,11 @@ export default function ProjectTransaction() {
   return (
     <div className="flex h-full w-full flex-col space-y-2 overflow-hidden min-h-0">
       <div className="px-2 md:px-3 lg:px-4">
-        <UpdateTransactionDialog id={project} servicingCharge={servicingCharge}>
+        <UpdateTransactionDialog
+          id={project}
+          servicingCharge={servicingCharge}
+          paidDataOptions={paidDataOptions}
+        >
           <Button icon={MdAdd} label="Add" />
         </UpdateTransactionDialog>
       </div>

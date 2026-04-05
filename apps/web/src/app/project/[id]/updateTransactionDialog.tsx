@@ -328,8 +328,9 @@ export default function UpdateTransactionDialog({
       amount: val?.amount ? Math.abs(val.amount) : 0,
       date: toISODate('dd.MM.yy', val?.date ?? ''),
     });
+
     if (val?.amount && val.amount >= 0) {
-      if (!paidArray) {
+      if (!paidArray || paidArray.length === 0) {
         setPaymentType('notPaid');
       } else if (paidArray.length == 1 && total >= val.amount) {
         setPaymentType('full');
@@ -457,7 +458,7 @@ export default function UpdateTransactionDialog({
                 value={paymentType}
                 onValueChange={setPaymentType}
                 options={paymentTypeOptions}
-                disabled={(paidDataOptions ? true : false) || isSubmitting}
+                disabled={(paidDataOptions ? false : true) || isSubmitting}
               />
               {paidDataOptions &&
                 paymentType === 'partial' &&
@@ -499,7 +500,7 @@ export default function UpdateTransactionDialog({
                               getLabelByValue(paidDataOptions, value),
                             );
                           }}
-                          className="flex-1"
+                          className="flex-grow"
                         />
                         <Input
                           placeholder="Amount"
@@ -509,7 +510,7 @@ export default function UpdateTransactionDialog({
                             handlePartialDataAmountChange(set.id, Number(value))
                           }
                           startAdornment={'৳'}
-                          className="w-28"
+                          className="w-24"
                         />
                         <Button
                           icon={MdDelete}
