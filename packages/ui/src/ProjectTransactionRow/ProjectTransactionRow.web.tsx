@@ -18,20 +18,20 @@ export function ProjectTransactionRow({
     amount === 0
       ? 'bg-green-800 hover:bg-green-900'
       : amount < 0
-      ? afterPayment === 0
-        ? 'bg-green-800 hover:bg-green-900'
+        ? afterPayment === 0
+          ? 'bg-green-800 hover:bg-green-900'
+          : totalPaid === 0
+            ? 'bg-zinc-800 hover:bg-zinc-900'
+            : totalPaid > amount
+              ? 'bg-yellow-800 hover:bg-yellow-900'
+              : 'bg-blue-800 hover:bg-blue-900'
         : totalPaid === 0
-        ? 'bg-zinc-800 hover:bg-zinc-900'
-        : totalPaid > amount
-        ? 'bg-yellow-800 hover:bg-yellow-900'
-        : 'bg-blue-800 hover:bg-blue-900'
-      : totalPaid === 0
-      ? 'bg-red-800 hover:bg-red-900'
-      : amount === totalPaid
-      ? 'bg-green-800 hover:bg-green-900'
-      : totalPaid > amount
-      ? 'bg-yellow-800 hover:bg-yellow-900'
-      : 'bg-blue-800 hover:bg-blue-900';
+          ? 'bg-red-800 hover:bg-red-900'
+          : amount === totalPaid
+            ? 'bg-green-800 hover:bg-green-900'
+            : totalPaid > amount
+              ? 'bg-yellow-800 hover:bg-yellow-900'
+              : 'bg-blue-800 hover:bg-blue-900';
 
   return (
     <div
@@ -44,9 +44,9 @@ export function ProjectTransactionRow({
             <span className="font-semibold">{val.title}</span>
             {val.details && <span>- {val.details}</span>}
           </div>
-          <span className="text-lg font-semibold">
+          <div className="lg:text-lg font-semibold">
             {formatCurrency(val.amount)}
-          </span>
+          </div>
         </div>
         <div className="w-full bg-black/80 rounded-md">
           {paidArray &&

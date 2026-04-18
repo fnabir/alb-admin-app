@@ -154,6 +154,13 @@ export default function StaffTransaction() {
                     .sort((a, b) => b.key!.localeCompare(a.key!))
                     .map((item) => (
                       <TransactionRow key={item.key} data={item}>
+                        <UpdateTransactionDialog
+                          id={staffId}
+                          name={staffName}
+                          data={item}
+                        >
+                          <Button icon={MdEdit} />
+                        </UpdateTransactionDialog>
                         <DeleteTransactionDialog
                           type="staff"
                           id={staffId}
