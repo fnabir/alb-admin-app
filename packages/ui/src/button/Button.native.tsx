@@ -37,7 +37,7 @@ export function Button({
     <Pressable
       disabled={isDisabled}
       onPress={onPress}
-      className={`flex-row items-center px-2 py-1 rounded-lg border ${style.background[variant]} ${className}`}
+      className={`flex-row items-center px-4 py-1 rounded-lg border ${style.background[variant]} ${className}`}
     >
       {icon && (
         <Ionicons

@@ -5,8 +5,9 @@ import * as DialogPrimitive from '@radix-ui/react-dialog';
 import { MdClose } from 'react-icons/md';
 
 function Dialog({
+  title,
   ...props
-}: React.ComponentProps<typeof DialogPrimitive.Root>) {
+}: React.ComponentProps<typeof DialogPrimitive.Root> & { title?: string }) {
   return <DialogPrimitive.Root data-slot="dialog" {...props} />;
 }
 
