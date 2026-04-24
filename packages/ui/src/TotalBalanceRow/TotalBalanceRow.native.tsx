@@ -11,19 +11,23 @@ export function TotalBalanceRow({
   className = '',
 }: TotalBalanceProps) {
   return (
-    <>
+    <View>
       {error ? (
-        <Card className={`!bg-blue-500 ${className}`}>
+        <Card className={`!bg-blue-700 ${className}`}>
           <Text className="text-2xl text-white">{error}</Text>
         </Card>
       ) : (
-        <Card className={`flex-row items-center !bg-blue-500 ${className}`}>
+        <Card
+          className={`flex-row items-center !bg-blue-700 !rounded-none ${className}`}
+        >
           <View className="flex-1">
             <Text className="text-xl text-white font-semibold pb-1 capitalize">
               {title}
             </Text>
             {date && (
-              <Text className="text-white/80">Last updated on {date}</Text>
+              <Text className="text-[15px] text-white/90">
+                Last updated on {date}
+              </Text>
             )}
           </View>
           <Text className="text-2xl text-white font-semibold">
@@ -31,6 +35,6 @@ export function TotalBalanceRow({
           </Text>
         </Card>
       )}
-    </>
+    </View>
   );
 }

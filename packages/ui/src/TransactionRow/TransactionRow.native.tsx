@@ -1,18 +1,29 @@
-import { Text, View, Pressable, Animated, PanResponder } from 'react-native';
+import {
+  Text,
+  View,
+  Animated,
+  PanResponder,
+  TouchableOpacity,
+} from 'react-native';
 import { useRef, useState } from 'react';
 import { Card } from '../Card';
 import { Dialog } from '../dialog';
-import { formatCurrency } from '@repo/app';
+import { deleteTransaction, formatCurrency } from '@repo/app';
 import { TransactionRowProps } from './types';
 import { Button } from '../button';
 import { Ionicons } from '@expo/vector-icons';
+import { toast } from '../toast';
 
-const SWIPE_THRESHOLD = 50;
+const SWIPE_THRESHOLD = 80;
 
 export function TransactionRow({
   data,
-  onDelete,
-}: TransactionRowProps & { onDelete?: () => void }) {
+  id,
+  type,
+}: TransactionRowProps & {
+  id: string;
+  type: 'staff' | 'conveyance';
+}) {
   const val = data?.val();
   const bgColor: string = val.amount <= 0 ? 'bg-green-800' : 'bg-red-800';
 
@@ -70,8 +81,7 @@ export function TransactionRow({
 
   return (
     <>
-      <View style={{ position: 'relative' }}>
-        {/* Red background revealed on swipe */}
+      <View className="relative">
         <Animated.View
           className="absolute inset-0 rounded-xl flex-row items-center justify-between px-4 bg-red-600"
           style={{
@@ -86,17 +96,17 @@ export function TransactionRow({
           <Ionicons name="trash-outline" size={24} color="#fff" />
         </Animated.View>
 
-        {/* Card slides over the red background */}
         <Animated.View
           style={{ transform: [{ translateX }] }}
           {...panResponder.panHandlers}
         >
-          <Pressable
+          <TouchableOpacity
             onLongPress={() => setDetailOpen(true)}
-            delayLongPress={400}
+            activeOpacity={0.7}
+            delayLongPress={600}
           >
             {transactionCard}
-          </Pressable>
+          </TouchableOpacity>
         </Animated.View>
       </View>
 
@@ -143,9 +153,14 @@ export function TransactionRow({
           <Button
             label="Delete"
             variant="danger"
-            onPress={() => {
+            onPress={async () => {
               setDeleteOpen(false);
-              onDelete?.();
+              try {
+                await deleteTransaction(type, id, data?.key!);
+                toast.success('Deleted', 'Deleted the transaction.');
+              } catch (error: any) {
+                toast.error('Failed', error.message || null);
+              }
             }}
           />
         </View>
