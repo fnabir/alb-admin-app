@@ -1,17 +1,18 @@
-import { View, Text, ScrollView } from 'react-native';
+import { View, ScrollView } from 'react-native';
 import { useLocalSearchParams } from 'expo-router';
 import { getDatabaseReference, getTotalValue, updateBalance } from '@repo/app';
 import { useList, useObject } from 'react-firebase-hooks/database';
 import {
   EmptyUI,
   ErrorUI,
+  LoadingUI,
+  ProjectTransactionRow,
   toast,
   TotalBalanceRow,
-  TransactionRow,
 } from '@repo/ui';
-import { GoBackButton } from '@/src/components/GoBackButton';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useEffect, useMemo } from 'react';
+import { HeaderBar } from '@/src/components/HeaderBar';
 
 export default function ProjectDetailScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
@@ -55,8 +56,11 @@ export default function ProjectDetailScreen() {
       try {
         await updateBalance('project', id, total);
         toast.success('Updated', 'Balance auto-synced.');
-      } catch (err) {
-        toast.error('Failed', 'Failed to sync balance.');
+      } catch (e) {
+        toast.error(
+          'Failed to sync balance.',
+          e instanceof Error ? e.message : 'Unknown error',
+        );
       }
     };
 
@@ -65,20 +69,14 @@ export default function ProjectDetailScreen() {
 
   return (
     <SafeAreaView className="flex-1 bg-background">
-      <View className="flex-row gap-2 items-center">
-        <GoBackButton />
-        <View className="flex-1">
-          <Text className="text-xl font-medium text-primary">{id}</Text>
-          <Text className="text-muted">Project Balance</Text>
-        </View>
-      </View>
+      <HeaderBar title={id} />
       <ScrollView
         className="bg-background p-2"
         contentContainerStyle={{ flexGrow: 1 }}
       >
         {loading ? (
           <View className="flex-1 items-center justify-center">
-            <Text className="text-muted">Loading...</Text>
+            <LoadingUI />
           </View>
         ) : error ? (
           <View className="flex-1 items-center justify-center">
@@ -89,11 +87,15 @@ export default function ProjectDetailScreen() {
             <EmptyUI />
           </View>
         ) : (
-          <View className="gap-2">
+          <View className="gap-2 pb-4">
             {uniqueData
               .sort((a, b) => b.key!.localeCompare(a.key!))
               .map((item) => (
-                <TransactionRow key={item.key} data={item} />
+                <ProjectTransactionRow
+                  key={item.key}
+                  id={id}
+                  transactionData={item}
+                />
               ))}
           </View>
         )}

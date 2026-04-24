@@ -1,18 +1,24 @@
-import { View, Text, ScrollView } from 'react-native';
+import { View, ScrollView } from 'react-native';
 import { useLocalSearchParams } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
-import { getDatabaseReference, getTotalValue, updateBalance } from '@repo/app';
+import {
+  deleteTransaction,
+  getDatabaseReference,
+  getTotalValue,
+  updateBalance,
+} from '@repo/app';
 import { useList, useObject } from 'react-firebase-hooks/database';
 import {
   EmptyUI,
   ErrorUI,
+  LoadingUI,
   toast,
   TotalBalanceRow,
   TransactionRow,
 } from '@repo/ui';
-import { GoBackButton } from '@/src/components/GoBackButton';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useEffect, useMemo } from 'react';
+import { HeaderBar } from '@/src/components/HeaderBar';
 
 export default function StaffDetailScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
@@ -71,20 +77,14 @@ export default function StaffDetailScreen() {
 
   return (
     <SafeAreaView className="flex-1 bg-background">
-      <View className="flex-row gap-2 items-center">
-        <GoBackButton />
-        <View className="flex-1">
-          <Text className="text-xl font-medium text-primary">{staffName}</Text>
-          <Text className="text-muted">Staff Balance</Text>
-        </View>
-      </View>
+      <HeaderBar title={staffName} subtitle="Staff Balance" />
       <ScrollView
         className="bg-background p-2"
         contentContainerStyle={{ flexGrow: 1 }}
       >
         {loading ? (
           <View className="flex-1 items-center justify-center">
-            <Text className="text-muted">Loading...</Text>
+            <LoadingUI />
           </View>
         ) : error ? (
           <View className="flex-1 items-center justify-center">
@@ -99,7 +99,12 @@ export default function StaffDetailScreen() {
             {uniqueData
               .sort((a, b) => b.key!.localeCompare(a.key!))
               .map((item) => (
-                <TransactionRow key={item.key} data={item} />
+                <TransactionRow
+                  key={item.key}
+                  data={item}
+                  id={id}
+                  type="staff"
+                />
               ))}
           </View>
         )}

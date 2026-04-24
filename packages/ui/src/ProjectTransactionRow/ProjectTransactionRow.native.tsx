@@ -27,6 +27,7 @@ export function ProjectTransactionRow({
   const val = transactionData?.val();
 
   const paidData = val?.data;
+  const dataKeys = paidData ? Object.keys(paidData) : [];
   const paidArray = Object.entries(paidData ?? {}).map(([key, value]) => ({
     key,
     ...(value as { details: string; amount: number }),
@@ -212,7 +213,12 @@ export function ProjectTransactionRow({
             onPress={async () => {
               setDeleteOpen(false);
               try {
-                await deleteTransaction('project', id, transactionData?.key!);
+                await deleteTransaction(
+                  'project',
+                  id,
+                  transactionData?.key!,
+                  dataKeys,
+                );
                 toast.success('Deleted', 'Deleted the transaction.');
               } catch (error: any) {
                 toast.error('Failed', error.message || null);
