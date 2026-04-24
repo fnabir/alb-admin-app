@@ -1,9 +1,10 @@
-import { View, Text, ScrollView } from 'react-native';
+import { View, ScrollView } from 'react-native';
 import {
   BalanceRow,
   EmptyUI,
   ErrorUI,
   LoadingLink,
+  LoadingUI,
   toast,
   TotalBalanceRow,
 } from '@repo/ui';
@@ -14,8 +15,8 @@ import {
 } from '@repo/app';
 import { useList, useObject } from 'react-firebase-hooks/database';
 import { useEffect, useMemo } from 'react';
-import { GoBackButton } from '@/src/components/GoBackButton';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { HeaderBar } from '@/src/components/HeaderBar';
 
 export default function ProjectBalanceScreen() {
   const [data, dataLoading, dataError] = useList(
@@ -58,17 +59,11 @@ export default function ProjectBalanceScreen() {
 
   return (
     <SafeAreaView className="flex-1 bg-background gap-2">
-      <View className="flex-row gap-2 items-center">
-        <GoBackButton />
-        <Text className="text-2xl text-primary">Project Balance</Text>
-      </View>
-      <ScrollView
-        className="bg-background py-2"
-        contentContainerStyle={{ flexGrow: 1 }}
-      >
+      <HeaderBar title="Project Balance" />
+      <ScrollView className="flex-1 bg-background">
         {loading ? (
           <View className="flex-1 items-center justify-center">
-            <Text className="text-muted">Loading...</Text>
+            <LoadingUI />
           </View>
         ) : error ? (
           <View className="flex-1 items-center justify-center">

@@ -1,16 +1,17 @@
-import { View, Text, ScrollView } from 'react-native';
+import { View, ScrollView } from 'react-native';
 import {
   BalanceRow,
   EmptyUI,
   ErrorUI,
   LoadingLink,
+  LoadingUI,
   TotalBalanceRow,
 } from '@repo/ui';
 import { StatusBar } from 'expo-status-bar';
 import { getDatabaseReference } from '@repo/app';
 import { useList, useObject } from 'react-firebase-hooks/database';
-import { GoBackButton } from '@/src/components/GoBackButton';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { HeaderBar } from '@/src/components/HeaderBar';
 
 export default function StaffBalanceScreen() {
   const [data, dataLoading, dataError] = useList(
@@ -36,17 +37,14 @@ export default function StaffBalanceScreen() {
 
   return (
     <SafeAreaView className="flex-1 bg-background">
-      <View className="flex-row items-center">
-        <GoBackButton />
-        <Text className="text-2xl text-primary">Staff Balance</Text>
-      </View>
+      <HeaderBar title="Staff Balance" />
       <ScrollView
         className="bg-background py-2"
         contentContainerStyle={{ flexGrow: 1 }}
       >
         {loading ? (
           <View className="flex-1 items-center justify-center">
-            <Text className="text-muted">Loading...</Text>
+            <LoadingUI />
           </View>
         ) : error ? (
           <View className="flex-1 items-center justify-center">
