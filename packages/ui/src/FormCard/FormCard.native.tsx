@@ -10,9 +10,7 @@ export function FormCard({ data, children, type }: FormCardProps) {
   return (
     <Card>
       <View className="flex-row flex-wrap items-center justify-center gap-2">
-        <Text className="px-2 py-0.25 bg-primary rounded-full font-medium text-background">
-          {format(parseISO(val.date), 'dd MMM yyyy hh:mm a')}
-        </Text>
+        <Badge label={format(parseISO(val.date), 'dd MMM yyyy hh:mm a')} />
         <Badge label={type} />
         {val.status && <Badge label={val.status} variant="success" />}
       </View>
