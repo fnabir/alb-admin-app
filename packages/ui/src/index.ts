@@ -18,6 +18,7 @@ export * from './TotalBalanceRow';
 
 export * from './ErrorUI';
 export * from './EmptyUI';
+export * from './LoadingUI';
 
 export * from './input';
 export * from './select';
