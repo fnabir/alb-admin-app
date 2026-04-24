@@ -6,18 +6,30 @@ export function Badge({
   variant = 'default',
   className = '',
 }: BadgeProps) {
-  const variantStyles = {
-    default: 'bg-primary text-background',
-    success: 'bg-green-200 text-green-800',
-    warning: 'bg-yellow-200 text-yellow-800',
-    error: 'bg-red-200 text-red-800',
+  const style = {
+    text: {
+      default: 'text-background',
+      success: 'text-green-200',
+      warning: 'text-yellow-200',
+      error: 'text-red-200',
+      light: 'text-black',
+    },
+    background: {
+      default: 'bg-primary',
+      success: 'bg-green-800',
+      warning: 'bg-yellow-800',
+      error: 'bg-red-800',
+      light: 'bg-white',
+    },
   };
 
   return (
     <View
-      className={`self-start px-2 py-0.25 rounded-full ${variantStyles[variant]} ${className}`}
+      className={`self-start px-2 py-0.25 rounded-full ${style.background[variant]} ${className}`}
     >
-      <Text className="font-medium capitalize">{label}</Text>
+      <Text className={`font-medium capitalize ${style.text[variant]}`}>
+        {label}
+      </Text>
     </View>
   );
 }
