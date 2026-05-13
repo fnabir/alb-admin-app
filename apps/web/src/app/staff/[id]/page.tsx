@@ -15,13 +15,13 @@ import {
   toast,
   TotalBalanceRow,
   TransactionRow,
+  StaffTransactionDialog,
 } from '@repo/ui';
 import { useParams } from 'next/navigation';
 import { useEffect, useMemo } from 'react';
 import { useList, useObject } from 'react-firebase-hooks/database';
 import { MdOutlineInfo } from 'react-icons/md';
 import DeleteTransactionDialog from '@/components/DeleteTransactionDialog';
-import UpdateTransactionDialog from './updateTransactionDialog';
 import { MdAdd, MdEdit } from 'react-icons/md';
 
 export default function StaffTransaction() {
@@ -122,9 +122,9 @@ export default function StaffTransaction() {
   return (
     <div className="flex h-full w-full flex-col space-y-2 overflow-hidden min-h-0">
       <div className="shrink-0 px-2 md:px-3 lg:px-4">
-        <UpdateTransactionDialog id={staffId} name={staffName}>
+        <StaffTransactionDialog id={staffId} name={staffName}>
           <Button icon={MdAdd} label="Add" />
-        </UpdateTransactionDialog>
+        </StaffTransactionDialog>
       </div>
       {loading ? (
         <div className="flex flex-1 items-center justify-center">
@@ -154,13 +154,13 @@ export default function StaffTransaction() {
                     .sort((a, b) => b.key!.localeCompare(a.key!))
                     .map((item) => (
                       <TransactionRow key={item.key} data={item}>
-                        <UpdateTransactionDialog
+                        <StaffTransactionDialog
                           id={staffId}
                           name={staffName}
                           data={item}
                         >
                           <Button icon={MdEdit} />
-                        </UpdateTransactionDialog>
+                        </StaffTransactionDialog>
                         <DeleteTransactionDialog
                           type="staff"
                           id={staffId}
@@ -191,13 +191,13 @@ export default function StaffTransaction() {
                     .sort((a, b) => b.key!.localeCompare(a.key!))
                     .map((item) => (
                       <TransactionRow key={item.key} data={item}>
-                        <UpdateTransactionDialog
+                        <StaffTransactionDialog
                           id={staffId}
                           name={staffName}
                           data={item}
                         >
                           <Button icon={MdEdit} />
-                        </UpdateTransactionDialog>
+                        </StaffTransactionDialog>
                         <DeleteTransactionDialog
                           type="staff"
                           id={staffId}

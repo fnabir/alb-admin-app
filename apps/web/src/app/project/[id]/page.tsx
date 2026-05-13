@@ -12,6 +12,7 @@ import {
   Button,
   EmptyUI,
   ErrorUI,
+  ProjectTransactionDialog,
   ProjectTransactionRow,
   toast,
   TotalBalanceRow,
@@ -21,7 +22,6 @@ import { useEffect, useMemo } from 'react';
 import { useList, useObject } from 'react-firebase-hooks/database';
 import { MdAdd, MdEdit, MdOutlineInfo } from 'react-icons/md';
 import DeleteTransactionDialog from '@/components/DeleteTransactionDialog';
-import UpdateTransactionDialog from './updateTransactionDialog';
 import type { SelectOption } from '@repo/ui';
 
 export default function ProjectTransaction() {
@@ -136,13 +136,13 @@ export default function ProjectTransaction() {
   return (
     <div className="flex h-full w-full flex-col space-y-2 overflow-hidden min-h-0">
       <div className="px-2 md:px-3 lg:px-4">
-        <UpdateTransactionDialog
+        <ProjectTransactionDialog
           id={project}
           servicingCharge={servicingCharge}
           paidDataOptions={paidDataOptions}
         >
           <Button icon={MdAdd} label="Add" />
-        </UpdateTransactionDialog>
+        </ProjectTransactionDialog>
       </div>
       {loading ? (
         <div className="flex flex-1 items-center justify-center">
@@ -192,7 +192,7 @@ export default function ProjectTransaction() {
                           paidArray={paidArray}
                           totalPaid={totalPaid}
                         >
-                          <UpdateTransactionDialog
+                          <ProjectTransactionDialog
                             id={project}
                             data={item}
                             servicingCharge={servicingCharge}
@@ -201,7 +201,7 @@ export default function ProjectTransaction() {
                             total={totalPaid}
                           >
                             <Button icon={MdEdit} />
-                          </UpdateTransactionDialog>
+                          </ProjectTransactionDialog>
                           <DeleteTransactionDialog
                             type="project"
                             id={project}
@@ -253,13 +253,13 @@ export default function ProjectTransaction() {
                           paidArray={paidArray}
                           totalPaid={totalPaid}
                         >
-                          <UpdateTransactionDialog
+                          <ProjectTransactionDialog
                             id={project}
                             data={item}
                             paidArray={paidArray}
                           >
                             <Button icon={MdEdit} />
-                          </UpdateTransactionDialog>
+                          </ProjectTransactionDialog>
                           <DeleteTransactionDialog
                             type="project"
                             id={project}

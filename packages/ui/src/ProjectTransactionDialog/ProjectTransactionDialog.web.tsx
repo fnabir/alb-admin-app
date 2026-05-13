@@ -165,9 +165,9 @@ export function ProjectTransactionDialog({
   };
 
   const onSubmit = async (formData: TransactionForm) => {
-    if (sign == '+') {
+    if (sign === '+') {
       if (
-        paymentType == 'full' &&
+        paymentType === 'full' &&
         (!fullPaymentData || !fullPaymentData.key || !fullPaymentData.details)
       ) {
         toast.error('Full Payment Date', 'Please select a valid payment date');
@@ -191,14 +191,14 @@ export function ProjectTransactionDialog({
 
     let paymentData = {};
     if (sign === '+') {
-      if (paymentType == 'full') {
+      if (paymentType === 'full') {
         paymentData = {
           [fullPaymentData.key]: {
             details: fullPaymentData.details,
             amount: formData.amount,
           },
         };
-      } else if (paymentType == 'partial') {
+      } else if (paymentType === 'partial') {
         paymentData = partialDataSets.reduce(
           (partialDataObject, partialData) => {
             if (
@@ -236,7 +236,7 @@ export function ProjectTransactionDialog({
         {
           title: formData.title,
           details: formData.details,
-          amount: formData.amount * (sign == '-' ? -1 : 1),
+          amount: formData.amount * (sign === '-' ? -1 : 1),
           date: fromISODate('dd.MM.yy', formData.date),
           data: paymentData,
         },
@@ -277,7 +277,7 @@ export function ProjectTransactionDialog({
     if (val?.amount && val.amount >= 0) {
       if (!paidArray || paidArray.length === 0) {
         setPaymentType('notPaid');
-      } else if (paidArray.length == 1 && total >= val.amount) {
+      } else if (paidArray.length === 1 && total >= val.amount) {
         setPaymentType('full');
         paidArray.map((item) => {
           setFullPaymentData({ key: item.key!, details: item.details });
@@ -386,7 +386,7 @@ export function ProjectTransactionDialog({
             control={control}
             type="number"
             placeholder="Amount"
-            startAdornment={`৳ ${sign == '-' ? sign : ''}`}
+            startAdornment={`৳ ${sign === '-' ? sign : ''}`}
             disabled={isSubmitting}
           />
           <FormInput<TransactionForm>
