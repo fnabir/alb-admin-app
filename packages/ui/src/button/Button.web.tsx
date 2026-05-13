@@ -3,6 +3,7 @@
 import { forwardRef } from 'react';
 import { ButtonProps } from './types';
 import { Slot } from '@radix-ui/react-slot';
+import { IconType } from 'react-icons';
 
 const style = {
   accent: 'text-white bg-gradient-to-b from-sky-600 to-sky-800',
@@ -11,11 +12,12 @@ const style = {
   secondary: 'text-white bg-gradient-to-b from-zinc-600 to-zinc-800',
   outline:
     'text-primary bg-transparent rounded-md border-2 border-border hover:border-accent',
+  transparent: 'text-primary bg-transparent',
 };
 
 export const Button = forwardRef<
   HTMLButtonElement,
-  ButtonProps & { asChild?: boolean }
+  ButtonProps & { asChild?: boolean; icon?: IconType }
 >(function Button(
   {
     label,

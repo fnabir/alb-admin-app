@@ -1,4 +1,4 @@
-import { Pressable, Text } from 'react-native';
+import { Text, TouchableOpacity } from 'react-native';
 import { ButtonProps } from './types';
 import { Ionicons } from '@expo/vector-icons';
 
@@ -30,11 +30,12 @@ export function Button({
   disabled = false,
   onPress,
   className = '',
-}: ButtonProps) {
+}: ButtonProps & { icon?: string }) {
   const isDisabled = disabled || loading;
 
   return (
-    <Pressable
+    <TouchableOpacity
+      activeOpacity={0.7}
       disabled={isDisabled}
       onPress={onPress}
       className={`flex-row items-center px-4 py-1 rounded-lg border ${style.background[variant]} ${className}`}
@@ -51,6 +52,6 @@ export function Button({
       >
         {loading && loadingLabel ? loadingLabel : label}
       </Text>
-    </Pressable>
+    </TouchableOpacity>
   );
 }

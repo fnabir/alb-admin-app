@@ -1,10 +1,10 @@
 import { Control, Controller, FieldValues, Path } from 'react-hook-form';
-import { Input } from '../../input';
+import { Input, InputProps } from '../../input/input.native';
 
 type FormInputProps<T extends FieldValues> = {
   name: Path<T>;
   control: Control<T>;
-} & Omit<React.ComponentProps<typeof Input>, 'value' | 'onChangeText'>;
+} & Omit<InputProps, 'value' | 'onChangeText'>;
 
 export function FormInput<T extends FieldValues>({
   name,
@@ -18,8 +18,21 @@ export function FormInput<T extends FieldValues>({
       render={({ field, fieldState }) => (
         <Input
           {...props}
-          value={field.value ?? ''}
-          onChangeText={field.onChange}
+          value={
+            props.type === 'number'
+              ? field.value === 0
+                ? ''
+                : String(field.value ?? '')
+              : String(field.value ?? '')
+          }
+          onChangeText={(text) => {
+            if (props.type === 'number') {
+              const num = parseFloat(text);
+              field.onChange(isNaN(num) ? 0 : num);
+            } else {
+              field.onChange(text);
+            }
+          }}
           onBlur={field.onBlur}
           error={fieldState.error?.message}
         />

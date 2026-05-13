@@ -1,7 +1,6 @@
 import { View, Text, Pressable, Modal, FlatList } from 'react-native';
 import { useState } from 'react';
 import { SelectProps } from './types';
-import { selectStyles } from './styles';
 
 export function Select({
   value,
@@ -18,14 +17,14 @@ export function Select({
   const selected = options.find((o) => o.value === value);
 
   return (
-    <View className={`${selectStyles.container} ${className}`}>
-      {label && <Text className={selectStyles.label}>{label}</Text>}
+    <View className={`gap-1 ${className}`}>
+      {label && <Text className="text-primary">{label}</Text>}
 
       <Pressable
         onPress={() => !disabled && setOpen(true)}
-        className={`${selectStyles.field} ${error ? 'border-red-500' : ''}`}
+        className={`w-full px-3 py-3 rounded-lg border bg-background ${error ? 'border-error' : 'border-muted'} ${disabled ? 'opacity-50' : ''}`}
       >
-        <Text>{selected?.label ?? placeholder}</Text>
+        <Text className="text-primary">{selected?.label ?? placeholder}</Text>
       </Pressable>
 
       <Modal visible={open} transparent animationType="slide">
@@ -34,30 +33,34 @@ export function Select({
           onPress={() => setOpen(false)}
         />
 
-        <View className={selectStyles.sheet}>
+        <View className="absolute bottom-0 left-0 right-0 rounded-t-2xl border-t-2 border-accent px-4 pt-2 pb-4 max-h-[60%] bg-card">
           <FlatList
             data={options}
             keyExtractor={(o) => o.value}
-            renderItem={({ item }) => (
+            renderItem={({ item, index }) => (
               <Pressable
                 onPress={() => {
                   onChange?.(item.value);
                   setOpen(false);
                 }}
-                className={selectStyles.option}
+                className={`py-2.5 ${index !== options.length - 1 ? 'border-b border-border' : ''}`}
               >
-                <Text>{item.label}</Text>
+                <Text
+                  className={`text-primary font-medium text-center text-lg`}
+                >
+                  {item.label}
+                </Text>
               </Pressable>
             )}
           />
         </View>
       </Modal>
 
-      {error ? (
-        <Text className={selectStyles.error}>{error}</Text>
-      ) : (
-        helperText && <Text className={selectStyles.helper}>{helperText}</Text>
-      )}
+      {helperText || error ? (
+        <Text className={`text-sm -mt-1 text-${error ? 'error' : 'muted'}`}>
+          {error ?? helperText}
+        </Text>
+      ) : null}
     </View>
   );
 }

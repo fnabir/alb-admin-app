@@ -1,5 +1,3 @@
-import { IconType } from 'react-icons';
-
 export type ButtonVariant =
   | 'accent'
   | 'primary'
@@ -11,7 +9,6 @@ export type ButtonVariant =
 export interface ButtonProps {
   label?: string;
   loadingLabel?: string;
-  icon?: IconType;
 
   variant?: ButtonVariant;
   type?: 'button' | 'submit' | 'reset';

@@ -28,6 +28,7 @@ export function ToastItem({ toast }: { toast: Toast }) {
         useNativeDriver: true,
       }),
     ]).start();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
@@ -46,23 +47,24 @@ export function ToastItem({ toast }: { toast: Toast }) {
         }),
       ]).start();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [toast.closing]);
 
   return (
     <Animated.View style={{ opacity, transform: [{ translateY }] }}>
       <Pressable onPress={() => toastStore.close(toast.id)}>
         <View
-          className={`rounded-xl border p-4 ${variantStyles[toast.variant]}`}
+          className={`rounded-t-2xl -mb-4 border p-4 ${variantStyles[toast.variant]}`}
         >
           {toast.title && (
             <Text
-              className={`text-lg font-semibold text-primary ${toast.description ? 'mb-1' : ''}`}
+              className={`text-lg font-semibold text-white ${toast.description ? 'mb-1' : ''}`}
             >
               {toast.title}
             </Text>
           )}
           {toast.description && (
-            <Text className={`text-primary`}>{toast.description}</Text>
+            <Text className={`text-white`}>{toast.description}</Text>
           )}
         </View>
       </Pressable>

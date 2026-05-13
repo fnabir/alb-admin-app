@@ -19,7 +19,7 @@ export function FormInput<T extends FieldValues>({
         <Input
           {...props}
           value={field.value ?? ''}
-          onChangeText={(value) => {
+          onChangeText={(value: string) => {
             if (props.type === 'number') {
               if (props.allowDecimal) {
                 const normalized = value.replace(',', '.');

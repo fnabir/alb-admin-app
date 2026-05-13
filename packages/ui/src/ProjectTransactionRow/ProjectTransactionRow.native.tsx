@@ -47,7 +47,7 @@ export function ProjectTransactionRow({
         ? afterPayment === 0
           ? 'bg-green-800'
           : totalPaid === 0
-            ? 'bg-zinc-800'
+            ? 'bg-card'
             : totalPaid > amount
               ? 'bg-yellow-800'
               : '!bg-blue-800'
@@ -58,6 +58,9 @@ export function ProjectTransactionRow({
             : totalPaid > amount
               ? 'bg-yellow-800'
               : '!bg-blue-800';
+
+  const textColor: string =
+    bgColor === 'bg-card' ? 'text-primary' : 'text-white';
 
   const [editOpen, setEditOpen] = useState(false);
   const [deleteOpen, setDeleteOpen] = useState(false);
@@ -96,15 +99,15 @@ export function ProjectTransactionRow({
     <Card className={`!py-1 !px-3 ${bgColor}`}>
       <View className="flex-row items-center justify-between -mb-1.5">
         <View>
-          <Text className="text-lg text-white capitalize font-semibold">
+          <Text className={`text-lg ${textColor} capitalize font-semibold`}>
             {val.title}
           </Text>
           {val.details && (
-            <Text className="text-white capitalize">{val.details}</Text>
+            <Text className={`${textColor} capitalize`}>{val.details}</Text>
           )}
-          {val.date && <Text className="text-white">{val.date}</Text>}
+          {val.date && <Text className={`${textColor}`}>{val.date}</Text>}
         </View>
-        <Text className="text-xl text-white font-semibold">
+        <Text className={`text-xl ${textColor} font-semibold`}>
           {formatCurrency(val.amount)}
         </Text>
       </View>

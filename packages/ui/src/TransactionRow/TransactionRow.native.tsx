@@ -13,21 +13,24 @@ import { TransactionRowProps } from './types';
 import { Button } from '../button';
 import { Ionicons } from '@expo/vector-icons';
 import { toast } from '../toast';
+import { StaffTransactionDialog } from '../StaffTransactionDialog';
 
 const SWIPE_THRESHOLD = 80;
 
 export function TransactionRow({
   data,
   id,
+  name,
   type,
 }: TransactionRowProps & {
   id: string;
+  name: string;
   type: 'staff' | 'conveyance';
 }) {
   const val = data?.val();
   const bgColor: string = val.amount <= 0 ? 'bg-green-800' : 'bg-red-800';
 
-  const [detailOpen, setDetailOpen] = useState(false);
+  const [editOpen, setEditOpen] = useState(false);
   const [deleteOpen, setDeleteOpen] = useState(false);
 
   const translateX = useRef(new Animated.Value(0)).current;
@@ -101,7 +104,7 @@ export function TransactionRow({
           {...panResponder.panHandlers}
         >
           <TouchableOpacity
-            onLongPress={() => setDetailOpen(true)}
+            onLongPress={() => setEditOpen(true)}
             activeOpacity={0.7}
             delayLongPress={600}
           >
@@ -110,30 +113,14 @@ export function TransactionRow({
         </Animated.View>
       </View>
 
-      <Dialog
-        open={detailOpen}
-        onOpenChange={setDetailOpen}
-        title="Edit Transaction"
-      >
-        <Text className="text-primary mb-2 capitalize">{val.title}</Text>
-        {val.details && (
-          <Text
-            style={{
-              color: '#ccc',
-              marginBottom: 4,
-              textTransform: 'capitalize',
-            }}
-          >
-            {val.details}
-          </Text>
-        )}
-        {val.date && (
-          <Text style={{ color: '#aaa', marginBottom: 12 }}>{val.date}</Text>
-        )}
-        <Text style={{ color: '#fff', fontSize: 22, fontWeight: '600' }}>
-          {formatCurrency(val.amount)}
-        </Text>
-      </Dialog>
+      <StaffTransactionDialog
+        type={type}
+        id={id}
+        name={name}
+        open={editOpen}
+        onOpenChange={setEditOpen}
+        data={data}
+      />
 
       <Dialog
         open={deleteOpen}
