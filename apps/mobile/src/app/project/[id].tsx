@@ -5,7 +5,6 @@ import { useList, useObject } from 'react-firebase-hooks/database';
 import {
   EmptyUI,
   ErrorUI,
-  LoadingUI,
   ProjectTransactionRow,
   toast,
   TotalBalanceRow,
@@ -13,6 +12,7 @@ import {
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useEffect, useMemo } from 'react';
 import { HeaderBar } from '@/src/components/HeaderBar';
+import { Loading } from '@/src/components/Loading';
 
 export default function ProjectDetailScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
@@ -76,7 +76,7 @@ export default function ProjectDetailScreen() {
       >
         {loading ? (
           <View className="flex-1 items-center justify-center">
-            <LoadingUI />
+            <Loading />
           </View>
         ) : error ? (
           <View className="flex-1 items-center justify-center">

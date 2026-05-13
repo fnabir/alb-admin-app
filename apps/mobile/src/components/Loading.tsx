@@ -1,6 +1,6 @@
 import { ActivityIndicator, Text, View } from 'react-native';
 
-export function LoadingUI() {
+export function Loading() {
   return (
     <View className="items-center">
       <ActivityIndicator size="large" color="#3B82F6" />

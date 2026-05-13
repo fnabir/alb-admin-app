@@ -4,7 +4,6 @@ import {
   EmptyUI,
   ErrorUI,
   LoadingLink,
-  LoadingUI,
   toast,
   TotalBalanceRow,
 } from '@repo/ui';
@@ -17,6 +16,7 @@ import { useList, useObject } from 'react-firebase-hooks/database';
 import { useEffect, useMemo } from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { HeaderBar } from '@/src/components/HeaderBar';
+import { Loading } from '@/src/components/Loading';
 
 export default function ProjectBalanceScreen() {
   const [data, dataLoading, dataError] = useList(
@@ -63,7 +63,7 @@ export default function ProjectBalanceScreen() {
       <ScrollView className="flex-1 bg-background">
         {loading ? (
           <View className="flex-1 items-center justify-center">
-            <LoadingUI />
+            <Loading />
           </View>
         ) : error ? (
           <View className="flex-1 items-center justify-center">

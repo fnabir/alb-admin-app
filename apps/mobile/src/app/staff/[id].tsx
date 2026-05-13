@@ -1,17 +1,11 @@
 import { View, ScrollView } from 'react-native';
 import { useLocalSearchParams } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
-import {
-  deleteTransaction,
-  getDatabaseReference,
-  getTotalValue,
-  updateBalance,
-} from '@repo/app';
+import { getDatabaseReference, getTotalValue, updateBalance } from '@repo/app';
 import { useList, useObject } from 'react-firebase-hooks/database';
 import {
   EmptyUI,
   ErrorUI,
-  LoadingUI,
   toast,
   TotalBalanceRow,
   TransactionRow,
@@ -19,6 +13,7 @@ import {
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useEffect, useMemo } from 'react';
 import { HeaderBar } from '@/src/components/HeaderBar';
+import { Loading } from '@/src/components/Loading';
 
 export default function StaffDetailScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
@@ -84,7 +79,7 @@ export default function StaffDetailScreen() {
       >
         {loading ? (
           <View className="flex-1 items-center justify-center">
-            <LoadingUI />
+            <Loading />
           </View>
         ) : error ? (
           <View className="flex-1 items-center justify-center">

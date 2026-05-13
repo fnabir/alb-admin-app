@@ -4,7 +4,6 @@ import {
   EmptyUI,
   ErrorUI,
   LoadingLink,
-  LoadingUI,
   TotalBalanceRow,
 } from '@repo/ui';
 import { StatusBar } from 'expo-status-bar';
@@ -12,6 +11,7 @@ import { getDatabaseReference } from '@repo/app';
 import { useList, useObject } from 'react-firebase-hooks/database';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { HeaderBar } from '@/src/components/HeaderBar';
+import { Loading } from '@/src/components/Loading';
 
 export default function StaffBalanceScreen() {
   const [data, dataLoading, dataError] = useList(
@@ -44,7 +44,7 @@ export default function StaffBalanceScreen() {
       >
         {loading ? (
           <View className="flex-1 items-center justify-center">
-            <LoadingUI />
+            <Loading />
           </View>
         ) : error ? (
           <View className="flex-1 items-center justify-center">

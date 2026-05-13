@@ -3,7 +3,6 @@ import {
   BalanceRow,
   EmptyUI,
   ErrorUI,
-  LoadingUI,
   LoadingLink,
   toast,
   TotalBalanceRow,
@@ -17,6 +16,7 @@ import { useList, useObject } from 'react-firebase-hooks/database';
 import { useEffect, useMemo } from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { HeaderBar } from '@/src/components/HeaderBar';
+import { Loading } from '@/src/components/Loading';
 
 export default function ConveyanceBalanceScreen() {
   const [data, dataLoading, dataError] = useList(
@@ -66,7 +66,7 @@ export default function ConveyanceBalanceScreen() {
       >
         {loading ? (
           <View className="flex-1 items-center justify-center">
-            <LoadingUI />
+            <Loading />
           </View>
         ) : error ? (
           <View className="flex-1 items-center justify-center">

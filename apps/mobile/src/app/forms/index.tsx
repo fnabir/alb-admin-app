@@ -1,11 +1,12 @@
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { View, Text, ScrollView } from 'react-native';
-import { Button, EmptyUI, ErrorUI, FormCard, LoadingUI } from '@repo/ui';
+import { Button, EmptyUI, ErrorUI, FormCard } from '@repo/ui';
 import { DataSnapshot } from 'firebase/database';
 import { useMemo, useState } from 'react';
 import { useList } from 'react-firebase-hooks/database';
 import { getDatabaseReference } from '@repo/app';
 import { HeaderBar } from '@/src/components/HeaderBar';
+import { Loading } from '@/src/components/Loading';
 
 type FormItem = {
   snap: DataSnapshot;
@@ -123,7 +124,7 @@ export default function FormsScreen() {
       >
         {loading ? (
           <View className="flex-1 items-center justify-center">
-            <LoadingUI />
+            <Loading />
           </View>
         ) : error ? (
           <View className="flex-1 items-center justify-center">
