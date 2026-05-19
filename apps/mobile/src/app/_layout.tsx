@@ -14,6 +14,17 @@ import ThemedStatusBar from '../components/ThemedStatusBar';
 
 SplashScreen.preventAutoHideAsync();
 
+function NavigationLoadingReset() {
+  const pathname = usePathname();
+  const { stopLoading } = useLoading();
+
+  useEffect(() => {
+    stopLoading();
+  }, [pathname, stopLoading]);
+
+  return null;
+}
+
 export default function RootLayout() {
   const [fontsLoaded] = useFonts({
     Nunito: require('../../assets/fonts/NunitoSans-VariableFont.ttf'),
@@ -32,6 +43,7 @@ export default function RootLayout() {
       <ThemeWrapper>
         <LoadingProvider>
           <AuthProvider>
+            <NavigationLoadingReset />
             <AuthGuard>
               <ThemedStatusBar />
               <Slot />
