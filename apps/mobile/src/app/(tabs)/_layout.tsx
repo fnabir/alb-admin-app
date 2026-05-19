@@ -6,19 +6,23 @@ import {
   VectorIcon,
 } from 'expo-router/unstable-native-tabs';
 import Ionicons from '@expo/vector-icons/Ionicons';
+import { Platform } from 'react-native';
 
 export default function TabsLayout() {
   const { colorScheme } = useTheme();
+  const isDark = colorScheme === 'dark';
+  const isIOS = Platform.OS === 'ios';
+
   const color = {
-    background: colorScheme === 'dark' ? '#18181b' : '#fafafa',
-    indicator: colorScheme === 'dark' ? '#3f3f47' : '#18181b',
+    background: isDark ? '#18181b' : '#fafafa',
+    indicator: isDark ? '#3f3f47' : '#18181b',
     icon: {
-      default: colorScheme === 'dark' ? '#6b7280' : '#52525b',
-      selected: colorScheme === 'dark' ? '#fafafa' : '#fafafa',
+      default: isDark ? '#6b7280' : '#52525b',
+      selected: isDark ? '#fafafa' : '#fafafa',
     },
     text: {
-      selected: colorScheme === 'dark' ? '#fafafa' : '#18181b',
-      default: colorScheme === 'dark' ? '#9f9fa9' : '#3f3f47',
+      selected: isIOS ? '#fafafa' : isDark ? '#fafafa' : '#18181b',
+      default: isDark ? '#9f9fa9' : '#3f3f47',
     },
   };
   return (
