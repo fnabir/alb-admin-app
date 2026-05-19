@@ -1,16 +1,16 @@
-import { Slot } from 'expo-router';
+import { Slot, usePathname } from 'expo-router';
 import { AuthProvider } from '../contexts/AuthContext';
-import { LoadingProvider } from '../contexts/LoadingContext';
+import { LoadingProvider, useLoading } from '../contexts/LoadingContext';
 import { LoadingOverlay } from '../components/LoadingOverlay';
 import { AuthGuard } from '../components/AuthGuard';
 import * as SplashScreen from 'expo-splash-screen';
 import { useFonts } from 'expo-font';
 import '../../global.css';
 import { useEffect } from 'react';
-import { ThemeProvider, useTheme } from '../contexts/ThemeContext';
+import { ThemeProvider } from '../contexts/ThemeContext';
 import { ThemeWrapper } from '../components/ThemeWrapper';
 import { ToastProvider } from '@repo/ui';
-import { StatusBar } from 'expo-status-bar';
+import ThemedStatusBar from '../components/ThemedStatusBar';
 
 SplashScreen.preventAutoHideAsync();
 
@@ -18,8 +18,6 @@ export default function RootLayout() {
   const [fontsLoaded] = useFonts({
     Nunito: require('../../assets/fonts/NunitoSans-VariableFont.ttf'),
   });
-
-  const { colorScheme } = useTheme();
 
   useEffect(() => {
     if (fontsLoaded) {
@@ -32,14 +30,10 @@ export default function RootLayout() {
   return (
     <ThemeProvider>
       <ThemeWrapper>
-        <StatusBar
-          style={colorScheme === 'dark' ? 'light' : 'dark'}
-          translucent
-          backgroundColor="transparent"
-        />
         <LoadingProvider>
           <AuthProvider>
             <AuthGuard>
+              <ThemedStatusBar />
               <Slot />
             </AuthGuard>
             <LoadingOverlay />
