@@ -15,11 +15,9 @@ export function AuthGuard({ children }: AuthGuardProps) {
   // Show loading during auth check or when on protected route without user
   if (loading || (!inAuthGroup && !user)) {
     return (
-      <View className="flex-1 items-center justify-center bg-white dark:bg-zinc-950">
+      <View className="flex-1 items-center justify-center bg-background">
         <ActivityIndicator size="large" color="#3B82F6" />
-        <Text className="mt-4 text-gray-600 dark:text-gray-400">
-          Loading...
-        </Text>
+        <Text className="mt-4 text-primary text-lg">Loading...</Text>
       </View>
     );
   }
