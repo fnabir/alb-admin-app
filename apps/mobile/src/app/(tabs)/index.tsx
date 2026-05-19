@@ -2,7 +2,7 @@ import { View, Text, ScrollView } from 'react-native';
 import { useAuth } from '../../contexts/AuthContext';
 import { BalanceCard, Card, LoadingLink } from '@repo/ui';
 import { LogoutButton } from '../../components/LogoutButton';
-import { StatusBar } from 'expo-status-bar';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { useMemo } from 'react';
 import { getDatabaseReference } from '@repo/app';
 import { useList, useListKeys } from 'react-firebase-hooks/database';
@@ -46,59 +46,64 @@ export default function HomeScreen() {
     (quoteDataKeys?.length ?? 0);
 
   return (
-    <ScrollView className="flex-1 bg-background p-4">
-      <View className="gap-4">
-        {/* Header */}
-        <View className="flex-row items-center justify-between">
-          <View>
-            <Text className="text-2xl font-bold text-primary">
-              Welcome Back!
-            </Text>
-            <Text className="text-muted">{user?.email}</Text>
+    <SafeAreaView className="flex-1 bg-background">
+      <ScrollView className="flex-1 p-4">
+        <View className="gap-4">
+          <View className="flex-row items-center justify-between">
+            <View>
+              <Text className="text-2xl font-bold text-primary">
+                Welcome Back!
+              </Text>
+              <Text className="text-muted">{user?.email}</Text>
+            </View>
+            <LogoutButton />
           </View>
-          <LogoutButton />
-        </View>
-        <View className="flex-col gap-2">
-          {filteredBalanceData?.map((card, index) => (
-            <LoadingLink href={card.key ?? '#'} key={index} className="w-full">
-              <BalanceCard
-                title={card?.key ?? ''}
-                balance={card?.val().value}
-                date={card?.val().date}
+          <View className="flex-col gap-2">
+            {filteredBalanceData?.map((card, index) => (
+              <LoadingLink
+                href={card.key ?? '#'}
+                key={index}
+                className="w-full"
+              >
+                <BalanceCard
+                  title={card?.key ?? ''}
+                  balance={card?.val().value}
+                  date={card?.val().date}
+                />
+              </LoadingLink>
+            ))}
+          </View>
+          <LoadingLink href={'/forms'}>
+            <Card className="gap-1.5 py-4">
+              <Text className="text-primary text-2xl font-semibold text-center">
+                Forms
+              </Text>
+              <FormCount
+                index={0}
+                title="Contact"
+                count={contactDataKeys?.length ?? 0}
+                total={totalFormCounts}
+                loading={formsLoading}
               />
-            </LoadingLink>
-          ))}
+              <FormCount
+                index={1}
+                title="Quote"
+                count={quoteDataKeys?.length ?? 0}
+                total={totalFormCounts}
+                loading={formsLoading}
+              />
+              <FormCount
+                index={2}
+                title="Offer"
+                count={offerDataKeys?.length ?? 0}
+                total={totalFormCounts}
+                loading={formsLoading}
+              />
+            </Card>
+          </LoadingLink>
         </View>
-        <LoadingLink href={'/forms'}>
-          <Card className="gap-1.5 py-4">
-            <Text className="text-primary text-2xl font-semibold text-center">
-              Forms
-            </Text>
-            <FormCount
-              index={0}
-              title="Contact"
-              count={contactDataKeys?.length ?? 0}
-              total={totalFormCounts}
-              loading={formsLoading}
-            />
-            <FormCount
-              index={1}
-              title="Quote"
-              count={quoteDataKeys?.length ?? 0}
-              total={totalFormCounts}
-              loading={formsLoading}
-            />
-            <FormCount
-              index={2}
-              title="Offer"
-              count={offerDataKeys?.length ?? 0}
-              total={totalFormCounts}
-              loading={formsLoading}
-            />
-          </Card>
-        </LoadingLink>
-      </View>
-    </ScrollView>
+      </ScrollView>
+    </SafeAreaView>
   );
 }
 
