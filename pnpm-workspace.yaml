@@ -22,4 +22,5 @@ onlyBuiltDependencies:
   - unrs-resolver
 
 minimumReleaseAgeExclude:
-  - date-fns@4.2.1
+  - date-fns@4.4.0
+  - '@types/react@19.2.17'
