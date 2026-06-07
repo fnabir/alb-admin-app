@@ -115,7 +115,7 @@ export default function ProjectTransaction() {
 
   const paidDataOptions: SelectOption[] | undefined = useMemo(
     () =>
-      data
+      uniqueData
         ?.filter((t) => t.val().amount < 0)
         .sort((a, b) => b.key!.localeCompare(a.key!))
         .map((item) => ({
@@ -124,7 +124,7 @@ export default function ProjectTransaction() {
             Math.abs(item.val().amount),
           )}`,
         })),
-    [data],
+    [uniqueData],
   );
 
   const servicingCharge = Number(
