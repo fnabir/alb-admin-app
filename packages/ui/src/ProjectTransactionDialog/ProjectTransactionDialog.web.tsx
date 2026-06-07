@@ -4,12 +4,14 @@ import {
   formatCurrency,
   fromISODate,
   generateDatabaseKey,
-  getDatabaseReference,
   getLabelByValue,
   toISODate,
   TransactionForm,
   transactionSchema,
   updateTransaction,
+  removeStalePaymentLinks,
+  updateProjectPaymentLink,
+  updateProjectPartialPaymentLinks,
 } from '@repo/app';
 import {
   Dialog,
@@ -34,7 +36,6 @@ import {
   transactionOptions,
 } from './types';
 import { RadioGroup } from '../radio';
-import { update } from 'firebase/database';
 import { MdAdd, MdDelete } from 'react-icons/md';
 import { Select } from '../select/Select';
 import { Input } from '../input/input';
@@ -83,6 +84,55 @@ export function ProjectTransactionDialog({
     },
   });
 
+  const initialDialogState = useMemo(() => {
+    let initialPaymentType = 'notPaid';
+    let initialFullPaymentData: FullPaymentDataType = {
+      key: '',
+      details: '',
+    };
+    let initialPartialDataSets: PartialPaymentDataType[] = [
+      { id: 1, key: '', details: '', amount: 0 },
+    ];
+
+    if (typeof val?.amount === 'number' && val.amount >= 0) {
+      if (!paidArray || paidArray.length === 0) {
+        initialPaymentType = 'notPaid';
+      } else if (paidArray.length === 1 && total >= val.amount) {
+        initialPaymentType = 'full';
+        initialFullPaymentData = {
+          key: paidArray[0].key ?? '',
+          details: paidArray[0].details ?? '',
+        };
+      } else {
+        initialPaymentType = 'partial';
+        initialPartialDataSets = paidArray.map((item, index) => ({
+          id: index + 1,
+          key: item.key ?? '',
+          details: item.details ?? '',
+          amount: item.amount ?? 0,
+        }));
+      }
+    }
+
+    return {
+      paymentType: initialPaymentType,
+      fullPaymentData: initialFullPaymentData,
+      partialDataSets: initialPartialDataSets,
+    };
+  }, [paidArray, total, val]);
+
+  const hasLocalChanges = useMemo(() => {
+    return (
+      paymentType !== initialDialogState.paymentType ||
+      JSON.stringify(fullPaymentData) !==
+        JSON.stringify(initialDialogState.fullPaymentData) ||
+      JSON.stringify(partialDataSets) !==
+        JSON.stringify(initialDialogState.partialDataSets)
+    );
+  }, [fullPaymentData, initialDialogState, partialDataSets, paymentType]);
+
+  const hasChanges = isDirty || hasLocalChanges;
+
   const addPartialDataSet = () => {
     if (partialDataSets.length < 10) {
       setPartialDataSets((prev: PartialPaymentDataType[]) => [
@@ -112,58 +162,6 @@ export function ProjectTransactionDialog({
     );
   }
 
-  const updatePaymentData = async (
-    data: TransactionForm,
-    transactionId: string,
-    key: string,
-    details: string,
-    amount: number,
-  ) => {
-    const expenseRef = getDatabaseReference(
-      `transaction/project/${id}/${transactionId}/data/${key}`,
-    );
-    const paymentRef = getDatabaseReference(
-      `transaction/project/${id}/${key}/data/${transactionId}`,
-    );
-    const expenseData = {
-      details: `${fromISODate('dd.MM.yy', data.date)} ${data.title} - ${
-        data.details
-      }`,
-      amount: amount,
-    };
-    const paymentData = {
-      details: details,
-      amount: amount,
-    };
-    update(expenseRef, paymentData).catch((error) =>
-      console.error(`Payment Data in Expense Transaction: ${error.message}`),
-    );
-    update(paymentRef, expenseData).catch((error) =>
-      console.error(`Expense Data in Payment Transaction: ${error.message}`),
-    );
-  };
-
-  const updatePartialPaymentData = async (
-    data: TransactionForm,
-    newKey: string,
-  ) => {
-    partialDataSets.forEach((partialDataSet) => {
-      if (
-        partialDataSet.key &&
-        partialDataSet.key !== 'Select' &&
-        partialDataSet.details !== 'Select'
-      ) {
-        updatePaymentData(
-          data,
-          newKey,
-          partialDataSet.key,
-          partialDataSet.details,
-          partialDataSet.amount,
-        );
-      }
-    });
-  };
-
   const onSubmit = async (formData: TransactionForm) => {
     if (sign === '+') {
       if (
@@ -189,7 +187,10 @@ export function ProjectTransactionDialog({
       }
     }
 
-    let paymentData = {};
+    let paymentData: Record<
+      string,
+      { amount: number; details: string }
+    > | null = {};
     if (sign === '+') {
       if (paymentType === 'full') {
         paymentData = {
@@ -226,6 +227,8 @@ export function ProjectTransactionDialog({
         generateDatabaseKey(`transaction/staff/${id}`);
 
     try {
+      await removeStalePaymentLinks(sign, id, val, key, paymentData);
+
       await updateTransaction(
         'project',
         id,
@@ -243,15 +246,18 @@ export function ProjectTransactionDialog({
       );
 
       if (paymentType === 'full') {
-        await updatePaymentData(
-          formData,
-          key,
-          fullPaymentData.key,
-          fullPaymentData.details,
-          formData.amount,
-        );
+        await updateProjectPaymentLink(id, key, formData, {
+          key: fullPaymentData.key,
+          details: fullPaymentData.details,
+          amount: formData.amount,
+        });
       } else if (paymentType === 'partial') {
-        await updatePartialPaymentData(formData, key);
+        await updateProjectPartialPaymentLinks(
+          id,
+          key,
+          formData,
+          partialDataSets,
+        );
       }
 
       toast.success(`${dataExists ? 'Updated' : 'Added'} the transaction`);
@@ -274,27 +280,10 @@ export function ProjectTransactionDialog({
       date: toISODate('dd.MM.yy', val?.date ?? ''),
     });
 
-    if (val?.amount && val.amount >= 0) {
-      if (!paidArray || paidArray.length === 0) {
-        setPaymentType('notPaid');
-      } else if (paidArray.length === 1 && total >= val.amount) {
-        setPaymentType('full');
-        paidArray.map((item) => {
-          setFullPaymentData({ key: item.key!, details: item.details });
-        });
-      } else {
-        setPaymentType('partial');
-        const updatedPartialData: PartialPaymentDataType[] = paidArray.map(
-          (item, index) => ({
-            id: index + 1,
-            key: item.key!,
-            details: item.details,
-            amount: item.amount,
-          }),
-        );
-        setPartialDataSets(updatedPartialData);
-      }
-    }
+    setSign(data && val.amount < 0 ? '-' : '+');
+    setPaymentType(initialDialogState.paymentType);
+    setFullPaymentData(initialDialogState.fullPaymentData);
+    setPartialDataSets(initialDialogState.partialDataSets);
   };
 
   const handleDialogChange = (state: boolean) => {
@@ -501,7 +490,7 @@ export function ProjectTransactionDialog({
               loadingLabel={dataExists ? 'Updating...' : 'Adding...'}
               className="px-10"
               loading={isSubmitting}
-              disabled={!isValid || !isDirty || isSubmitting}
+              disabled={!isValid || !hasChanges || isSubmitting}
             />
           </div>
         </form>

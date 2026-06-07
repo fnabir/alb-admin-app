@@ -8,7 +8,7 @@ import {
   DatabaseReference,
 } from 'firebase/database';
 import { database } from './core';
-import { getCurrentDate } from '../utils';
+import { fromISODate, getCurrentDate } from '../utils';
 
 export function getDatabaseReference(path?: string): DatabaseReference {
   return ref(database, path ?? '/');
@@ -54,6 +54,86 @@ export async function deleteTransaction(
   }
 
   await update(getDatabaseReference(`transaction/${type}/${id}`), updates);
+}
+
+export async function removeStalePaymentLinks(
+  sign: string,
+  id: string,
+  val: { data?: Record<string, unknown> } | null,
+  transactionId: string,
+  nextPaymentData: Record<string, { amount: number; details: string }> | null,
+) {
+  if (sign !== '+') return;
+
+  const previousData = (val?.data ?? {}) as Record<string, unknown>;
+  const previousKeys = Object.keys(previousData);
+  const nextKeys = new Set(Object.keys(nextPaymentData ?? {}));
+
+  const staleKeys = previousKeys.filter((key) => !nextKeys.has(key));
+
+  if (staleKeys.length === 0) return;
+
+  await Promise.all(
+    staleKeys.map((paymentKey) =>
+      remove(
+        getDatabaseReference(
+          `transaction/project/${id}/${paymentKey}/data/${transactionId}`,
+        ),
+      ),
+    ),
+  );
+}
+
+export type ProjectPaymentLinkInput = {
+  key: string;
+  details: string;
+  amount: number;
+};
+
+export async function updateProjectPaymentLink(
+  id: string,
+  transactionId: string,
+  formData: { date: string; title: string; details?: string },
+  paymentData: ProjectPaymentLinkInput,
+) {
+  const expenseRef = getDatabaseReference(
+    `transaction/project/${id}/${transactionId}/data/${paymentData.key}`,
+  );
+  const paymentRef = getDatabaseReference(
+    `transaction/project/${id}/${paymentData.key}/data/${transactionId}`,
+  );
+
+  const expensePayload = {
+    details: `${fromISODate('dd.MM.yy', formData.date)} ${formData.title} - ${formData.details ?? ''}`,
+    amount: paymentData.amount,
+  };
+
+  const paymentPayload = {
+    details: paymentData.details,
+    amount: paymentData.amount,
+  };
+
+  await Promise.all([
+    update(expenseRef, paymentPayload),
+    update(paymentRef, expensePayload),
+  ]);
+}
+
+export async function updateProjectPartialPaymentLinks(
+  id: string,
+  transactionId: string,
+  formData: { date: string; title: string; details?: string },
+  partialPayments: ProjectPaymentLinkInput[],
+) {
+  const validPayments = partialPayments.filter(
+    (item) => item.key && item.key !== 'Select' && item.details !== 'Select',
+  );
+
+  await Promise.all(
+    validPayments.map((paymentData) =>
+      updateProjectPaymentLink(id, transactionId, formData, paymentData),
+    ),
+  );
 }
 
 export async function updateBalance(
