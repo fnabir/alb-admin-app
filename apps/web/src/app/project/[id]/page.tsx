@@ -22,6 +22,7 @@ import { useEffect, useMemo } from 'react';
 import { useList, useObject } from 'react-firebase-hooks/database';
 import { MdAdd, MdEdit, MdOutlineInfo } from 'react-icons/md';
 import DeleteTransactionDialog from '@/components/DeleteTransactionDialog';
+import { PrintStatementButton } from '@/components/PrintStatementButton';
 import type { SelectOption } from '@repo/ui';
 
 export default function ProjectTransaction() {
@@ -58,22 +59,12 @@ export default function ProjectTransaction() {
     });
   }, [data]);
 
-  const paymentData = useMemo(
-    () =>
-      uniqueData
-        ? uniqueData.filter((item) => {
-            return item.val().amount < 0;
-          })
-        : [],
+  const billData = useMemo(
+    () => uniqueData.filter((item) => item.val().amount >= 0),
     [uniqueData],
   );
-  const billData = useMemo(
-    () =>
-      uniqueData
-        ? uniqueData.filter((item) => {
-            return item.val().amount >= 0;
-          })
-        : [],
+  const paymentData = useMemo(
+    () => uniqueData.filter((item) => item.val().amount < 0),
     [uniqueData],
   );
 
@@ -81,16 +72,20 @@ export default function ProjectTransaction() {
     getDatabaseReference(`balance/project/${project}`),
   );
 
+  const totalBill = useMemo(
+    () => getTotalValue(billData, 'amount'),
+    [billData],
+  );
+  const totalPayment = useMemo(
+    () => getTotalValue(paymentData, 'amount'),
+    [paymentData],
+  );
+
   const balanceVal = balance?.val();
-  const totalBill = useMemo(() => {
-    return billData ? getTotalValue(billData, 'amount') : 0;
-  }, [billData]);
-  const totalPayment = useMemo(() => {
-    return paymentData ? getTotalValue(paymentData, 'amount') : 0;
-  }, [paymentData]);
-  const total = useMemo(() => {
-    return totalBill + totalPayment;
-  }, [totalBill, totalPayment]);
+  const total = useMemo(
+    () => totalBill + totalPayment,
+    [totalBill, totalPayment],
+  );
   const totalValue = balanceVal?.value ?? 0;
 
   const loading = transactionLoading || balanceLoading;
@@ -135,7 +130,7 @@ export default function ProjectTransaction() {
 
   return (
     <div className="flex h-full w-full flex-col space-y-2 overflow-hidden min-h-0">
-      <div className="px-2 md:px-3 lg:px-4">
+      <div className="px-2 md:px-3 lg:px-4 flex items-center gap-2">
         <ProjectTransactionDialog
           id={project}
           servicingCharge={servicingCharge}
@@ -143,6 +138,16 @@ export default function ProjectTransaction() {
         >
           <Button icon={MdAdd} label="Add" />
         </ProjectTransactionDialog>
+        {data && data.length > 0 && (
+          <PrintStatementButton
+            projectId={project}
+            billData={billData}
+            paymentData={paymentData}
+            totalBill={totalBill}
+            totalPayment={totalPayment}
+            balance={total}
+          />
+        )}
       </div>
       {loading ? (
         <div className="flex flex-1 items-center justify-center">
