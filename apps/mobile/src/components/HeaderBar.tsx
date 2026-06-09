@@ -47,7 +47,7 @@ export function HeaderBar({ title, subtitle, showBack = true, right }: Props) {
       </View>
 
       {/* Right — optional button */}
-      <View className="w-16 ml-auto items-end">
+      <View className="flex-wrap ml-auto items-end">
         {right && <View className="px-4">{right}</View>}
       </View>
     </View>
