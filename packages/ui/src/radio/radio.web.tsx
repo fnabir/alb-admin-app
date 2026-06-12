@@ -1,7 +1,6 @@
 'use client';
 
 import { RadioGroupProps } from './types';
-import { radioStyles } from './styles';
 
 export function RadioGroup({
   value,
@@ -15,18 +14,18 @@ export function RadioGroup({
   className = '',
 }: RadioGroupProps) {
   return (
-    <div className={`${radioStyles.container} ${className}`}>
+    <div className={`mx-auto ${className}`}>
       {label && (
-        <p className={radioStyles.label}>
+        <p className="text-sm font-medium">
           {label} {required && <span className="text-error">*</span>}
         </p>
       )}
 
-      <div className={radioStyles.group}>
+      <div className="flex gap-3 lg:gap-5">
         {options.map((o) => (
           <label
             key={o.value}
-            className={`${radioStyles.option} ${
+            className={`flex items-center gap-2 ${
               disabled ? 'opacity-50 pointer-events-none' : ''
             }`}
           >
@@ -35,7 +34,7 @@ export function RadioGroup({
               checked={value === o.value}
               onChange={() => onValueChange?.(o.value)}
               disabled={disabled}
-              className={radioStyles.input}
+              className="accent-accent"
             />
             <span>{o.label}</span>
           </label>
@@ -43,9 +42,9 @@ export function RadioGroup({
       </div>
 
       {error ? (
-        <p className={radioStyles.error}>{error}</p>
+        <p className="text-error text-sm">{error}</p>
       ) : (
-        helperText && <p className={radioStyles.helper}>{helperText}</p>
+        helperText && <p className="text-muted text-sm">{helperText}</p>
       )}
     </div>
   );

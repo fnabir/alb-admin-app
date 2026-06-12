@@ -30,7 +30,9 @@ export function Button({
   disabled = false,
   onPress,
   className = '',
-}: ButtonProps & { icon?: string }) {
+  textClassName = '',
+  iconSize = 20,
+}: ButtonProps & { icon?: string; iconSize?: number }) {
   const isDisabled = disabled || loading;
 
   return (
@@ -38,17 +40,17 @@ export function Button({
       activeOpacity={0.7}
       disabled={isDisabled}
       onPress={onPress}
-      className={`flex-row items-center px-4 py-1 rounded-lg border ${style.background[variant]} ${className}`}
+      className={`flex-row items-center px-4 py-1 rounded-lg border ${isDisabled ? 'bg-muted border-transparent opacity-60' : style.background[variant]} ${className}`}
     >
       {icon && (
         <Ionicons
           name={icon as any}
-          size={16}
-          color={variant === 'outline' ? '#3b82f6' : '#fff'}
+          size={iconSize}
+          color={variant === 'outline' ? '#3b82f6' : style.text[variant]}
         />
       )}
       <Text
-        className={`text-lg ${style.text[variant]} ${isDisabled ? 'opacity-50' : ''}`}
+        className={`text-lg ${style.text[variant]} ${isDisabled ? 'opacity-50' : ''} ${textClassName}`}
       >
         {loading && loadingLabel ? loadingLabel : label}
       </Text>

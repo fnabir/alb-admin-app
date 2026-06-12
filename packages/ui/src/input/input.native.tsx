@@ -83,7 +83,9 @@ export function Input({
             onPress={() => {
               if (!disabled) {
                 setFocused(true);
-                setShowDatePicker(true);
+                if (!showDatePicker && !value)
+                  onChangeText?.(formatDate(new Date()));
+                setShowDatePicker(!showDatePicker);
               }
             }}
             className={`
@@ -109,7 +111,7 @@ export function Input({
               display={Platform.OS === 'ios' ? 'spinner' : 'default'}
               onChange={(_event, selectedDate) => {
                 setShowDatePicker(Platform.OS === 'ios');
-                setFocused(false);
+                setFocused(true);
                 if (selectedDate) {
                   onChangeText?.(formatDate(selectedDate));
                 }
@@ -128,7 +130,7 @@ export function Input({
           `}
         >
           {startAdornment && (
-            <Text className="text-primary text-base mr-1 pt-1">
+            <Text className="text-primary text-base mr-1">
               {startAdornment}
             </Text>
           )}
@@ -154,7 +156,7 @@ export function Input({
             secureTextEntry={isPassword && !showPassword}
             editable={!disabled}
             keyboardType={isNumeric ? 'decimal-pad' : 'default'}
-            className="flex-1 text-base text-primary"
+            className="flex-1 text-primary h-11"
           />
 
           {isPassword && (

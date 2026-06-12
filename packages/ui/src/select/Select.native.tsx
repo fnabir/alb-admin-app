@@ -27,7 +27,7 @@ export function Select({
         <Text className="text-primary">{selected?.label ?? placeholder}</Text>
       </Pressable>
 
-      <Modal visible={open} transparent animationType="slide">
+      <Modal visible={open} transparent animationType="fade">
         <Pressable
           className="flex-1 bg-black/40"
           onPress={() => setOpen(false)}

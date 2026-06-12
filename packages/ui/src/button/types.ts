@@ -20,4 +20,5 @@ export interface ButtonProps {
 
   ariaLabel?: string;
   className?: string;
+  textClassName?: string;
 }
