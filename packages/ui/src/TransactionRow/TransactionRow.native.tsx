@@ -104,7 +104,11 @@ export function TransactionRow({
           {...panResponder.panHandlers}
         >
           <TouchableOpacity
-            onLongPress={() => setEditOpen(true)}
+            onLongPress={() => {
+              if (type === 'staff') {
+                setEditOpen(true);
+              }
+            }}
             activeOpacity={0.7}
             delayLongPress={600}
           >
