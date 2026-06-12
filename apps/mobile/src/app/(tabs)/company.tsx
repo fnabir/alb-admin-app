@@ -14,7 +14,7 @@ type itemProps = {
 
 const items: itemProps[] = [
   {
-    href: '/project-info',
+    href: '/ledger',
     icon: 'file-tray-full',
     title: 'Financial Ledger',
     details: 'Daily Cash Flow',
