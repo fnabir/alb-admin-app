@@ -92,30 +92,34 @@ export default function FormsScreen() {
   return (
     <SafeAreaView className="flex-1 bg-background gap-2">
       <HeaderBar title="Forms" />
-      <View className="flex-row gap-1 mx-auto">
+      <View className="flex-wrap flex-row gap-1 justify-center">
         <Button
           label={`All (${combinedData.totalCount})`}
           onPress={() => setFilter('')}
           variant={filter === '' ? 'accent' : 'outline'}
           disabled={loading || !combinedData.totalCount}
+          textClassName="!text-base"
         />
         <Button
           label={`Offers (${combinedData.counts.offer})`}
           onPress={() => setFilter('offer')}
           variant={filter === 'offer' ? 'accent' : 'outline'}
           disabled={loading || !combinedData.counts.offer}
+          textClassName="!text-base"
         />
         <Button
           label={`Contacts (${combinedData.counts.contact})`}
           onPress={() => setFilter('contact')}
           variant={filter === 'contact' ? 'accent' : 'outline'}
           disabled={loading || !combinedData.counts.contact}
+          textClassName="!text-base"
         />
         <Button
           label={`Quotes (${combinedData.counts.quote})`}
           onPress={() => setFilter('quote')}
           variant={filter === 'quote' ? 'accent' : 'outline'}
           disabled={loading || !combinedData.counts.quote}
+          textClassName="!text-base"
         />
       </View>
       <ScrollView
