@@ -16,6 +16,8 @@ export * from './TransactionRow';
 export * from './ProjectTransactionRow';
 export * from './TotalBalanceRow';
 
+export * from './PaymentInfo';
+
 export * from './ErrorUI';
 export * from './EmptyUI';
 

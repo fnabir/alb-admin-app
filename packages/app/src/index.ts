@@ -3,5 +3,6 @@ export * from './data';
 export * from './firebase';
 export * from './hooks';
 export * from './pdf';
+export * from './options';
 export * from './schemas';
 export * from './utils';

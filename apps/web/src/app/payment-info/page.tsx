@@ -3,14 +3,20 @@
 import { useBreadcrumbs } from '@/components/BreadcrumbContext';
 import { Loading } from '@/components/Loading';
 import { getDatabaseReference } from '@repo/app';
-import { useEffect } from 'react';
+import { useEffect, useMemo } from 'react';
 import { useList } from 'react-firebase-hooks/database';
 import { MdOutlineInfo } from 'react-icons/md';
 import { DataSnapshot } from 'firebase/database';
-import { Card } from '@repo/ui';
+import { Card, PaymentInfoRow } from '@repo/ui';
 import { useAuth } from '@/contexts/AuthContext';
 import AddPaymentInfoDialog from './addPaymentInfoDialog';
 import DeletePaymentInfoDialog from './deletePaymentInfoDialog';
+
+const PAYMENT_TYPE_LABEL: Record<string, string> = {
+  bank: 'bank transfer',
+  account: 'account transfer',
+  cell: 'cellfin',
+};
 
 export default function PaymentInfo() {
   const { setItems } = useBreadcrumbs();
@@ -26,14 +32,11 @@ export default function PaymentInfo() {
   const { isAdmin } = useAuth();
 
   const [data, loading, error] = useList(getDatabaseReference('info/payment'));
-  const accountPaymentData = data?.find(
-    (snapshot) => snapshot.key === 'account',
-  );
-  const bankPaymentData = data?.find((snapshot) => snapshot.key === 'bank');
-  const bkashPaymentData = data?.find((snapshot) => snapshot.key === 'bKash');
-  const cashPaymentData = data?.find((snapshot) => snapshot.key === 'cash');
-  const cellfinPaymentData = data?.find((snapshot) => snapshot.key === 'cell');
-  const chequePaymentData = data?.find((snapshot) => snapshot.key === 'cheque');
+
+  const paymentData = useMemo(() => {
+    if (!data) return {};
+    return Object.fromEntries(data.map((snapshot) => [snapshot.key, snapshot]));
+  }, [data]);
 
   return (
     <div className="flex h-full w-full flex-col space-y-2 overflow-hidden min-h-0">
@@ -56,31 +59,31 @@ export default function PaymentInfo() {
         </div>
       ) : (
         <div className="grid gap-2 lg:gap-3 grid-cols-1 lg:grid-cols-3 px-2 md:px-3 lg:px-4 overflow-auto">
-          {(cashPaymentData || bkashPaymentData || cellfinPaymentData) && (
+          {(paymentData.cash || paymentData.bKash || paymentData.cell) && (
             <div className="grid gap-2 lg:gap-3 grid-cols-1">
-              {cashPaymentData && (
-                <PaymentInfoGrid data={cashPaymentData} isAdmin={isAdmin} />
+              {paymentData.cash && (
+                <PaymentInfoGrid data={paymentData.cash} isAdmin={isAdmin} />
               )}
-              {bkashPaymentData && (
-                <PaymentInfoGrid data={bkashPaymentData} isAdmin={isAdmin} />
+              {paymentData.bKash && (
+                <PaymentInfoGrid data={paymentData.bKash} isAdmin={isAdmin} />
               )}
-              {cellfinPaymentData && (
-                <PaymentInfoGrid data={cellfinPaymentData} isAdmin={isAdmin} />
+              {paymentData.cell && (
+                <PaymentInfoGrid data={paymentData.cell} isAdmin={isAdmin} />
               )}
             </div>
           )}
-          {(accountPaymentData || chequePaymentData) && (
+          {(paymentData.account || paymentData.cheque) && (
             <div className="grid gap-2 lg:gap-3 grid-cols-1">
-              {accountPaymentData && (
-                <PaymentInfoGrid data={accountPaymentData} isAdmin={isAdmin} />
+              {paymentData.account && (
+                <PaymentInfoGrid data={paymentData.account} isAdmin={isAdmin} />
               )}
-              {chequePaymentData && (
-                <PaymentInfoGrid data={chequePaymentData} isAdmin={isAdmin} />
+              {paymentData.cheque && (
+                <PaymentInfoGrid data={paymentData.cheque} isAdmin={isAdmin} />
               )}
             </div>
           )}
-          {bankPaymentData && (
-            <PaymentInfoGrid data={bankPaymentData} isAdmin={isAdmin} />
+          {paymentData.bank && (
+            <PaymentInfoGrid data={paymentData.bank} isAdmin={isAdmin} />
           )}
         </div>
       )}
@@ -95,28 +98,22 @@ function PaymentInfoGrid({
   data: DataSnapshot;
   isAdmin: boolean;
 }) {
+  const dataType = data.key!;
+
   return (
     <Card>
       <div className="text-lg text-center font-bold pt-2 pb-1 uppercase">
-        {data.key === 'bank' || data.key === 'account'
-          ? `${data.key!} transfer`
-          : data.key === 'cell'
-            ? 'cellfin'
-            : data.key!}
+        {PAYMENT_TYPE_LABEL[dataType] || data.key!}
       </div>
       <div className={'text-xs md:text-sm lg:text-[15px] lg:text divide-y'}>
         {Object.entries(data.val()).map(([key, value]) => {
-          const dataType = data.key!;
-          const originalId = key.split('_')[0];
           return (
-            <div className="flex space-x-2 p-1 items-center" key={key}>
-              <div className="flex-auto font-semibold">{`${
-                dataType === 'account' ||
-                (dataType === 'cell' && originalId.length === 8)
-                  ? '***'
-                  : ''
-              }${originalId}`}</div>
-              {dataType != 'cash' && <div>{value!.toString()}</div>}
+            <PaymentInfoRow
+              type={dataType}
+              id={key}
+              value={value!.toString()}
+              key={key}
+            >
               {isAdmin && (
                 <DeletePaymentInfoDialog
                   type={dataType}
@@ -124,7 +121,7 @@ function PaymentInfoGrid({
                   value={value!.toString()}
                 />
               )}
-            </div>
+            </PaymentInfoRow>
           );
         })}
       </div>
