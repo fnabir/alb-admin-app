@@ -1,0 +1,1 @@
+export { PaymentInfoRow } from './PaymentInfoRow';
