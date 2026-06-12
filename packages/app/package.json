@@ -10,5 +10,8 @@
   "scripts": {
     "lint": "eslint .",
     "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@repo/ui": "workspace:*"
   }
 }
