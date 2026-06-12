@@ -1,4 +1,4 @@
-import { View, ScrollView } from 'react-native';
+import { View, ScrollView, TouchableOpacity } from 'react-native';
 import { useLocalSearchParams } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import { getDatabaseReference, getTotalValue, updateBalance } from '@repo/app';
@@ -6,17 +6,21 @@ import { useList, useObject } from 'react-firebase-hooks/database';
 import {
   EmptyUI,
   ErrorUI,
+  StaffTransactionDialog,
   toast,
   TotalBalanceRow,
   TransactionRow,
 } from '@repo/ui';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { useEffect, useMemo } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { HeaderBar } from '@/src/components/HeaderBar';
 import { Loading } from '@/src/components/Loading';
+import { ThemedIcon } from '@/src/components/ThemedIcon';
 
 export default function StaffDetailScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
+
+  const [openDialog, setOpenDialog] = useState(false);
 
   const [data, transactionLoading, transactionError] = useList(
     getDatabaseReference(`transaction/staff/${id}`),
@@ -71,47 +75,69 @@ export default function StaffDetailScreen() {
   }, [total, totalValue, loading, error, id]);
 
   return (
-    <SafeAreaView className="flex-1 bg-background">
-      <HeaderBar title={staffName} subtitle="Staff Balance" />
-      <ScrollView
-        className="bg-background p-2"
-        contentContainerStyle={{ flexGrow: 1 }}
-      >
-        {loading ? (
-          <View className="flex-1 items-center justify-center">
-            <Loading />
-          </View>
-        ) : error ? (
-          <View className="flex-1 items-center justify-center">
-            <ErrorUI error={error} />
-          </View>
-        ) : !data?.length ? (
-          <View className="flex-1 items-center justify-center">
-            <EmptyUI />
-          </View>
-        ) : (
-          <View className="gap-2">
-            {uniqueData
-              .sort((a, b) => b.key!.localeCompare(a.key!))
-              .map((item) => (
-                <TransactionRow
-                  key={item.key}
-                  data={item}
-                  id={id}
-                  type="staff"
-                />
-              ))}
-          </View>
-        )}
-        <StatusBar style="auto" />
-      </ScrollView>
-      {data && data.length > 0 && (
-        <TotalBalanceRow
-          value={totalValue}
-          date={balanceVal?.date}
-          error={balanceError?.message}
+    <>
+      <SafeAreaView className="flex-1 bg-background">
+        <HeaderBar
+          title={staffName}
+          subtitle="Staff Balance"
+          right={
+            <TouchableOpacity
+              onPress={() => {
+                setOpenDialog(true);
+              }}
+            >
+              <ThemedIcon name="add-circle-outline" size={30} />
+            </TouchableOpacity>
+          }
         />
-      )}
-    </SafeAreaView>
+        <ScrollView
+          className="bg-background p-2"
+          contentContainerStyle={{ flexGrow: 1 }}
+        >
+          {loading ? (
+            <View className="flex-1 items-center justify-center">
+              <Loading />
+            </View>
+          ) : error ? (
+            <View className="flex-1 items-center justify-center">
+              <ErrorUI error={error} />
+            </View>
+          ) : !data?.length ? (
+            <View className="flex-1 items-center justify-center">
+              <EmptyUI />
+            </View>
+          ) : (
+            <View className="gap-2">
+              {uniqueData
+                .sort((a, b) => b.key!.localeCompare(a.key!))
+                .map((item) => (
+                  <TransactionRow
+                    key={item.key}
+                    data={item}
+                    id={id}
+                    type="staff"
+                  />
+                ))}
+            </View>
+          )}
+          <StatusBar style="auto" />
+        </ScrollView>
+        {data && data.length > 0 && (
+          <TotalBalanceRow
+            value={totalValue}
+            date={balanceVal?.date}
+            error={balanceError?.message}
+          />
+        )}
+      </SafeAreaView>
+
+      <StaffTransactionDialog
+        type="staff"
+        id={id}
+        name={staffName}
+        open={openDialog}
+        onOpenChange={setOpenDialog}
+      />
+    </>
   );
 }
