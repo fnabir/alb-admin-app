@@ -235,20 +235,20 @@ export function ProjectTransactionDialog({
       );
 
       if (paymentType === 'full') {
-        await updateProjectPaymentLink(
+        await updateProjectPaymentLink(id, key, formData, {
+          key: fullPaymentData.key,
+          details: fullPaymentData.details,
+          amount: formData.amount,
+        });
+      } else if (paymentType === 'partial') {
+        await updateProjectPartialPaymentLinks(
           id,
           key,
           formData,
-          {
-            key: fullPaymentData.key,
-            details: fullPaymentData.details,
-            amount: formData.amount,
-          },
+          partialDataSets,
         );
-      } else if (paymentType === 'partial') {
-        await updateProjectPartialPaymentLinks(id, key, formData, partialDataSets);
       }
-
+      onOpenChange(false);
       toast.success(`${dataExists ? 'Updated' : 'Added'} the transaction`);
     } catch (error: any) {
       toast.error(
@@ -257,8 +257,6 @@ export function ProjectTransactionDialog({
       );
       return;
     }
-
-    onOpenChange(false);
   };
 
   const handleReset = () => {
@@ -275,10 +273,10 @@ export function ProjectTransactionDialog({
     setPartialDataSets(initialDialogState.partialDataSets);
   };
 
-  const handleDialogChange = (state: boolean) => {
-    onOpenChange(state);
-    handleReset();
-  };
+  useEffect(() => {
+    if (open) handleReset();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [open, data]);
 
   const titleValue = useWatch({
     control,
@@ -315,7 +313,7 @@ export function ProjectTransactionDialog({
   return (
     <Dialog
       open={open}
-      onOpenChange={handleDialogChange}
+      onOpenChange={onOpenChange}
       title={`${dataExists ? 'Update' : 'Add New'} Transaction`}
     >
       <>
@@ -377,7 +375,7 @@ export function ProjectTransactionDialog({
             className="mb-3"
           />
           {sign === '+' ? (
-            <View className="pt-4">
+            <View className="gap-2">
               <RadioGroup
                 value={paymentType}
                 onValueChange={setPaymentType}
@@ -391,6 +389,7 @@ export function ProjectTransactionDialog({
                     icon={'add'}
                     label="Add"
                     onPress={addPartialDataSet}
+                    className="w-fit mx-auto"
                   />
                 )}
               {paidDataOptions &&
@@ -411,7 +410,7 @@ export function ProjectTransactionDialog({
                     {partialDataSets.map((set, index) => (
                       <View
                         key={set.id}
-                        className={`flex-row gap-2 items-center`}
+                        className={`flex-row gap-2 py-0.5 items-center`}
                       >
                         <Select
                           options={paidDataOptions}
@@ -441,9 +440,9 @@ export function ProjectTransactionDialog({
                           className="w-24"
                         />
                         <Button
-                          icon={'delete'}
+                          icon={'trash-outline'}
                           onPress={() => removePartialDataSet(set.id)}
-                          className="h-8"
+                          className="h-12"
                         />
                       </View>
                     ))}
@@ -472,11 +471,11 @@ export function ProjectTransactionDialog({
               </View>
             )
           )}
-          <View className="flex-row gap-2 justify-end mt-4">
+          <View className="flex-row gap-2 justify-end mt-4 mx-auto">
             <Button
               label="Cancel"
               variant="secondary"
-              onPress={() => handleDialogChange(false)}
+              onPress={() => onOpenChange(false)}
             />
             <Button
               label={dataExists ? 'Update' : 'Add'}

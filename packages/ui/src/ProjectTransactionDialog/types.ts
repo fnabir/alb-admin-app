@@ -52,10 +52,8 @@ export type FullPaymentDataType = {
 
 export type PartialPaymentDataType = {
   id: number;
-  key: string;
-  details: string;
   amount: number;
-};
+} & FullPaymentDataType;
 
 export interface Props {
   id: string;

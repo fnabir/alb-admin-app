@@ -15,14 +15,20 @@ import { Dialog } from '../dialog';
 import { Button } from '../button';
 import { Ionicons } from '@expo/vector-icons';
 import { toast } from '../toast';
+import { ProjectTransactionDialog } from '../ProjectTransactionDialog';
 
 const SWIPE_THRESHOLD = 80;
 
 export function ProjectTransactionRow({
   transactionData,
   id,
+  servicingCharge,
+  paidDataOptions,
 }: ProjectTransactionRowProps & {
   id: string;
+  servicingCharge: number;
+  paidDataOptions: Record<string, { details: string; amount: number }>;
+  totalPayment: number;
 }) {
   const val = transactionData?.val();
 
@@ -170,30 +176,16 @@ export function ProjectTransactionRow({
         </Animated.View>
       </View>
 
-      <Dialog
+      <ProjectTransactionDialog
+        id={id}
+        data={transactionData}
+        servicingCharge={servicingCharge}
+        paidArray={paidArray}
+        paidDataOptions={paidDataOptions}
+        total={totalPaid}
         open={editOpen}
         onOpenChange={setEditOpen}
-        title="Edit Transaction"
-      >
-        <Text className="text-primary mb-2 capitalize">{val.title}</Text>
-        {val.details && (
-          <Text
-            style={{
-              color: '#ccc',
-              marginBottom: 4,
-              textTransform: 'capitalize',
-            }}
-          >
-            {val.details}
-          </Text>
-        )}
-        {val.date && (
-          <Text style={{ color: '#aaa', marginBottom: 12 }}>{val.date}</Text>
-        )}
-        <Text style={{ color: '#fff', fontSize: 22, fontWeight: '600' }}>
-          {formatCurrency(val.amount)}
-        </Text>
-      </Dialog>
+      />
 
       <Dialog
         open={deleteOpen}

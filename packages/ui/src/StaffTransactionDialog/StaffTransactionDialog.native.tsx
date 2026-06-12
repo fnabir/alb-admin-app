@@ -15,6 +15,7 @@ import { toast } from '../toast';
 import { FormInput, FormSelect } from '../FormField';
 import { DataSnapshot } from 'firebase/database';
 import { staffTransactionTypeOptions } from './options';
+import { useEffect } from 'react';
 
 type Props = {
   type: 'staff' | 'conveyance';
@@ -68,10 +69,10 @@ export function StaffTransactionDialog({
     });
   };
 
-  const handleDialogChange = (state: boolean) => {
-    onOpenChange(state);
-    handleReset();
-  };
+  useEffect(() => {
+    if (open) handleReset();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [open, data]);
 
   const onSubmit = async (formData: TransactionForm) => {
     try {
@@ -89,8 +90,8 @@ export function StaffTransactionDialog({
           date: fromISODate('dd.MM.yy', formData.date),
         },
       );
+      onOpenChange(false);
       toast.success(`${dataExists ? 'Updated' : 'Added'} the transaction`);
-      handleDialogChange(false);
     } catch (error: any) {
       toast.error(
         `Failed to ${dataExists ? 'update' : 'add'}: ${error}`,
@@ -102,7 +103,7 @@ export function StaffTransactionDialog({
   return (
     <Dialog
       open={open}
-      onOpenChange={handleDialogChange}
+      onOpenChange={onOpenChange}
       title={`${dataExists ? 'Update' : 'Add New'} Transaction`}
     >
       <>
@@ -144,7 +145,7 @@ export function StaffTransactionDialog({
             <Button
               label="Cancel"
               variant="secondary"
-              onPress={() => handleDialogChange(false)}
+              onPress={() => onOpenChange(false)}
             />
             <Button
               label={dataExists ? 'Update' : 'Add'}
