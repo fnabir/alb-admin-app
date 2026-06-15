@@ -1,7 +1,7 @@
 'use client';
 
 import { Control, FieldValues, Path, useController } from 'react-hook-form';
-import { Textarea } from '../textarea';
+import { Textarea } from '../../textarea';
 
 type FormTextareaProps<T extends FieldValues> = {
   name: Path<T>;

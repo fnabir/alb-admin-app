@@ -1,4 +1,4 @@
 export * from './FormInput';
-export { FormTextarea } from './FormTextArea';
+export * from './FormTextarea';
 export { FormSelect } from './FormSelect';
 export { FormRadioGroup } from './FormRadioGroup';
