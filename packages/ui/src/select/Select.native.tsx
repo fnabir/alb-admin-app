@@ -1,6 +1,7 @@
 import { View, Text, Pressable, Modal, FlatList } from 'react-native';
 import { useState } from 'react';
 import { SelectProps } from './types';
+import { ThemedIcon } from '../../../../apps/mobile/src/components/ThemedIcon';
 
 export function Select({
   value,
@@ -22,9 +23,12 @@ export function Select({
 
       <Pressable
         onPress={() => !disabled && setOpen(true)}
-        className={`w-full px-3 py-3 rounded-lg border bg-background ${error ? 'border-error' : 'border-muted'} ${disabled ? 'opacity-50' : ''}`}
+        className={`w-full flex-row items-center px-3 py-3 rounded-lg border bg-background ${error ? 'border-error' : 'border-muted'} ${disabled ? 'opacity-50' : ''}`}
       >
-        <Text className="text-primary">{selected?.label ?? placeholder}</Text>
+        <Text className="flex-1 text-primary">
+          {selected?.label ?? placeholder}
+        </Text>
+        <ThemedIcon name="chevron-down" size={20} />
       </Pressable>
 
       <Modal visible={open} transparent animationType="fade">
