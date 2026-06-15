@@ -1,3 +1,6 @@
+import { View, ScrollView } from 'react-native';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
 import {
   fromISODate,
   generateDatabaseKey,
@@ -6,46 +9,26 @@ import {
   CallbackForm,
   getDatabaseReference,
   updateCallback,
+  callbackStatusOptions,
 } from '@repo/app';
-import {
-  Button,
-  Dialog,
-  DialogClose,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-  FormInput,
-  FormSelect,
-  toast,
-} from '@repo/ui';
-import { useState } from 'react';
-import { DataSnapshot } from 'firebase/database';
-import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import type { SelectOption } from '@repo/ui';
+import { FormInput, FormSelect } from '../../FormField';
+import { Button } from '../../button';
+import { Dialog } from '../../dialog';
+import { toast } from '../../toast';
+import { useEffect } from 'react';
 import { useListKeys } from 'react-firebase-hooks/database';
+import { CallbackDialogProps } from './types';
 
-const statusOptions: SelectOption[] = [
-  { value: 'New', label: 'New' },
-  { value: 'Assigned', label: 'Assigned' },
-  { value: 'In Progress', label: 'In Progress' },
-  { value: 'Fixed', label: 'Fixed' },
-  { value: 'Cannot be fixed', label: 'Cannot be fixed' },
-];
-
-export default function UpdateCallbackDialog({
+export function CallbackDialog({
   project,
-  data,
-  children,
-}: {
-  project?: string;
-  data?: DataSnapshot;
-  children: React.ReactNode;
+  val,
+  id,
+  open,
+  onOpenChange,
+}: CallbackDialogProps & {
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
 }) {
-  const [open, setOpen] = useState<boolean>(false);
-
   const projectNames = useListKeys(getDatabaseReference(`info/project`))[0];
   const projectNameOptions = projectNames
     ? projectNames.map((name) => ({
@@ -54,9 +37,9 @@ export default function UpdateCallbackDialog({
       }))
     : [];
 
-  const dataExists = data ? true : false;
+  const dataExists = id ? true : false;
   const projectNameExists = project ? true : false;
-  const val = data?.val();
+
   const {
     control,
     handleSubmit,
@@ -78,10 +61,9 @@ export default function UpdateCallbackDialog({
     try {
       await updateCallback(
         formData.project,
-        data
-          ? data.key!
-          : fromISODate('yyMMdd', formData.date) +
-              generateDatabaseKey(`callback/${project}`),
+        id ??
+          fromISODate('yyMMdd', formData.date) +
+            generateDatabaseKey(`callback/${project}`),
         {
           details: formData.details,
           name: formData.name,
@@ -89,8 +71,8 @@ export default function UpdateCallbackDialog({
           date: fromISODate('dd.MM.yy', formData.date),
         },
       );
-      console.log(formData);
-      toast.success(`${dataExists ? 'Updated' : 'Added'} the transaction`);
+      onOpenChange(false);
+      toast.success(`${dataExists ? 'Updated' : 'Added'} the callback details`);
     } catch (error: any) {
       toast.error(
         `Failed to ${dataExists ? 'update' : 'add'} : ${error}`,
@@ -98,8 +80,6 @@ export default function UpdateCallbackDialog({
       );
       return;
     }
-
-    setOpen(false);
   };
 
   const handleReset = () => {
@@ -112,26 +92,19 @@ export default function UpdateCallbackDialog({
     });
   };
 
-  const handleDialogChange = (state: boolean) => {
-    setOpen(state);
-    handleReset();
-  };
+  useEffect(() => {
+    if (open) handleReset();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [open, val]);
 
   return (
-    <Dialog open={open} onOpenChange={handleDialogChange}>
-      <DialogTrigger asChild>{children}</DialogTrigger>
-      <DialogContent className={'border-error'}>
-        <DialogHeader>
-          <DialogTitle>{`${data ? 'Update' : 'Add New'} Callback`}</DialogTitle>
-          <DialogDescription>
-            {project ?? 'Select Project Name'}
-          </DialogDescription>
-        </DialogHeader>
-        <form
-          onSubmit={handleSubmit(onSubmit)}
-          onReset={handleReset}
-          className="flex flex-col space-y-3"
-        >
+    <Dialog
+      open={open}
+      onOpenChange={onOpenChange}
+      title={`${dataExists ? 'Update' : 'Add New'} Callback`}
+    >
+      <>
+        <ScrollView className="space-y-1 my-4">
           <FormSelect<CallbackForm>
             name="project"
             control={control}
@@ -162,33 +135,28 @@ export default function UpdateCallbackDialog({
             name="status"
             control={control}
             placeholder="Select Status..."
-            options={statusOptions}
+            options={callbackStatusOptions}
             disabled={isSubmitting}
           />
-
-          <div className="flex space-x-2 pt-4 lg:pt-6 justify-center">
-            <DialogClose asChild>
-              <Button label={'Close'} variant="danger" className="px-10" />
-            </DialogClose>
+          <View className="flex-row gap-2 justify-end mt-4">
             <Button
-              type="reset"
-              label={'Reset'}
+              label="Cancel"
               variant="secondary"
-              className="px-10"
-              disabled={isSubmitting}
+              onPress={() => onOpenChange(false)}
             />
             <Button
-              type="submit"
-              variant="accent"
               label={dataExists ? 'Update' : 'Add'}
-              loadingLabel={dataExists ? 'Updating...' : 'Adding...'}
-              className="px-10"
+              variant="accent"
+              disabled={!isValid || !isDirty}
               loading={isSubmitting}
-              disabled={!isValid || !isDirty || isSubmitting}
+              loadingLabel={dataExists ? 'Updating...' : 'Adding...'}
+              onPress={async () => {
+                handleSubmit(onSubmit)();
+              }}
             />
-          </div>
-        </form>
-      </DialogContent>
+          </View>
+        </ScrollView>
+      </>
     </Dialog>
   );
 }
