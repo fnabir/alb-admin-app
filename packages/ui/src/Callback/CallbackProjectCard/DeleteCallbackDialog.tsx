@@ -1,3 +1,5 @@
+'use client';
+
 import { deleteCallback } from '@repo/app';
 import {
   Button,
@@ -9,26 +11,31 @@ import {
   DialogTitle,
   DialogTrigger,
   toast,
-} from '@repo/ui';
+} from '../..';
 import { useState } from 'react';
 import { MdDelete } from 'react-icons/md';
-import { DataSnapshot } from 'firebase/database';
 
 export default function DeleteCallbackDialog({
   project,
-  data,
+  val,
+  id,
 }: {
   project: string;
-  data: DataSnapshot;
+  val: {
+    date: string;
+    details: string;
+    name: string;
+    status?: string;
+  };
+  id: string;
 }) {
   const [open, setOpen] = useState<boolean>(false);
   const [isDeleting, setIsDeleting] = useState<boolean>(false);
 
-  const val = data.val();
   const handleDelete = async () => {
     setIsDeleting(true);
     try {
-      await deleteCallback(project, data.key!);
+      await deleteCallback(project, id);
       toast.success('Deleted', 'Deleted the callback.');
     } catch (error: any) {
       toast.error(`Failed', '${error.message}`);

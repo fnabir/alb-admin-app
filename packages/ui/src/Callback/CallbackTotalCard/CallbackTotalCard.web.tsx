@@ -1,5 +1,5 @@
-import { Card } from '../Card';
-import { CallabckTotalCardProps } from './types';
+import { Card } from '../../Card';
+import { CallabckTotalCardProps } from '../CallbackProjectCard/types';
 
 export function CallbackTotalCard({ project, count }: CallabckTotalCardProps) {
   return (
