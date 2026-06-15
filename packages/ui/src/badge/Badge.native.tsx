@@ -5,6 +5,7 @@ export function Badge({
   label,
   variant = 'default',
   className = '',
+  textClassName = '',
 }: BadgeProps) {
   const style = {
     text: {
@@ -25,9 +26,11 @@ export function Badge({
 
   return (
     <View
-      className={`self-start px-2 py-0.25 rounded-full ${style.background[variant]} ${className}`}
+      className={`self-start px-2 py-0.5 rounded-full ${style.background[variant]} ${className}`}
     >
-      <Text className={`font-medium capitalize ${style.text[variant]}`}>
+      <Text
+        className={`font-medium capitalize ${style.text[variant]} ${textClassName}`}
+      >
         {label}
       </Text>
     </View>
