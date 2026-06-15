@@ -6,3 +6,4 @@ export * from './pdf';
 export * from './options';
 export * from './schemas';
 export * from './utils';
+export * from './types';
