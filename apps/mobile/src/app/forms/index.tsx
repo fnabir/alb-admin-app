@@ -1,22 +1,42 @@
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { View, Text, ScrollView } from 'react-native';
-import { Button, EmptyUI, ErrorUI, FormCard } from '@repo/ui';
+import { View, Text, ScrollView, TouchableOpacity } from 'react-native';
+import { Button, EmptyUI, ErrorUI, FormCard, OfferFormDialog } from '@repo/ui';
 import { DataSnapshot } from 'firebase/database';
 import { useMemo, useState } from 'react';
 import { useList } from 'react-firebase-hooks/database';
-import { getDatabaseReference } from '@repo/app';
+import { FormType, FormVal, getDatabaseReference } from '@repo/app';
 import { HeaderBar } from '@/src/components/HeaderBar';
 import { Loading } from '@/src/components/Loading';
+import { ThemedIcon } from '@/src/components/ThemedIcon';
 
 type FormItem = {
-  snap: DataSnapshot;
-  type: 'offer' | 'contact' | 'quote';
-  date: string;
-  name: string;
+  id: string;
+  val: FormVal;
+  type: FormType;
 };
+
+function mapSnapshots(
+  snaps: DataSnapshot[] | undefined,
+  type: FormType,
+): FormItem[] {
+  if (!snaps?.length) return [];
+  const map = new Map<string, FormItem>();
+
+  for (const snap of snaps) {
+    if (!snap.key) continue;
+    map.set(snap.key, {
+      id: snap.key,
+      val: snap.val() as FormVal,
+      type,
+    });
+  }
+
+  return Array.from(map.values());
+}
 
 export default function FormsScreen() {
   const [filter, setFilter] = useState<string>('');
+  const [openDialog, setOpenDialog] = useState(false);
 
   const [offers, offersLoading, offerError] = useList(
     getDatabaseReference('forms/offer'),
@@ -30,31 +50,12 @@ export default function FormsScreen() {
     getDatabaseReference('forms/quote'),
   );
 
-  const mapSnapshots = (
-    snaps: DataSnapshot[] | undefined,
-    type: FormItem['type'],
-  ): FormItem[] => {
-    if (!snaps?.length) return [];
-
-    const map = new Map<string, FormItem>();
-
-    for (const snap of snaps) {
-      if (!snap.key) continue;
-
-      const val = snap.val();
-
-      map.set(snap.key, {
-        snap,
-        type,
-        name: val.name,
-        date: val.date,
-      });
-    }
-
-    return Array.from(map.values());
-  };
+  const loading = offersLoading || contactsLoading || quoteLoading;
+  const error = offerError || contactsError || quoteError;
 
   const combinedData = useMemo(() => {
+    if (offersLoading || contactsLoading || quoteLoading) return null;
+
     const offerList = mapSnapshots(offers, 'offer');
     const contactList = mapSnapshots(contacts, 'contact');
     const quoteList = mapSnapshots(quote, 'quote');
@@ -75,80 +76,96 @@ export default function FormsScreen() {
         list = [...offerList, ...contactList, ...quoteList];
     }
 
-    const counts = {
-      offer: offerList.length,
-      contact: contactList.length,
-      quote: quoteList.length,
+    return {
+      list: list.sort((a, b) => b.val.date.localeCompare(a.val.date)),
+      counts: {
+        offer: offerList.length,
+        contact: contactList.length,
+        quote: quoteList.length,
+      },
+      totalCount: offerList.length + contactList.length + quoteList.length,
     };
-
-    const totalCount = offerList.length + contactList.length + quoteList.length;
-
-    return { list, counts, totalCount };
-  }, [offers, contacts, quote, filter]);
-
-  const loading = offersLoading || contactsLoading || quoteLoading;
-  const error = offerError || contactsError || quoteError;
+  }, [
+    offersLoading,
+    contactsLoading,
+    quoteLoading,
+    offers,
+    contacts,
+    quote,
+    filter,
+  ]);
 
   return (
-    <SafeAreaView className="flex-1 bg-background gap-2">
-      <HeaderBar title="Forms" />
-      <View className="flex-wrap flex-row gap-1 justify-center">
-        <Button
-          label={`All (${combinedData.totalCount})`}
-          onPress={() => setFilter('')}
-          variant={filter === '' ? 'accent' : 'outline'}
-          disabled={loading || !combinedData.totalCount}
-          textClassName="!text-base"
+    <>
+      <SafeAreaView className="flex-1 bg-background gap-2">
+        <HeaderBar
+          title="Forms"
+          right={
+            <TouchableOpacity
+              onPress={() => {
+                setOpenDialog(true);
+              }}
+            >
+              <ThemedIcon name="add-circle-outline" size={30} />
+            </TouchableOpacity>
+          }
         />
-        <Button
-          label={`Offers (${combinedData.counts.offer})`}
-          onPress={() => setFilter('offer')}
-          variant={filter === 'offer' ? 'accent' : 'outline'}
-          disabled={loading || !combinedData.counts.offer}
-          textClassName="!text-base"
-        />
-        <Button
-          label={`Contacts (${combinedData.counts.contact})`}
-          onPress={() => setFilter('contact')}
-          variant={filter === 'contact' ? 'accent' : 'outline'}
-          disabled={loading || !combinedData.counts.contact}
-          textClassName="!text-base"
-        />
-        <Button
-          label={`Quotes (${combinedData.counts.quote})`}
-          onPress={() => setFilter('quote')}
-          variant={filter === 'quote' ? 'accent' : 'outline'}
-          disabled={loading || !combinedData.counts.quote}
-          textClassName="!text-base"
-        />
-      </View>
-      <ScrollView
-        className="bg-background py-2"
-        contentContainerStyle={{ flexGrow: 1 }}
-      >
-        {loading ? (
-          <View className="flex-1 items-center justify-center">
-            <Loading />
-          </View>
-        ) : error ? (
-          <View className="flex-1 items-center justify-center">
-            <ErrorUI error={error} />
-          </View>
-        ) : !combinedData?.list.length ? (
-          <View className="flex-1 items-center justify-center">
-            <EmptyUI />
-          </View>
-        ) : (
-          <View className="flex-col gap-2">
-            <>
-              {combinedData.list
-                .sort((a, b) => b.date.localeCompare(a.date))
-                .map((item) => {
+        <View className="flex-wrap flex-row gap-1 justify-center">
+          <Button
+            label={`All (${combinedData?.totalCount ?? 0})`}
+            onPress={() => setFilter('')}
+            variant={filter === '' ? 'accent' : 'outline'}
+            disabled={loading || !combinedData?.totalCount}
+            textClassName="!text-base"
+          />
+          <Button
+            label={`Offers (${combinedData?.counts.offer ?? 0})`}
+            onPress={() => setFilter('offer')}
+            variant={filter === 'offer' ? 'accent' : 'outline'}
+            disabled={loading || !combinedData?.counts.offer}
+            textClassName="!text-base"
+          />
+          <Button
+            label={`Contacts (${combinedData?.counts.contact ?? 0})`}
+            onPress={() => setFilter('contact')}
+            variant={filter === 'contact' ? 'accent' : 'outline'}
+            disabled={loading || !combinedData?.counts.contact}
+            textClassName="!text-base"
+          />
+          <Button
+            label={`Quotes (${combinedData?.counts.quote ?? 0})`}
+            onPress={() => setFilter('quote')}
+            variant={filter === 'quote' ? 'accent' : 'outline'}
+            disabled={loading || !combinedData?.counts.quote}
+            textClassName="!text-base"
+          />
+        </View>
+        <ScrollView
+          className="bg-background py-2"
+          contentContainerStyle={{ flexGrow: 1 }}
+        >
+          {loading ? (
+            <View className="flex-1 items-center justify-center">
+              <Loading />
+            </View>
+          ) : error ? (
+            <View className="flex-1 items-center justify-center">
+              <ErrorUI error={error} />
+            </View>
+          ) : !combinedData?.list.length ? (
+            <View className="flex-1 items-center justify-center">
+              <EmptyUI />
+            </View>
+          ) : (
+            <View className="flex-col gap-2">
+              <>
+                {combinedData.list.map((item) => {
                   return (
                     <FormCard
-                      key={item.snap.key}
+                      key={item.id}
+                      id={item.id}
                       type={item.type}
-                      data={item.snap}
+                      val={item.val}
                     >
                       {item.type === 'offer' ? (
                         <Text>Offer Details</Text>
@@ -160,10 +177,13 @@ export default function FormsScreen() {
                     </FormCard>
                   );
                 })}
-            </>
-          </View>
-        )}
-      </ScrollView>
-    </SafeAreaView>
+              </>
+            </View>
+          )}
+        </ScrollView>
+      </SafeAreaView>
+
+      <OfferFormDialog open={openDialog} onOpenChange={setOpenDialog} />
+    </>
   );
 }

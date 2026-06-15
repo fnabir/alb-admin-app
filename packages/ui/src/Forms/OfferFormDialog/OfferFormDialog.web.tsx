@@ -1,11 +1,16 @@
+'use client';
+
 import {
   generateDatabaseKey,
   OfferForm,
   offerSchema,
+  productOptions,
+  workOptions,
+  formStatusOptions,
   updateForm,
 } from '@repo/app';
+import { Button } from '../../button';
 import {
-  Button,
   Dialog,
   DialogClose,
   DialogContent,
@@ -13,60 +18,29 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-  FormInput,
-  FormSelect,
-  FormTextarea,
-  toast,
-} from '@repo/ui';
-import type { SelectOption } from '@repo/ui';
-import { useState } from 'react';
+} from '../../dialog';
+import { toast } from '../../toast';
+import { FormInput, FormSelect, FormTextarea } from '../../FormField';
+import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { DataSnapshot } from 'firebase/database';
+import { OfferFormDialogProps } from './types';
 
-const productOptions: SelectOption[] = [
-  { value: 'Passenger Lift', label: 'Passenger Lift' },
-  { value: 'Cargo Lift', label: 'Cargo Lift' },
-  { value: 'Hospital Lift', label: 'Hospital Lift' },
-  { value: 'Capsule Lift', label: 'Capsule Lift' },
-  { value: 'Escalator', label: 'Escalator' },
-  { value: 'Dumbwaiter', label: 'Dumbwaiter' },
-  { value: 'Generator', label: 'Generator' },
-  { value: 'Other', label: 'Other' },
-];
-
-const workOptions: SelectOption[] = [
-  { value: 'Full Project', label: 'Full Project' },
-  { value: 'Servicing', label: 'Servicing' },
-  { value: 'Installation', label: 'Installation' },
-  { value: 'Repair', label: 'Repair' },
-];
-
-export const statusOptions: SelectOption[] = [
-  { value: 'New', label: 'New' },
-  { value: 'Contacted', label: 'Contacted' },
-  { value: 'Quote Submitted', label: 'Quote Submitted' },
-  { value: 'In Progress', label: 'In Progress' },
-  { value: 'Closed', label: 'Closed' },
-];
-
-export default function OfferFormDialog({
-  data,
+export function OfferFormDialog({
+  id,
+  val,
   children,
-}: {
-  data?: DataSnapshot;
+}: OfferFormDialogProps & {
   children: React.ReactNode;
 }) {
   const [open, setOpen] = useState<boolean>(false);
-
-  const dataExists = data ? true : false;
-  const val = data?.val();
+  const dataExists = id ? true : false;
 
   const {
     control,
     handleSubmit,
     reset,
-    formState: { isSubmitting, isValid, isDirty },
+    formState: { isSubmitting },
   } = useForm<OfferForm>({
     resolver: zodResolver(offerSchema),
     mode: 'onChange',
@@ -86,7 +60,7 @@ export default function OfferFormDialog({
   });
 
   const onSubmit = async (formData: OfferForm) => {
-    const key = dataExists ? data?.key! : generateDatabaseKey('forms/offer');
+    const key = id ?? generateDatabaseKey('forms/offer');
     const updatedData = dataExists
       ? formData
       : {
@@ -99,7 +73,7 @@ export default function OfferFormDialog({
         'Updated',
         dataExists ? 'Updated the offer.' : 'Added new offer.',
       );
-    } catch (error: any) {
+    } catch {
       toast.error(
         `Failed to ${dataExists ? 'update' : 'add'} the offer.`,
         'Please try again.',
@@ -110,8 +84,7 @@ export default function OfferFormDialog({
     setOpen(false);
   };
 
-  const handleDialogChange = (state: boolean) => {
-    setOpen(state);
+  const handleReset = () => {
     reset({
       name: val?.name ?? '',
       address: val?.address ?? '',
@@ -127,8 +100,13 @@ export default function OfferFormDialog({
     });
   };
 
+  useEffect(() => {
+    if (open) handleReset();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [open, val]);
+
   return (
-    <Dialog open={open} onOpenChange={handleDialogChange}>
+    <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>{children}</DialogTrigger>
       <DialogContent className={'border-accent'}>
         <DialogHeader>
@@ -207,7 +185,7 @@ export default function OfferFormDialog({
           <FormSelect
             name="status"
             control={control}
-            options={statusOptions}
+            options={formStatusOptions}
             placeholder="Select Status..."
             disabled={isSubmitting}
           />

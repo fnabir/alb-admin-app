@@ -2,29 +2,52 @@
 
 import { useBreadcrumbs } from '@/components/BreadcrumbContext';
 import { Loading } from '@/components/Loading';
-import { getDatabaseReference, usePersistedState } from '@repo/app';
-import { Button, EmptyUI, ErrorUI, FormCard, Select } from '@repo/ui';
+import {
+  filterOptions,
+  getDatabaseReference,
+  usePersistedState,
+  FormType,
+  FormVal,
+} from '@repo/app';
+import {
+  Button,
+  EmptyUI,
+  ErrorUI,
+  FormCard,
+  OfferFormDialog,
+  Select,
+  WebsiteFormDialog,
+} from '@repo/ui';
 import { DataSnapshot } from 'firebase/database';
 import { useEffect, useMemo } from 'react';
 import { useList } from 'react-firebase-hooks/database';
 import { MdAdd } from 'react-icons/md';
-import OfferFormDialog from './offerFormDialog';
-import DeleteFormDialog from './deleteFormDialog';
-import WebsiteFormDialog from './websiteFormDialog';
-import type { SelectOption } from '@repo/ui';
-
-const filterOptions: SelectOption[] = [
-  { value: 'offer', label: 'Offer' },
-  { value: 'contact', label: 'Contact' },
-  { value: 'quote', label: 'Quote' },
-];
+import DeleteFormDialog from './DeleteFormDialog';
 
 type FormItem = {
-  snap: DataSnapshot;
-  type: 'offer' | 'contact' | 'quote';
-  date: string;
-  name: string;
+  id: string;
+  val: FormVal;
+  type: FormType;
 };
+
+function mapSnapshots(
+  snaps: DataSnapshot[] | undefined,
+  type: FormType,
+): FormItem[] {
+  if (!snaps?.length) return [];
+  const map = new Map<string, FormItem>();
+
+  for (const snap of snaps) {
+    if (!snap.key) continue;
+    map.set(snap.key, {
+      id: snap.key,
+      val: snap.val() as FormVal,
+      type,
+    });
+  }
+
+  return Array.from(map.values());
+}
 
 export default function Forms() {
   const { setItems } = useBreadcrumbs();
@@ -47,31 +70,12 @@ export default function Forms() {
     getDatabaseReference('forms/quote'),
   );
 
-  const mapSnapshots = (
-    snaps: DataSnapshot[] | undefined,
-    type: FormItem['type'],
-  ): FormItem[] => {
-    if (!snaps?.length) return [];
-
-    const map = new Map<string, FormItem>();
-
-    for (const snap of snaps) {
-      if (!snap.key) continue;
-
-      const val = snap.val();
-
-      map.set(snap.key, {
-        snap,
-        type,
-        name: val.name,
-        date: val.date,
-      });
-    }
-
-    return Array.from(map.values());
-  };
+  const loading = offersLoading || contactsLoading || quoteLoading;
+  const error = offerError || contactsError || quoteError;
 
   const combinedData = useMemo(() => {
+    if (offersLoading || contactsLoading || quoteLoading) return [];
+
     const offerList = mapSnapshots(offers, 'offer');
     const contactList = mapSnapshots(contacts, 'contact');
     const quoteList = mapSnapshots(quote, 'quote');
@@ -92,11 +96,16 @@ export default function Forms() {
         list = [...offerList, ...contactList, ...quoteList];
     }
 
-    return list.sort((a, b) => b.date.localeCompare(a.date));
-  }, [offers, contacts, quote, filter]);
-
-  const loading = offersLoading || contactsLoading || quoteLoading;
-  const error = offerError || contactsError || quoteError;
+    return list.sort((a, b) => b.val.date.localeCompare(a.val.date));
+  }, [
+    offersLoading,
+    contactsLoading,
+    quoteLoading,
+    offers,
+    contacts,
+    quote,
+    filter,
+  ]);
 
   return (
     <div className="size-full flex flex-col space-y-2">
@@ -125,16 +134,21 @@ export default function Forms() {
         />
       ) : (
         <div className="flex-1 grid grid-cols-1 lg:grid-cols-2 gap-2 lg:gap-3 overflow-y-auto px-2 md:px-3 lg:px-4 content-start">
-          {combinedData?.map((item) => (
-            <FormCard key={item.snap.key} type={item.type} data={item.snap}>
+          {combinedData.map((item) => (
+            <FormCard
+              key={item.id}
+              id={item.id}
+              type={item.type}
+              val={item.val}
+            >
               {item.type === 'offer' ? (
-                <OfferFormDialog data={item.snap}>
+                <OfferFormDialog id={item.id} val={item.val}>
                   <div className="px-2 py-0.25 bg-primary rounded-full cursor-pointer">
                     <span>Edit</span>
                   </div>
                 </OfferFormDialog>
               ) : item.type === 'contact' || item.type === 'quote' ? (
-                <WebsiteFormDialog type={item.type} data={item.snap}>
+                <WebsiteFormDialog type={item.type} id={item.id} val={item.val}>
                   <div className="px-2 py-0.25 bg-primary rounded-full cursor-pointer">
                     <span>Edit</span>
                   </div>
@@ -143,8 +157,8 @@ export default function Forms() {
 
               <DeleteFormDialog
                 type={item.type}
-                id={item.snap.key!}
-                name={item.name}
+                id={item.id}
+                name={item.val.name}
               >
                 <div className="px-2 py-0.25 bg-primary rounded-full cursor-pointer">
                   <span>Delete</span>

@@ -6,8 +6,6 @@ export * from './LoadingLink';
 
 export * from './Card';
 export * from './BalanceCard';
-export * from './CallbackCard';
-export * from './FormCard';
 export * from './IconCard';
 export * from './VersionCard';
 
@@ -17,6 +15,8 @@ export * from './ProjectTransactionRow';
 export * from './TotalBalanceRow';
 
 export * from './PaymentInfo';
+export * from './Callback';
+export * from './Forms';
 
 export * from './ErrorUI';
 export * from './EmptyUI';

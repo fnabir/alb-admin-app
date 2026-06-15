@@ -29,7 +29,9 @@ export function Dialog({ open, onOpenChange, children, title }: Props) {
         <Pressable onPress={(e) => e.stopPropagation()}>
           <View className="bg-card p-4 border border-accent rounded-xl gap-4">
             <View className="flex-row items-center justify-between">
-              <Text className="text-primary text-lg font-semibold">{title}</Text>
+              <Text className="text-primary text-lg font-semibold capitalize">
+                {title}
+              </Text>
               <Pressable onPress={() => onOpenChange(false)} hitSlop={8}>
                 <Ionicons name="close" size={24} color={primaryColor} />
               </Pressable>
