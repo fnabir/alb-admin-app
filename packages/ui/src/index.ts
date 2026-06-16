@@ -17,6 +17,7 @@ export * from './TotalBalanceRow';
 export * from './PaymentInfo';
 export * from './Callback';
 export * from './Forms';
+export * from './Inventory';
 
 export * from './ErrorUI';
 export * from './EmptyUI';

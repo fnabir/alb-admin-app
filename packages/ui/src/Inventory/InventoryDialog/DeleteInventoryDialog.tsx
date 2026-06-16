@@ -1,4 +1,6 @@
-import { deleteInventoryItem, deletePaymentInfo } from '@repo/app';
+'use client';
+
+import { deleteInventoryItem } from '@repo/app';
 import {
   Button,
   Dialog,
@@ -13,7 +15,7 @@ import {
 import { useState } from 'react';
 import { MdDelete } from 'react-icons/md';
 
-export default function DeleteInventoryDialog({
+export function DeleteInventoryDialog({
   item,
   count,
 }: {
@@ -27,6 +29,8 @@ export default function DeleteInventoryDialog({
     setIsDeleting(true);
     try {
       await deleteInventoryItem(item);
+      setOpen(false);
+      setIsDeleting(false);
       toast.success(`Deleted Item: ${item}.`);
     } catch (error: any) {
       toast.error(`Failed: ${error.message}`, 'Please try again.');

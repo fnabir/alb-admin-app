@@ -1,6 +1,9 @@
+'use client';
+
 import { InventoryForm, inventorySchema, setInventoryItem } from '@repo/app';
+import { InventoryDialogProps } from './types';
+import { toast } from '../../toast';
 import {
-  Button,
   Dialog,
   DialogClose,
   DialogContent,
@@ -8,20 +11,18 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-  toast,
-} from '@repo/ui';
-import { useState } from 'react';
+} from '../../dialog';
+import { Button } from '../../button';
+import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
+import { FormInput } from '../../FormField';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { FormInput } from '@repo/ui';
 
-export default function InventoryDialog({
+export function InventoryDialog({
   item,
   count = 0,
   children,
-}: {
-  item?: string;
-  count?: number;
+}: InventoryDialogProps & {
   children: React.ReactNode;
 }) {
   const itemExists = item ? true : false;
@@ -44,13 +45,13 @@ export default function InventoryDialog({
   const onSubmit = async (formData: InventoryForm) => {
     try {
       await setInventoryItem(formData.item, formData.count);
-
+      setOpen(false);
       toast.success(
         itemExists
           ? `Updated the number of ${formData.item}.`
           : `Added ${formData.item}.`,
       );
-    } catch (error: any) {
+    } catch {
       toast.error(
         itemExists
           ? `Failed to update the number of ${formData.item}.`
@@ -59,8 +60,6 @@ export default function InventoryDialog({
       );
       return;
     }
-
-    setOpen(false);
   };
 
   const handleReset = () => {
@@ -70,13 +69,15 @@ export default function InventoryDialog({
     });
   };
 
-  const handleDialogChange = (state: boolean) => {
-    setOpen(state);
-    handleReset();
-  };
+  useEffect(() => {
+    if (open) {
+      handleReset();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [open, item, count]);
 
   return (
-    <Dialog open={open} onOpenChange={handleDialogChange}>
+    <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>{children}</DialogTrigger>
       <DialogContent className={'border-accent'}>
         <DialogHeader>

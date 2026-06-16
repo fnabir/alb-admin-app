@@ -3,12 +3,10 @@
 import { useBreadcrumbs } from '@/components/BreadcrumbContext';
 import { Loading } from '@/components/Loading';
 import { getDatabaseReference } from '@repo/app';
-import { Button, Card } from '@repo/ui';
+import { Button, InventoryCard, InventoryDialog } from '@repo/ui';
 import { useEffect, useMemo } from 'react';
-import { useList, useObject } from 'react-firebase-hooks/database';
-import { MdAdd, MdEdit, MdOutlineInfo } from 'react-icons/md';
-import InventoryDialog from './inventoryDialog';
-import DeleteInventoryDialog from './deleteInventoryDialog';
+import { useObject } from 'react-firebase-hooks/database';
+import { MdAdd, MdOutlineInfo } from 'react-icons/md';
 
 export default function Inventory() {
   const { setItems } = useBreadcrumbs();
@@ -56,20 +54,11 @@ export default function Inventory() {
       ) : (
         <div className="flex-1 w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-2 lg:gap-3 overflow-y-auto px-2 md:px-3 lg:px-4 content-start">
           {inventoryList.map((item) => (
-            <Card
+            <InventoryCard
               key={item.name}
-              className="flex items-center justify-between hover:border-accent h-fit font-medium"
-            >
-              <div className="flex space-x-2">
-                <InventoryDialog item={item.name} count={item.count}>
-                  <Button icon={MdEdit} />
-                </InventoryDialog>
-                <DeleteInventoryDialog item={item.name} count={item.count} />
-              </div>
-
-              <span>{item.name}</span>
-              <span>{item.count}</span>
-            </Card>
+              item={item.name}
+              count={item.count}
+            />
           ))}
         </div>
       )}
