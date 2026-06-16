@@ -25,37 +25,40 @@ export function VersionCard({ version, isAdmin }: VersionCardProps) {
 
     return (
       <View key={index} className="w-full flex flex-row py-1 space-x-2">
-        {tag && (
-          <Text
-            className={`font-semibold ${
-              tag === 'FEATURE'
-                ? 'text-green-500'
-                : tag === 'UPDATE'
-                  ? 'text-sky-500'
-                  : tag === 'FIX'
-                    ? 'text-red-500'
-                    : 'text-gray-500'
-            }`}
-          >
-            [{tag}]
-          </Text>
-        )}
-
-        <Text className="text-primary">{message}</Text>
+        <Text className="text-primary">
+          {tag && (
+            <Text
+              className={`font-semibold ${
+                tag === 'FEATURE'
+                  ? 'text-green-500'
+                  : tag === 'UPDATE'
+                    ? 'text-sky-500'
+                    : tag === 'FIX'
+                      ? 'text-red-500'
+                      : 'text-gray-500'
+              }`}
+            >
+              [{tag}]{' '}
+            </Text>
+          )}
+          {message}
+        </Text>
       </View>
     );
   }
 
   return (
-    <Card className="flex items-center">
-      <Text className="text-lg text-primary">VERSION</Text>
-      <Text className="text-3xl font-mono text-accent">{version}</Text>
+    <Card className="flex-col items-center !gap-0">
+      <Text className="text-primary">VERSION</Text>
+      <Text className="text-3xl font-mono font-bold text-accent">
+        {version}
+      </Text>
       {date && (
-        <Text className="text-muted text-center">
+        <Text className="text-primary">
           {format(new Date(date), 'dd MMMM yyyy')}
         </Text>
       )}
-      <View className="w-full h-[1px] bg-muted my-3" />
+      <View className="w-full h-[1px] bg-muted my-2" />
       {filteredDetails.length > 0 ? (
         filteredDetails.map((detail, index) => renderDetail(detail, index))
       ) : (
