@@ -36,7 +36,7 @@ export default function StaffBalanceScreen() {
   const error = dataError || balanceError;
 
   return (
-    <SafeAreaView className="flex-1 bg-background">
+    <SafeAreaView className="flex-1 bg-background gap-2">
       <HeaderBar title="Staff Balance" />
       <ScrollView
         className="bg-background py-2"
@@ -72,7 +72,6 @@ export default function StaffBalanceScreen() {
               })}
           </View>
         )}
-        <StatusBar style="auto" />
       </ScrollView>
       {data && data.length > 0 && (
         <TotalBalanceRow

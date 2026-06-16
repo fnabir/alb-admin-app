@@ -120,7 +120,6 @@ export default function StaffDetailScreen() {
                 ))}
             </View>
           )}
-          <StatusBar style="auto" />
         </ScrollView>
         {data && data.length > 0 && (
           <TotalBalanceRow
