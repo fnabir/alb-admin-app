@@ -9,10 +9,10 @@ import {
   EmptyUI,
   ErrorUI,
   LoadingLink,
+  CallbackDialog,
 } from '@repo/ui';
 import { useEffect } from 'react';
 import { useList } from 'react-firebase-hooks/database';
-import UpdateCallbackDialog from './updateCallbackDialog';
 import { MdAdd } from 'react-icons/md';
 
 export default function Callback() {
@@ -31,9 +31,9 @@ export default function Callback() {
   return (
     <div className="size-full flex flex-col space-y-2">
       <div className="flex items-center space-x-2 px-2 md:px-3 lg:px-4">
-        <UpdateCallbackDialog>
+        <CallbackDialog>
           <Button label="Add Callback" icon={MdAdd} />
-        </UpdateCallbackDialog>
+        </CallbackDialog>
       </div>
       {loading ? (
         <div className="flex flex-1 items-center justify-center">
@@ -48,7 +48,7 @@ export default function Callback() {
           {data.map((item) => {
             return (
               <LoadingLink key={item.key} href={`callback/${item.key}`}>
-                <CallbackTotalCard project={item.key!} count={item.size} />
+                <CallbackTotalCard project={item.key} count={item.size} />
               </LoadingLink>
             );
           })}

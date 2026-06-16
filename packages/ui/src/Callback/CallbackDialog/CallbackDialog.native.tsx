@@ -1,4 +1,4 @@
-import { View, ScrollView } from 'react-native';
+import { View, ScrollView, Text } from 'react-native';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import {
@@ -104,7 +104,8 @@ export function CallbackDialog({
       title={`${dataExists ? 'Update' : 'Add New'} Callback`}
     >
       <>
-        <ScrollView className="space-y-1 my-4">
+        {dataExists && <Text className="text-primary -mt-4">{project}</Text>}
+        <ScrollView className="my-4">
           <FormSelect<CallbackForm>
             name="project"
             control={control}
@@ -117,12 +118,14 @@ export function CallbackDialog({
             control={control}
             placeholder="Details"
             disabled={isSubmitting}
+            className="mt-2"
           />
           <FormInput<CallbackForm>
             name="name"
             control={control}
             placeholder="Staff Name"
             disabled={isSubmitting}
+            className="mt-2"
           />
           <FormInput<CallbackForm>
             name="date"
@@ -130,6 +133,7 @@ export function CallbackDialog({
             type="date"
             placeholder="Date"
             disabled={dataExists || isSubmitting}
+            className="mt-2"
           />
           <FormSelect<CallbackForm>
             name="status"
@@ -137,8 +141,9 @@ export function CallbackDialog({
             placeholder="Select Status..."
             options={callbackStatusOptions}
             disabled={isSubmitting}
+            className="mt-2"
           />
-          <View className="flex-row gap-2 justify-end mt-4">
+          <View className="flex-row gap-2 justify-center mt-8">
             <Button
               label="Cancel"
               variant="secondary"
