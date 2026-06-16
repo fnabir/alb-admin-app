@@ -60,7 +60,10 @@ export default function ProjectBalanceScreen() {
   return (
     <SafeAreaView className="flex-1 bg-background gap-2">
       <HeaderBar title="Project Balance" />
-      <ScrollView className="flex-1 bg-background">
+      <ScrollView
+        className="bg-background p-2"
+        contentContainerStyle={{ flexGrow: 1 }}
+      >
         {loading ? (
           <View className="flex-1 items-center justify-center">
             <Loading />

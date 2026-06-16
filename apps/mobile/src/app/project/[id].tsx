@@ -1,4 +1,4 @@
-import { View, ScrollView, Pressable, TouchableOpacity } from 'react-native';
+import { View, ScrollView, TouchableOpacity } from 'react-native';
 import { useLocalSearchParams } from 'expo-router';
 import {
   formatCurrency,
