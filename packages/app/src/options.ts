@@ -1,8 +1,4 @@
-type SelectOption = {
-  label: string;
-  value: string;
-  disabled?: boolean;
-};
+import { SelectOption } from './types';
 
 export const filterOptions: SelectOption[] = [
   { value: 'offer', label: 'Offer' },
@@ -27,6 +23,7 @@ export const callbackStatusOptions: SelectOption[] = [
   { value: 'Cannot be fixed', label: 'Cannot be fixed' },
 ];
 
+// Forms
 export const productOptions: SelectOption[] = [
   { value: 'Passenger Lift', label: 'Passenger Lift' },
   { value: 'Cargo Lift', label: 'Cargo Lift' },
@@ -51,4 +48,15 @@ export const formStatusOptions: SelectOption[] = [
   { value: 'Quote Submitted', label: 'Quote Submitted' },
   { value: 'In Progress', label: 'In Progress' },
   { value: 'Closed', label: 'Closed' },
+];
+
+// Ledger
+export const ledgerFilterOptions: SelectOption[] = [
+  { value: 'monthly', label: 'Monthly' },
+  { value: 'yearly', label: 'Yearly' },
+];
+
+export const ledgerOptions: SelectOption[] = [
+  { value: '+', label: 'Money In (+)' },
+  { value: '-', label: 'Money Out (-)' },
 ];

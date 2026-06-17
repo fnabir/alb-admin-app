@@ -1,39 +1,32 @@
-'use client';
-
-import { useBreadcrumbs } from '@/components/BreadcrumbContext';
-import { Loading } from '@/components/Loading';
+import { View, ScrollView, Text, TouchableOpacity } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { HeaderBar } from '@/src/components/HeaderBar';
+import { useMemo, useState } from 'react';
 import {
   DailyLedger,
   fromISODate,
   getDatabaseReference,
   Ledger,
+  ledgerFilterOptions,
   MonthlyLedger,
   YearlyLedger,
-  usePersistedState,
-  ledgerFilterOptions,
 } from '@repo/app';
 import {
-  Button,
   EmptyUI,
   ErrorUI,
-  Select,
   DailyLedgerCard,
   MonthlyLedgerCard,
   YearlyLedgerCard,
-  LedgerDialog,
+  Select,
+  Card,
 } from '@repo/ui';
-import { useEffect, useMemo } from 'react';
 import { useObject } from 'react-firebase-hooks/database';
-import { MdAdd } from 'react-icons/md';
+import { Loading } from '@/src/components/Loading';
+import { ThemedIcon } from '@/src/components/ThemedIcon';
 
-export default function LedgerPage() {
-  const { setItems } = useBreadcrumbs();
-
-  useEffect(() => {
-    setItems([{ label: 'Home', href: '/' }, { label: 'Financial Ledger' }]);
-  }, [setItems]);
-
-  const [filter, setFilter] = usePersistedState<string>('ledger-filter', '');
+export default function LedgerScreen() {
+  const [openDialog, setOpenDialog] = useState<boolean>(false);
+  const [filter, setFilter] = useState<string>('');
 
   const [data, loading, error] = useObject(
     getDatabaseReference('ledger/transaction'),
@@ -185,68 +178,88 @@ export default function LedgerPage() {
   }, [filter, yearlyCards, monthlyCards, dailyCards]);
 
   return (
-    <div className="size-full flex flex-col space-y-2">
-      <div className="flex items-center space-x-2 px-2 md:px-3 lg:px-4">
-        <span>Show</span>
+    <>
+      <SafeAreaView className="flex-1 bg-background gap-2">
+        <HeaderBar
+          title="Financial Ledger"
+          right={
+            <TouchableOpacity
+              onPress={() => {
+                setOpenDialog(true);
+              }}
+            >
+              <ThemedIcon name="add-circle-outline" size={30} />
+            </TouchableOpacity>
+          }
+        />
         <Select
           value={filter}
-          options={ledgerFilterOptions}
           onChange={setFilter}
+          options={ledgerFilterOptions}
           placeholder="Daily"
-          className="max-w-36"
+          className="mx-2"
         />
-        <LedgerDialog>
-          <Button icon={MdAdd} label="Add Transaction" />
-        </LedgerDialog>
-      </div>
-      {loading ? (
-        <div className="flex flex-1 items-center justify-center">
-          <Loading isFullScreen={false} />
-        </div>
-      ) : error ? (
-        <ErrorUI error={error} />
-      ) : (
-        <div className="flex-1 space-y-2">
-          {cards.length > 0 && (
-            <div className="grid grid-cols-[200px_1fr_1fr] gap-4 px-4 pb-1 text-center mx-4">
-              <span className="text-left">
-                {filter == 'monthly' ? 'Month' : 'Date'}
-              </span>
-              <span>Money Out</span>
-              <span>Money In</span>
-            </div>
-          )}
-
-          {cards.length ? (
-            cards.map((card) => {
-              if (filter === 'yearly')
-                return (
-                  <YearlyLedgerCard
-                    key={(card as YearlyLedger).year}
-                    data={card as YearlyLedger}
-                  />
-                );
-              if (filter === 'monthly')
-                return (
-                  <MonthlyLedgerCard
-                    key={(card as MonthlyLedger).month}
-                    data={card as MonthlyLedger}
-                  />
-                );
-              return (
-                <DailyLedgerCard
-                  key={(card as DailyLedger).date}
-                  data={card as DailyLedger}
-                />
-              );
-            })
+        <View className="flex-1 bg-background">
+          {loading ? (
+            <View className="flex-1 items-center justify-center">
+              <Loading />
+            </View>
+          ) : error ? (
+            <View className="flex-1 items-center justify-center">
+              <ErrorUI error={error} />
+            </View>
           ) : (
-            <div className="flex h-full">
-              <EmptyUI />
-            </div>
+            <View className="flex-1 gap-2 px-2">
+              {cards.length > 0 && (
+                <Card className="flex-row">
+                  <Text className="text-primary font-semibold text-lg w-[120px] text-center">
+                    {filter === 'monthly' ? 'Month' : 'Date'}
+                  </Text>
+                  <Text className="flex-1 text-center text-error font-semibold text-lg">
+                    Out
+                  </Text>
+                  <Text className="flex-1 text-center text-success font-semibold text-lg">
+                    In
+                  </Text>
+                </Card>
+              )}
+              <ScrollView
+                className="bg-background"
+                contentContainerStyle={{ flexGrow: 1 }}
+              >
+                {cards.length ? (
+                  cards.map((card) => {
+                    if (filter === 'yearly')
+                      return (
+                        <YearlyLedgerCard
+                          key={(card as YearlyLedger).year}
+                          data={card as YearlyLedger}
+                        />
+                      );
+                    if (filter === 'monthly')
+                      return (
+                        <MonthlyLedgerCard
+                          key={(card as MonthlyLedger).month}
+                          data={card as MonthlyLedger}
+                        />
+                      );
+                    return (
+                      <DailyLedgerCard
+                        key={(card as DailyLedger).date}
+                        data={card as DailyLedger}
+                      />
+                    );
+                  })
+                ) : (
+                  <View className="flex-1 items-center justify-center">
+                    <EmptyUI />
+                  </View>
+                )}
+              </ScrollView>
+            </View>
           )}
-        </div>
-      )}
-    </div>
+        </View>
+      </SafeAreaView>
+    </>
   );
 }

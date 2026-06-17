@@ -1,6 +1,8 @@
+'use client';
+
 import { deleteLedgerTransaction, fromISODate } from '@repo/app';
+import { Button } from '../../button';
 import {
-  Button,
   Dialog,
   DialogClose,
   DialogContent,
@@ -8,12 +10,12 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-  toast,
-} from '@repo/ui';
+} from '../../dialog';
+import { toast } from '../../toast';
 import { useState } from 'react';
 import { MdDelete } from 'react-icons/md';
 
-export default function DeleteLedgerTransactionDialog({
+export function DeleteLedgerDialog({
   date,
   id,
   children,

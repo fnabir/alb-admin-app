@@ -1,7 +1,9 @@
+'use client';
+
 import {
   fromISODate,
   generateDatabaseKey,
-  toISODate,
+  ledgerOptions,
   TransactionForm,
   transactionSchema,
   updateLedgerTransaction,
@@ -19,29 +21,19 @@ import {
   RadioGroup,
   toast,
 } from '@repo/ui';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import type { SelectOption } from '@repo/ui';
+import { LedgerDialogProps } from './types';
 
-const transactionOptions: SelectOption[] = [
-  { value: '+', label: 'Money In (+)' },
-  { value: '-', label: 'Money Out (-)' },
-];
-
-export default function UpdateLedgerTransactionDialog({
+export function LedgerDialog({
   id,
   title,
   details,
   amount = 0,
   date,
   children,
-}: {
-  id?: string;
-  title?: string;
-  details?: string;
-  amount?: number;
-  date?: string;
+}: LedgerDialogProps & {
   children: React.ReactNode;
 }) {
   const [open, setOpen] = useState<boolean>(false);
@@ -79,9 +71,10 @@ export default function UpdateLedgerTransactionDialog({
       await updateLedgerTransaction(year, month, day, key, {
         title: formData.title,
         details: formData.details,
-        amount: formData.amount * (sign == '-' ? -1 : 1),
+        amount: formData.amount * (sign === '-' ? -1 : 1),
         date: formData.date,
       });
+      setOpen(false);
       toast.success(
         `${dataExists ? 'Updated' : 'Added'} the ledger transaction`,
       );
@@ -92,8 +85,6 @@ export default function UpdateLedgerTransactionDialog({
       );
       return;
     }
-
-    setOpen(false);
   };
 
   const handleReset = () => {
@@ -105,13 +96,13 @@ export default function UpdateLedgerTransactionDialog({
     });
   };
 
-  const handleDialogChange = (state: boolean) => {
-    setOpen(state);
-    if (state) handleReset();
-  };
+  useEffect(() => {
+    if (open) handleReset();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [open, title, details, amount, date]);
 
   return (
-    <Dialog open={open} onOpenChange={handleDialogChange}>
+    <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>{children}</DialogTrigger>
       <DialogContent className={'border-error'}>
         <DialogHeader>
@@ -128,7 +119,7 @@ export default function UpdateLedgerTransactionDialog({
           <RadioGroup
             value={sign}
             onValueChange={setSign}
-            options={transactionOptions}
+            options={ledgerOptions}
             disabled={dataExists || isSubmitting}
           />
           <FormInput<TransactionForm>
@@ -148,7 +139,7 @@ export default function UpdateLedgerTransactionDialog({
             control={control}
             type="number"
             placeholder="Amount"
-            startAdornment={`৳ ${sign == '-' ? sign : ''}`}
+            startAdornment={`৳ ${sign === '-' ? sign : ''}`}
             disabled={isSubmitting}
           />
           <FormInput<TransactionForm>
