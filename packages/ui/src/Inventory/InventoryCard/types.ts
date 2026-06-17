@@ -1,4 +1,4 @@
-export type InventoryCardProps = {
+export interface InventoryCardProps {
   item: string;
   count: number;
-};
+}

@@ -1,4 +1,4 @@
-export type InventoryDialogProps = {
+export interface InventoryDialogProps {
   item?: string;
   count?: number;
-};
+}
