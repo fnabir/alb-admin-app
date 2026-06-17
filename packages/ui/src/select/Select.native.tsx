@@ -39,15 +39,15 @@ export function Select({
 
         <View className="absolute bottom-0 left-0 right-0 rounded-t-2xl border-t-2 border-accent px-4 pt-2 pb-4 max-h-[60%] bg-card">
           <FlatList
-            data={options}
-            keyExtractor={(o) => o.value}
+            data={[{ label: placeholder, value: '' }, ...options]}
+            keyExtractor={(o) => o.value || '__placeholder__'}
             renderItem={({ item, index }) => (
               <Pressable
                 onPress={() => {
                   onChange?.(item.value);
                   setOpen(false);
                 }}
-                className={`py-2.5 ${index !== options.length - 1 ? 'border-b border-border' : ''}`}
+                className={`py-2.5 ${index !== options.length ? 'border-b border-border' : ''}`}
               >
                 <Text
                   className={`text-primary font-medium text-center text-lg`}
