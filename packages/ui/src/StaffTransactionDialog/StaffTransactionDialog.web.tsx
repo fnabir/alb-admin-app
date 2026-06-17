@@ -3,6 +3,7 @@
 import {
   fromISODate,
   generateDatabaseKey,
+  staffTransactionTypeOptions,
   toISODate,
   TransactionForm,
   transactionSchema,
@@ -23,7 +24,6 @@ import { Button } from '../button/Button';
 import { useState } from 'react';
 import { useForm, useWatch } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { staffTransactionTypeOptions } from './options';
 import { DataSnapshot } from 'firebase/database';
 
 type Props = {

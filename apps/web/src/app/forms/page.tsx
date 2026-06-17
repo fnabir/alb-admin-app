@@ -3,7 +3,7 @@
 import { useBreadcrumbs } from '@/components/BreadcrumbContext';
 import { Loading } from '@/components/Loading';
 import {
-  filterOptions,
+  formFilterOptions,
   getDatabaseReference,
   usePersistedState,
   FormType,
@@ -113,7 +113,7 @@ export default function Forms() {
         <span>Show</span>
         <Select
           value={filter}
-          options={filterOptions}
+          options={formFilterOptions}
           onChange={setFilter}
           placeholder="All"
           className="max-w-36"

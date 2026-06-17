@@ -6,6 +6,7 @@ import {
   formatCurrency,
   getDatabaseReference,
   getTotalValue,
+  SelectOption,
   updateBalance,
 } from '@repo/app';
 import {
@@ -23,7 +24,6 @@ import { useList, useObject } from 'react-firebase-hooks/database';
 import { MdAdd, MdEdit, MdOutlineInfo } from 'react-icons/md';
 import DeleteTransactionDialog from '@/components/DeleteTransactionDialog';
 import { PrintStatementButton } from '@/components/PrintStatementButton';
-import type { SelectOption } from '@repo/ui';
 
 export default function ProjectTransaction() {
   const { id } = useParams() as { id: string };

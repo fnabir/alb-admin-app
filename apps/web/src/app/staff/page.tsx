@@ -5,6 +5,7 @@ import { Loading } from '@/components/Loading';
 import {
   getDatabaseReference,
   getTotalValue,
+  staffSortOptions,
   updateTotalBalance,
   usePersistedState,
 } from '@repo/app';
@@ -19,13 +20,7 @@ import {
   TotalBalanceRow,
   LoadingLink,
 } from '@repo/ui';
-import type { SelectOption } from '@repo/ui';
 import { DataSnapshot } from 'firebase/database';
-
-const sortOptions: SelectOption[] = [
-  { value: 'position', label: 'Position' },
-  { value: 'balance', label: 'Balance' },
-];
 
 type StaffBalance = {
   snap: DataSnapshot;
@@ -139,7 +134,7 @@ export default function Staff() {
         <span>Sort</span>
         <Select
           value={sort}
-          options={sortOptions}
+          options={staffSortOptions}
           onChange={setSort}
           className="max-w-32"
         />

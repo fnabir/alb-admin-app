@@ -3,6 +3,7 @@ import {
   getDatabaseReference,
   PaymentInfoForm,
   paymentInfoSchema,
+  paymentInfoOptions,
 } from '@repo/app';
 import {
   Button,
@@ -22,17 +23,6 @@ import { useForm, useWatch } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useListKeys } from 'react-firebase-hooks/database';
 import { MdAdd } from 'react-icons/md';
-import type { SelectOption } from '@repo/ui';
-
-export const paymentInfoOptions: SelectOption[] = [
-  { value: 'account', label: 'Account Transfer' },
-  { value: 'bank', label: 'Bank Transfer' },
-  { value: 'bKash', label: 'bKash' },
-  { value: 'cash', label: 'Cash' },
-  { value: 'cell', label: 'CellFin (Phone)' },
-  { value: 'cellAccount', label: 'CellFin (Account)' },
-  { value: 'cheque', label: 'Cheque' },
-];
 
 export default function AddPaymentInfoDialog() {
   const [open, setOpen] = useState<boolean>(false);

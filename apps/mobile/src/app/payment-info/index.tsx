@@ -3,7 +3,7 @@ import { View, ScrollView } from 'react-native';
 import { EmptyUI, ErrorUI, PaymentInfoRow, Select } from '@repo/ui';
 import { useMemo, useState } from 'react';
 import { useList } from 'react-firebase-hooks/database';
-import { getDatabaseReference, paymentOptions } from '@repo/app';
+import { getDatabaseReference, paymentInfoOptions } from '@repo/app';
 import { HeaderBar } from '@/src/components/HeaderBar';
 import { Loading } from '@/src/components/Loading';
 
@@ -23,7 +23,7 @@ export default function PaymentInfoScreen() {
       <Select
         value={type}
         onChange={setType}
-        options={paymentOptions}
+        options={paymentInfoOptions}
         className="mx-2"
       />
       <ScrollView

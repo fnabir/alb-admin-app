@@ -5,6 +5,11 @@ import {
   fromISODate,
   generateDatabaseKey,
   getLabelByValue,
+  monthOptions,
+  projectExpenseOptions,
+  projectPaymentOptions,
+  projectPaymentTypeOptions,
+  projectTransactionOptions,
   toISODate,
   TransactionForm,
   transactionSchema,
@@ -25,16 +30,7 @@ import {
 import { useEffect, useMemo, useState } from 'react';
 import { useForm, useWatch } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import {
-  expenseOptions,
-  FullPaymentDataType,
-  monthOptions,
-  PartialPaymentDataType,
-  paymentOptions,
-  paymentTypeOptions,
-  Props,
-  transactionOptions,
-} from './types';
+import { FullPaymentDataType, PartialPaymentDataType, Props } from './types';
 import { RadioGroup } from '../radio';
 import { MdAdd, MdDelete } from 'react-icons/md';
 import { Select } from '../select/Select';
@@ -318,8 +314,26 @@ export function ProjectTransactionDialog({
   }, [titleValue]);
 
   useEffect(() => {
-    setValue('details', '');
-    if (titleValue === 'Servicing') setValue('amount', servicingCharge);
+    switch (titleValue) {
+      case 'Account Transfer':
+      case 'CellFin (Account)':
+        setValue('details', 'A/C No.**');
+        setValue('amount', 0);
+        break;
+      case 'CellFin (Phone)':
+      case 'bKash':
+        setValue('details', '01');
+        setValue('amount', 0);
+        break;
+      case 'Servicing':
+        setValue('details', '');
+        setValue('amount', servicingCharge);
+        break;
+      default:
+        setValue('details', '');
+        setValue('amount', 0);
+        break;
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [titleValue]);
 
@@ -342,7 +356,7 @@ export function ProjectTransactionDialog({
               setValue('title', '');
               setValue('details', '');
             }}
-            options={transactionOptions}
+            options={projectTransactionOptions}
             disabled={dataExists || isSubmitting}
           />
           <FormSelect<TransactionForm>
@@ -351,7 +365,9 @@ export function ProjectTransactionDialog({
             placeholder={
               sign === '+' ? 'Select Expense Type...' : 'Select Payment Type...'
             }
-            options={sign === '+' ? expenseOptions : paymentOptions}
+            options={
+              sign === '+' ? projectExpenseOptions : projectPaymentOptions
+            }
             disabled={isSubmitting}
           />
           {titleValue === 'Servicing' ? (
@@ -391,7 +407,7 @@ export function ProjectTransactionDialog({
               <RadioGroup
                 value={paymentType}
                 onValueChange={setPaymentType}
-                options={paymentTypeOptions}
+                options={projectPaymentTypeOptions}
                 disabled={(paidDataOptions ? false : true) || isSubmitting}
               />
               {paidDataOptions &&

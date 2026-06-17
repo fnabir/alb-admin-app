@@ -4,6 +4,7 @@ import {
   formatCurrency,
   getDatabaseReference,
   getTotalValue,
+  SelectOption,
   updateBalance,
 } from '@repo/app';
 import { useList, useObject } from 'react-firebase-hooks/database';
@@ -12,7 +13,6 @@ import {
   ErrorUI,
   ProjectTransactionDialog,
   ProjectTransactionRow,
-  SelectOption,
   toast,
   TotalBalanceRow,
 } from '@repo/ui';

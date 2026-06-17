@@ -4,6 +4,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import {
   fromISODate,
   generateDatabaseKey,
+  staffTransactionTypeOptions,
   toISODate,
   TransactionForm,
   transactionSchema,
@@ -14,7 +15,6 @@ import { Button } from '../button/Button.native';
 import { toast } from '../toast';
 import { FormInput, FormSelect } from '../FormField';
 import { DataSnapshot } from 'firebase/database';
-import { staffTransactionTypeOptions } from './options';
 import { useEffect } from 'react';
 
 type Props = {

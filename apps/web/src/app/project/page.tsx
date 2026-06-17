@@ -5,6 +5,8 @@ import { Loading } from '@/components/Loading';
 import {
   getDatabaseReference,
   getTotalValue,
+  projectSortOptions,
+  SelectOption,
   updateTotalBalance,
   usePersistedState,
 } from '@repo/app';
@@ -19,13 +21,7 @@ import {
   TotalBalanceRow,
   LoadingLink,
 } from '@repo/ui';
-import type { SelectOption } from '@repo/ui';
 import { DataSnapshot } from 'firebase/database';
-
-const sortOptions: SelectOption[] = [
-  { value: 'name', label: 'Name' },
-  { value: 'balance', label: 'Balance' },
-];
 
 type ProjectBalance = {
   snap: DataSnapshot;
@@ -192,13 +188,13 @@ export default function Project() {
           value={filter}
           options={filterOptions}
           onChange={setFilter}
-          className="max-w-36"
+          className="max-w-44"
         />
         <div className="w-0.5 h-full bg-muted" />
         <span>Sort</span>
         <Select
           value={sort}
-          options={sortOptions}
+          options={projectSortOptions}
           onChange={setSort}
           className="max-w-32"
         />
