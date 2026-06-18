@@ -1,3 +1,5 @@
+'use client';
+
 import { deletePaymentInfo } from '@repo/app';
 import {
   Button,
@@ -29,20 +31,19 @@ export default function DeletePaymentInfoDialog({
     setIsDeleting(true);
     try {
       await deletePaymentInfo(type, id);
+      setOpen(false);
       toast.success('Deleted the payment info.');
     } catch (error: any) {
       toast.error(`Failed: ${error.message}`);
     }
+
     setIsDeleting(false);
   };
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button
-          icon={MdDelete}
-          ariaLabel="Delete Payment Info dialog button"
-        />
+        <Button icon={MdDelete} ariaLabel="Delete Payment Info dialog button" />
       </DialogTrigger>
       <DialogContent className={'border-error'}>
         <DialogHeader>

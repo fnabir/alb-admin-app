@@ -1,9 +1,11 @@
+import DeletePaymentInfoDialog from '../PaymentInfoDialog/DeletePaymentInfoDialog';
 import { PaymentInfoRowProps } from './types';
 
 export function PaymentInfoRow({
   type,
   id,
   value,
+  isAdmin = false,
   children,
 }: PaymentInfoRowProps) {
   const originalId = id?.split('_')[0];
@@ -16,7 +18,13 @@ export function PaymentInfoRow({
           : ''
       }${originalId}`}</div>
       {type !== 'cash' && <div>{value}</div>}
-      {children}
+      {isAdmin && (
+        <DeletePaymentInfoDialog
+          type={type}
+          id={id}
+          value={value!.toString()}
+        />
+      )}
     </div>
   );
 }

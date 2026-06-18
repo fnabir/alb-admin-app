@@ -7,10 +7,8 @@ import { useEffect, useMemo } from 'react';
 import { useList } from 'react-firebase-hooks/database';
 import { MdOutlineInfo } from 'react-icons/md';
 import { DataSnapshot } from 'firebase/database';
-import { Card, PaymentInfoRow } from '@repo/ui';
+import { Card, PaymentInfoDialog, PaymentInfoRow } from '@repo/ui';
 import { useAuth } from '@/contexts/AuthContext';
-import AddPaymentInfoDialog from './addPaymentInfoDialog';
-import DeletePaymentInfoDialog from './deletePaymentInfoDialog';
 
 const PAYMENT_TYPE_LABEL: Record<string, string> = {
   bank: 'bank transfer',
@@ -41,7 +39,7 @@ export default function PaymentInfo() {
   return (
     <div className="flex h-full w-full flex-col space-y-2 overflow-hidden min-h-0">
       <div className="shrink-0 px-2 md:px-3 lg:px-4">
-        <AddPaymentInfoDialog />
+        <PaymentInfoDialog />
       </div>
       {loading ? (
         <div className="flex flex-1 items-center justify-center">
@@ -113,15 +111,8 @@ function PaymentInfoGrid({
               id={key}
               value={value!.toString()}
               key={key}
-            >
-              {isAdmin && (
-                <DeletePaymentInfoDialog
-                  type={dataType}
-                  id={key}
-                  value={value!.toString()}
-                />
-              )}
-            </PaymentInfoRow>
+              isAdmin={isAdmin}
+            />
           );
         })}
       </div>

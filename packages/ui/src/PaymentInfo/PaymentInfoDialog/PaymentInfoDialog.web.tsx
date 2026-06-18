@@ -1,3 +1,5 @@
+'use client';
+
 import {
   addNewPaymentInfo,
   getDatabaseReference,
@@ -18,13 +20,13 @@ import {
   toast,
   FormSelect,
 } from '@repo/ui';
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useForm, useWatch } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useListKeys } from 'react-firebase-hooks/database';
 import { MdAdd } from 'react-icons/md';
 
-export default function AddPaymentInfoDialog() {
+export function PaymentInfoDialog() {
   const [open, setOpen] = useState<boolean>(false);
 
   const projectNames = useListKeys(getDatabaseReference(`balance/project`))[0];
@@ -74,10 +76,12 @@ export default function AddPaymentInfoDialog() {
     });
   };
 
-  const handleDialogChange = (state: boolean) => {
-    setOpen(state);
-    handleReset();
-  };
+  useEffect(() => {
+    if (!open) {
+      handleReset();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [open]);
 
   const typeValue = useWatch({
     control,
@@ -106,7 +110,7 @@ export default function AddPaymentInfoDialog() {
   }, [typeValue]);
 
   return (
-    <Dialog open={open} onOpenChange={handleDialogChange}>
+    <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         <Button
           label="Add Payment Info"
