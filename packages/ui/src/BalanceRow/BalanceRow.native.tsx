@@ -7,7 +7,7 @@ import { Badge } from '../badge';
 export function BalanceRow({ data, title }: BalanceRowProps) {
   const val = data.val();
   const getCardStyle = () => {
-    if (val.status === 'cancel') return 'bg-red-900';
+    if (val.status === 'cancel') return 'bg-red-800';
     else if (val.value < 0) return 'bg-yellow-900';
     else if (val.value === 0) return 'bg-green-900';
     else return 'bg-card';
@@ -15,9 +15,6 @@ export function BalanceRow({ data, title }: BalanceRowProps) {
 
   const textColor =
     getCardStyle() === 'bg-card' ? 'text-primary' : 'text-white';
-
-  const badge =
-    val.status === 'cancel' ? 'Cancelled' : val.value < 0 ? 'Overpaid' : '';
 
   return (
     <View className="w-full mx-auto px-2">
@@ -34,9 +31,8 @@ export function BalanceRow({ data, title }: BalanceRowProps) {
           <Text className={`text-xl font-semibold ${textColor}`}>
             {formatCurrency(val.value)}
           </Text>
-          {badge && (
-            <Badge label={badge} variant="light" className="self-end" />
-          )}
+          {val.cancelled && <Badge label="Cancelled" variant="light" />}
+          {val.value < 0 && <Badge label="Overpaid" variant="light" />}
         </View>
       </Card>
     </View>
