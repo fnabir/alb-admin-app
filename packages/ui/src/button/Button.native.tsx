@@ -1,6 +1,7 @@
 import { Text, TouchableOpacity } from 'react-native';
 import { ButtonProps } from './types';
 import { Ionicons } from '@expo/vector-icons';
+import { useTheme } from '../../../../apps/mobile/src/contexts/ThemeContext';
 
 const style = {
   text: {
@@ -33,6 +34,9 @@ export function Button({
   textClassName = '',
   iconSize = 20,
 }: ButtonProps & { icon?: string; iconSize?: number }) {
+  const { colorScheme } = useTheme();
+  const isDark = colorScheme === 'dark';
+
   const isDisabled = disabled || loading;
 
   return (
@@ -46,7 +50,7 @@ export function Button({
         <Ionicons
           name={icon as any}
           size={iconSize}
-          color={variant === 'outline' ? '#3b82f6' : style.text[variant]}
+          color={isDark ? '#fafafa' : '#0a0a0a'}
         />
       )}
       <Text
