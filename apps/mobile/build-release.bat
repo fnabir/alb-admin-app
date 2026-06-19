@@ -9,7 +9,7 @@ set EXPO_NO_METRO_WORKSPACE_ROOT=1
 
 REM Extract version from package.json
 for /f "tokens=2 delims=:, " %%A in (
-	'findstr /r "version" "%~dp0package.json" ^| findstr /v "packages"'
+	'findstr /r "version" "%~dp0..\..\package.json" ^| findstr /v "packages"'
 ) do (
 	set "version=%%A"
 	REM Remove quotes if present
