@@ -14,18 +14,20 @@ export * from './TransactionRow';
 export * from './ProjectTransactionRow';
 export * from './TotalBalanceRow';
 
-export * from './PaymentInfo';
 export * from './Callback';
 export * from './Forms';
 export * from './Inventory';
 export * from './Ledger';
+export * from './PaymentInfo';
+export * from './ProjectInfo';
 
 export * from './ErrorUI';
 export * from './EmptyUI';
 
+export * from './checkbox';
 export * from './input';
-export * from './select';
 export * from './radio';
+export * from './select';
 export * from './textarea';
 export * from './FormField';
 
