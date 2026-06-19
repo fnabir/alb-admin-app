@@ -1,12 +1,15 @@
+'use client';
+
 import {
   getCurrentDate,
   getDatabaseReference,
   getDatabaseReferenceExists,
   ProjectInfoForm,
   projectInfoSchema,
+  updateProjectInfo,
 } from '@repo/app';
+import { Button } from '../../button';
 import {
-  Button,
   Dialog,
   DialogClose,
   DialogContent,
@@ -14,25 +17,25 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-  Input,
-  toast,
-} from '@repo/ui';
-import { DataSnapshot } from 'firebase/database';
+} from '../../dialog';
+import { FormCheckbox, FormInput } from '../../FormField';
+import { Input } from '../../input';
+import { toast } from '../../toast';
+import { set, update } from 'firebase/database';
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { FormInput } from '@repo/ui';
-import { set, update } from 'firebase/database';
+import { ProjectInfoDialogProps } from './types';
 
-export default function ProjectInfoDialog({
-  data,
+export function ProjectInfoDialog({
+  id,
+  val,
   children,
-}: {
-  data?: DataSnapshot;
+}: ProjectInfoDialogProps & {
   children: React.ReactNode;
 }) {
   const [open, setOpen] = useState<boolean>(false);
-  const [project, setProject] = useState<string>('');
+  const [project, setProject] = useState<string>(id ?? '');
 
   const {
     control,
@@ -51,81 +54,62 @@ export default function ProjectInfoDialog({
   });
 
   const onSubmit = async (formData: ProjectInfoForm) => {
-    if (!data && project.length === 0) {
+    if (!id && project.length === 0) {
       toast.error('Error', 'Project Name is required.');
       return;
     }
 
+    const key = id ?? project;
+
     try {
-      if (data)
-        await update(
-          getDatabaseReference(`info/project/${data?.key!}`),
-          formData,
-        );
+      await updateProjectInfo(key, formData);
+
+      const balanceRef = `balance/project/${key}`;
+      if (await getDatabaseReferenceExists(balanceRef))
+        await update(getDatabaseReference(balanceRef), {
+          cancelled: formData.cancelled ? true : undefined,
+        });
       else {
-        await set(getDatabaseReference(`info/project/${project}`), formData);
-
-        const balanceRef = `balance/project/${project}`;
-        if (!(await getDatabaseReferenceExists(balanceRef)))
-          await set(getDatabaseReference(balanceRef), {
-            date: getCurrentDate('dd MMM yyyy'),
-            value: 0,
-          });
+        await set(getDatabaseReference(balanceRef), {
+          date: getCurrentDate('dd MMM yyyy'),
+          value: 0,
+          cancelled: formData.cancelled ? true : undefined,
+        });
       }
-
-      toast.success(
-        data ? data.key! : project,
-        'Updated the project info successfully.',
-      );
+      setOpen(false);
+      toast.success(key, 'Updated the project info successfully.');
     } catch (error: any) {
-      toast.error(
-        data ? data.key! : project,
-        'Failed to update the project info. Please try again.',
-      );
+      toast.error(key, 'Failed to update the project info. Please try again.');
+      console.error('Error updating project info:', error);
       return;
     }
-
-    setOpen(false);
   };
 
   const handleReset = () => {
     setProject('');
     reset({
-      location: data?.val().location ?? '',
-      contactName: data?.val().contactName ?? '',
-      phone: data?.val().phone ?? '',
-      servicing: data?.val().servicing ?? 0,
+      location: val?.location ?? '',
+      contactName: val?.contactName ?? '',
+      phone: val?.phone ?? '',
+      servicing: val?.servicing ?? 0,
     });
   };
 
-  const handleDialogChange = (state: boolean) => {
-    setOpen(state);
-    if (!state) {
-      setProject('');
-      reset({
-        location: '',
-        contactName: '',
-        phone: '',
-        servicing: 0,
-      });
-    }
-  };
-
   useEffect(() => {
-    if (!open || !data) return;
-    reset(data.val());
-  }, [open, data, reset]);
+    if (open) handleReset();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [open]);
 
   return (
-    <Dialog open={open} onOpenChange={handleDialogChange}>
+    <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>{children}</DialogTrigger>
       <DialogContent className={'border-accent'}>
         <DialogHeader>
           <DialogTitle>
-            {data ? `${data.key ?? 'Project'} Info` : 'Add New Project'}
+            {id ? `${id} Project Info` : 'Add New Project'}
           </DialogTitle>
           <DialogDescription>
-            {data
+            {id
               ? 'Update project info'
               : 'Add new project info and in the balance list'}
           </DialogDescription>
@@ -135,7 +119,7 @@ export default function ProjectInfoDialog({
           onReset={handleReset}
           className="flex flex-col space-y-3"
         >
-          {!data && (
+          {!id && (
             <Input
               label="Project Name"
               value={project}
@@ -170,6 +154,12 @@ export default function ProjectInfoDialog({
             disabled={isSubmitting}
             startAdornment={'৳'}
           />
+          <FormCheckbox<ProjectInfoForm>
+            name="cancelled"
+            control={control}
+            label="Cancelled"
+            disabled={isSubmitting}
+          />
 
           <div className="flex space-x-2 pt-4 lg:pt-6 justify-center">
             <DialogClose asChild>
@@ -185,15 +175,15 @@ export default function ProjectInfoDialog({
             <Button
               type="submit"
               variant="accent"
-              label={data ? 'Update' : 'Submit'}
-              loadingLabel={data ? 'Updating...' : 'Submitting...'}
+              label={id ? 'Update' : 'Submit'}
+              loadingLabel={id ? 'Updating...' : 'Submitting...'}
               className="px-10"
               loading={isSubmitting}
               disabled={
                 !isValid ||
                 !isDirty ||
                 isSubmitting ||
-                (data ? false : project?.length == 0)
+                (!id && project?.length === 0)
               }
             />
           </div>

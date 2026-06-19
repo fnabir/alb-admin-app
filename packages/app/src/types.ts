@@ -58,3 +58,11 @@ export type YearlyLedger = {
   incomeTotal: number;
   expenseTotal: number;
 };
+
+export type ProjectInfo = {
+  location?: string;
+  contactName?: string;
+  phone?: string;
+  servicing?: number;
+  cancelled?: boolean;
+};
