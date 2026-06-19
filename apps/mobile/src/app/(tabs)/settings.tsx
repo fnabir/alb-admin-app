@@ -4,7 +4,7 @@ import { LogoutButton } from '../../components/LogoutButton';
 import { Ionicons } from '@expo/vector-icons';
 import { ThemeSelector } from '@/src/components/ThemeSelector';
 import { useAuth } from '@/src/contexts/AuthContext';
-import packageJson from '@/package.json';
+import packageJson from '@/../../package.json';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 export default function SettingsScreen() {

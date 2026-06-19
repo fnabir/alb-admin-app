@@ -2,7 +2,7 @@
 
 import { Card, VersionCard } from '@repo/ui';
 import { BalanceCard, IconCard, LoadingLink } from '@repo/ui';
-import packageJson from '@/../../package.json';
+import packageJson from '@/../../../../package.json';
 import PieChart from '@/components/PieChart';
 import { FaBook, FaBuildingUser, FaTag, FaWrench } from 'react-icons/fa6';
 import { getDatabaseReference } from '@repo/app';

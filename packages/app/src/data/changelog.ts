@@ -4,6 +4,17 @@ type ChangelogItem = {
 };
 
 export const changelog: Record<string, ChangelogItem> = {
+  '1.5.1': {
+    date: '2026-06-19',
+    details: [
+      '[FEATURE] Added option to see yearly summary in financial ledger.',
+      '[UPDATE] Added option to update project cancelled status in project info page.',
+      '[UPDATE] Show time with date for forms.',
+      '[FIX] Forms submitted from website did not show all the data.',
+      '[FIX] Data would not update correctly in transactions and callbacks if editing second time before refreshing the page.',
+    ],
+  },
+
   '1.5.0': {
     date: '2026-02-14',
     details: [
