@@ -155,6 +155,15 @@ export async function updateTotalBalance(
   });
 }
 
+// Project Info
+export async function updateProjectInfo(project: string, data: object) {
+  await update(getDatabaseReference(`info/project/${project}`), data);
+}
+
+export async function deleteProjectInfo(project: string) {
+  await remove(getDatabaseReference(`info/project/${project}`));
+}
+
 // Payment Info
 export async function addNewPaymentInfo(data: {
   type: string;
