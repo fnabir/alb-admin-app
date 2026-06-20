@@ -7,7 +7,7 @@ import { Badge } from '../badge';
 export function BalanceRow({ data, title }: BalanceRowProps) {
   const val = data.val();
   const getCardStyle = () => {
-    if (val.status === 'cancel') return 'bg-red-800';
+    if (val.cancelled) return 'bg-red-800';
     else if (val.value < 0) return 'bg-yellow-900';
     else if (val.value === 0) return 'bg-green-900';
     else return 'bg-card';
