@@ -50,7 +50,17 @@ export function Button({
         <Ionicons
           name={icon as any}
           size={iconSize}
-          color={isDark ? '#fafafa' : '#0a0a0a'}
+          color={
+            variant === 'transparent'
+              ? isDark
+                ? '#fafafa'
+                : '#0a0a0a'
+              : variant === 'primary'
+                ? isDark
+                  ? '#0a0a0a'
+                  : '#fafafa'
+                : '#fafafa'
+          }
         />
       )}
       <Text
