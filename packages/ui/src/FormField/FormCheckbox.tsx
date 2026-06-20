@@ -1,4 +1,6 @@
-import { Control, FieldValues, Path, useController } from 'react-hook-form';
+'use client';
+
+import { Control, Controller, FieldValues, Path } from 'react-hook-form';
 import { Checkbox } from '../checkbox';
 import { CheckboxProps } from '../checkbox/types';
 
@@ -12,18 +14,19 @@ export function FormCheckbox<T extends FieldValues>({
   control,
   ...props
 }: FormCheckboxProps<T>) {
-  const {
-    field,
-    fieldState: { error },
-  } = useController({ name, control });
-
   return (
-    <Checkbox
-      value={!!field.value}
-      onChange={field.onChange}
-      onBlur={field.onBlur}
-      error={error?.message}
-      {...props}
+    <Controller
+      name={name}
+      control={control}
+      render={({ field, fieldState }) => (
+        <Checkbox
+          {...props}
+          value={!!field.value}
+          onChange={field.onChange}
+          onBlur={field.onBlur}
+          error={fieldState.error?.message}
+        />
+      )}
     />
   );
 }
