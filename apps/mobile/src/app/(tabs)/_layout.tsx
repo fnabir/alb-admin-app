@@ -1,11 +1,5 @@
 import { useTheme } from '@/src/contexts/ThemeContext';
-import {
-  NativeTabs,
-  Label,
-  Icon,
-  VectorIcon,
-} from 'expo-router/unstable-native-tabs';
-import Ionicons from '@expo/vector-icons/Ionicons';
+import { NativeTabs } from 'expo-router/unstable-native-tabs';
 import { Platform } from 'react-native';
 
 export default function TabsLayout() {
@@ -39,20 +33,20 @@ export default function TabsLayout() {
       backgroundColor={color.background}
     >
       <NativeTabs.Trigger name="index">
-        <Label>Home</Label>
-        <Icon src={<VectorIcon family={Ionicons} name="home" />} />
+        <NativeTabs.Trigger.Label>Home</NativeTabs.Trigger.Label>
+        <NativeTabs.Trigger.Icon md="home" />
       </NativeTabs.Trigger>
       <NativeTabs.Trigger name="projects">
-        <Label>Projects</Label>
-        <Icon src={<VectorIcon family={Ionicons} name="business" />} />
+        <NativeTabs.Trigger.Label>Projects</NativeTabs.Trigger.Label>
+        <NativeTabs.Trigger.Icon md="business" />
       </NativeTabs.Trigger>
       <NativeTabs.Trigger name="company">
-        <Label>Company</Label>
-        <Icon src={<VectorIcon family={Ionicons} name="briefcase" />} />
+        <NativeTabs.Trigger.Label>Company</NativeTabs.Trigger.Label>
+        <NativeTabs.Trigger.Icon md="business_center" />
       </NativeTabs.Trigger>
       <NativeTabs.Trigger name="settings">
-        <Label>Settings</Label>
-        <Icon src={<VectorIcon family={Ionicons} name="settings" />} />
+        <NativeTabs.Trigger.Label>Settings</NativeTabs.Trigger.Label>
+        <NativeTabs.Trigger.Icon md="settings" />
       </NativeTabs.Trigger>
     </NativeTabs>
   );
