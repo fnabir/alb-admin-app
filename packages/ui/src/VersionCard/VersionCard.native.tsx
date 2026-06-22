@@ -1,7 +1,7 @@
 import { Text, View } from 'react-native';
 import { Card } from '../Card';
 import { format } from 'date-fns';
-import { changelog } from '../../../app/src';
+import { changelog } from '@repo/app';
 import { VersionCardProps } from './types';
 
 export function VersionCard({ version, isAdmin }: VersionCardProps) {
