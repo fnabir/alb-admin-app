@@ -39,7 +39,7 @@ export function formatCurrency(
 
   const finalNumber = decimals > 0 ? `${formatted}.${decimalPart}` : formatted;
 
-  return `${isNegative ? '- ' : ''}${symbol ?? ''} ${finalNumber}`;
+  return `${isNegative ? '- ' : ''}${symbol ? `${symbol} ` : ''}${finalNumber}`;
 }
 
 export function getTotalValue(

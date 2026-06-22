@@ -68,3 +68,6 @@ web-build/
 
 # TypeScript
 *.tsbuildinfo
+
+# Testing
+coverage/
