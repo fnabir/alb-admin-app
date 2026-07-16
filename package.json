@@ -10,7 +10,7 @@
     "android": "expo run:android",
     "ios": "expo run:ios"
   },
-  "packageManager": "pnpm@11.8.0",
+  "packageManager": "pnpm@11.13.0",
   "dependencies": {
     "@hookform/resolvers": "^5.4.0",
     "date-fns": "^4.4.0",
