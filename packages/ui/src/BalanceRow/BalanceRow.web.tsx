@@ -26,11 +26,7 @@ export function BalanceRow({ data, title }: BalanceRowProps) {
           <Badge className="w-fit" label="Cancelled" variant="light" />
         )}
         {val.value < 0 && (
-          <Badge
-            className="w-fit"
-            label="Overpaid"
-            variant={val.cancelled ? 'light' : 'warning'}
-          />
+          <Badge className="w-fit" label="Overpaid" variant="light" />
         )}
       </div>
       <div className="text-xl font-semibold">{formatCurrency(val.value)}</div>

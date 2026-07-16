@@ -17,7 +17,7 @@
     "test:web": "jest --selectProjects web",
     "test:mobile": "jest --selectProjects mobile"
   },
-  "packageManager": "pnpm@11.8.0",
+  "packageManager": "pnpm@11.13.0",
   "dependencies": {
     "@hookform/resolvers": "^5.4.0",
     "date-fns": "^4.4.0",

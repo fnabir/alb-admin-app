@@ -5,7 +5,7 @@ import { ProjectInfoDialog } from '../ProjectInfoDialog';
 import { MdCall, MdEdit } from 'react-icons/md';
 import Link from 'next/link';
 import { formatCurrency } from '@repo/app';
-import { Badge } from '../../badge/Badge.native';
+import { Badge } from '../../badge';
 
 export function ProjectInfoCard({ id, val }: ProjectInfoCardProps) {
   return (

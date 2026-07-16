@@ -4,19 +4,19 @@ All notable changes to this project will be documented in this file.
 
 ## [1.5.1] - 2026-06-19
 
-- **[FEATURE]** Added option to see yearly summary in financial ledger.
-- **[UPDATE]** Added option to update project cancelled status in project info page.
+- **[UPDATE]** Yearly summary option in financial ledger.
+- **[UPDATE]** Update project cancelled status in project info page.
 - **[UPDATE]** Show time with date for forms.
 - **[FIX]** Forms submitted from website did not show all the data.
 - **[FIX]** Data would not update correctly in transactions and callbacks if editing second time before refreshing the page.
 
 ## [1.5.0] - 2026-02-14
 
-- **[ADMIN][FEATURE]** Added ledger, inventory page.
+- **[FEATURE]** Added ledger, inventory page.
 - **[FEATURE]** Added changelog page.
-- **[ADMIN][UPDATE]** Option to add project and update info including service charge.
+- **[UPDATE]** Option to add project and update info including service charge.
 - **[UPDATE]** Unified website forms and offer forms in single page.
-- **[ADMIN][UPDATE]** Update balance automatically.
+- **[UPDATE]** Update balance automatically.
 - **[FIX]** Major bug fixes and optimizations.
 
 ## [1.4.0] - 2025-10-21
